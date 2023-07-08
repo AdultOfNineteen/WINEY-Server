@@ -1,0 +1,16 @@
+oauth:
+  kakao:
+    base-url: ${KAKAO_BASE_URL}
+    client-id: ${KAKAO_CLIENT}
+    client-secret: ${KAKAO_SECRET}
+    redirect-url: ${KAKAO_REDIRECT}
+    app-id: ${KAKAO_APP_ID}
+    admin-key: ${KAKAO_ADMIN_KEY}
+
+jwt:
+  header: X-AUTH-TOKEN
+  secret: ${JWT_SECRET_KEY}
+  refresh: ${JWT_REFRESH_KEY}
+  access-token-seconds: 31536000
+  refresh-token-seconds: 31536000
+

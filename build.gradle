@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.2'
+    id 'io.spring.dependency-management' version '1.1.0'
+}
+
+allprojects{
+    group = 'com.example'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '17'
+
+    repositories {
+        mavenCentral()
+    }
+}
+subprojects{
+
+
+    apply plugin: 'java'
+    // build.gradle에서 api() 를 사용하려면 java-library 사용
+    apply plugin: 'java-library'
+    apply plugin: 'org.springframework.boot'
+    // spring boot dependency를 사용하여 사용중인 부트 버전에서 자동으로 의존성을 가져온다.
+    apply plugin: 'io.spring.dependency-management'
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+
+    // 공통적으로 사용하는 dependencies
+    dependencies {
+
+        // swagger dependency
+        implementation "io.springfox:springfox-boot-starter:3.0.0"
+        implementation "io.springfox:springfox-swagger-ui:3.0.0"
+        implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
+        implementation 'org.springframework.boot:spring-boot-starter-tomcat'
+        annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+        implementation 'org.springframework.boot:spring-boot-starter'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+}

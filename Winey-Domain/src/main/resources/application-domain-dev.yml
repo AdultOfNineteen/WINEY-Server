@@ -1,0 +1,33 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  sql:
+    init:
+      platform: mysql
+  datasource:
+    url: ${DEV_DB_URL_HOST}
+    username: ${AWS_DB_USER_NAME}
+    password: ${AWS_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    # create, update, create-drop, none 등의 옵션이 있습니다.
+    # create: 기존테이블 삭제 후 다시 생성
+    # update: 변경된 부분만 반영
+    # create-drop: create와 같으나 종료 시점에 테이블 DROP
+    # none: 사용하지 않음
+    hibernate:
+      ddl-auto: none
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    # DDl 생성 시 데이터베이스 고유의 기능 사용여부
+    generate-ddl: false
+    # 실행되는 쿼리문 보여주기 여부
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+

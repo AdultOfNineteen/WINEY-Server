@@ -1,0 +1,6 @@
+rootProject.name = 'WINEY-Server'
+include 'Winey-API'
+include 'Winey-Batch'
+include 'Winey-Common'
+include 'Winey-Domain'
+include 'Winey-Infrastructure'

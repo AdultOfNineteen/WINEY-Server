@@ -1,0 +1,32 @@
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
+
+    api 'org.springframework.boot:spring-boot-starter-web'
+    api 'org.springframework.boot:spring-boot-starter-security'
+
+
+
+    //jwt
+    api group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+    api group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+    api group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+}
+
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

@@ -1,0 +1,27 @@
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+---
+spring:
+  config:
+    activate:
+      on-profile: localDev
+

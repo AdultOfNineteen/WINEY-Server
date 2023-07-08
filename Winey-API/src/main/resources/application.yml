@@ -1,0 +1,48 @@
+server:
+  port: 9000
+
+spring:
+  profiles:
+    include:
+      - infrastructure
+      - common
+    group:
+      dev: dev, domain-dev
+      prod: prod, domain-prod
+      local: local, domain-local
+      localDev: local, domain-local-dev
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 300MB
+    mvc:
+      pathmatch:
+        matching-strategy: ant_path_matcher
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "prod"
+
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "dev"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "local"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "localDev"
+
