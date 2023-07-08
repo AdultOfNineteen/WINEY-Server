@@ -1,6 +1,6 @@
 package com.example.wineydomain.user.entity;
 
-import com.example.matchdomain.common.model.BaseEntity;
+import com.example.wineydomain.common.model.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -52,11 +52,6 @@ public class User extends BaseEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType = SocialType.normal;
-
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "userId")
-    private List<UserAddress> userAddresses = new ArrayList<>();
 
 
     @ManyToMany
