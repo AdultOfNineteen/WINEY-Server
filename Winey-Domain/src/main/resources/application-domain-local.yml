@@ -6,9 +6,9 @@ spring:
     init:
       platform: mysql
   datasource:
-    url: ${DB_URL_HOST}
-    username: ${AWS_DB_USER_NAME}
-    password: ${AWS_DB_PASSWORD}
+    url: ${LOCAL_DB_URL_HOST}
+    username: ${LOCAL_DB_USER_NAME}
+    password: ${LOCAL_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

@@ -56,8 +56,6 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "phoneNumber")
     private String phoneNumber;
 
-    @Column(name = "isDeleted")
-    private Boolean isDeleted;
 
     @Column(name = "level")
     private Integer level;
