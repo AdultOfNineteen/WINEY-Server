@@ -53,6 +53,14 @@ public class User extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private SocialType socialType = SocialType.normal;
 
+    @Column(name = "phoneNumber")
+    private String phoneNumber;
+
+    @Column(name = "isDeleted")
+    private Boolean isDeleted;
+
+    @Column(name = "level")
+    private Integer level;
 
     @ManyToMany
     @JoinTable(
