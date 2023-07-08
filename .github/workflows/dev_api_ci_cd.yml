@@ -30,7 +30,7 @@ jobs:
           oauth.kakao.client-id: ${{ secrets.KAKAO_CLIENT }}
           oauth.kakao.client-secret: ${{ secrets.KAKAO_SECRET }}
           oauth.kakao.redirect-url: ${{ secrets.KAKAO_REDIRECT }}
-          oauth.kakao.app-id: ${{ secrets.KAKAO_APP_ID }}
+          oauth.kakao.app-id: ${{ secrets.KAKAO_APP_I   D }}
           oauth.kakao.admin-key: ${{ secrets.KAKAO_ADMIN_KEY }}
           jwt.secret: ${{ secrets.JWT_SECRET_KEY }}
           jwt.refresh: ${{ secrets.JWT_REFRESH_KEY }}
@@ -62,7 +62,7 @@ jobs:
       - name: Generate deployment packagez
         run: |
           mkdir -p deploy
-          cp Winey-Api/build/libs/*.jar deploy/winey-dev-api.jar
+          cp Winey-API/build/libs/*.jar deploy/winey-dev-api.jar
           cp Procfile deploy/Procfile
           cp -r .ebextensions-dev deploy/.ebextensions
           cp -r .platform deploy/.platform
