@@ -72,7 +72,7 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: winey
-          environment_name: Winey-Api-Dev
+          environment_name: Winey-Api-Dev-env
           version_label: winey-server-api-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}
           region: ap-northeast-2
           deployment_package: deploy/winey-server-api-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}.zip
