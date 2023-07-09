@@ -1,4 +1,4 @@
-package com.example.wineydomain.model;
+package com.example.wineydomain.common.model;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
-    @Column(name="createdAt",updatable = false)
+    @Column(name="createdAt", updatable = false)
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -20,6 +20,4 @@ public abstract class BaseEntity {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
 }
