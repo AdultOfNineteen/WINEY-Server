@@ -1,7 +1,9 @@
-package com.example.wineydomain.wine.entity;
+package com.example.wineydomain.tastingNote.entity;
 
-import com.example.wineydomain.common.model.Color;
 import com.example.wineydomain.common.model.BaseEntity;
+import com.example.wineydomain.common.model.Color;
+import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.wine.entity.Wine;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -9,7 +11,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "`Wine`")
+@Table(name = "`TastingNote`")
 @Getter
 @Setter
 @Builder
@@ -17,7 +19,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
-public class Wine extends BaseEntity {
+public class TastingNote extends BaseEntity {
 
     @Id
     @Column(name = "id")
@@ -27,22 +29,13 @@ public class Wine extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Color color;
 
-    @Column(name = "name")
-    private String name;
-
-    /**
-     * 품종
-     */
-    @Column(name = "varietal")
-    private String varietal;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "countryId", nullable = false)
-    private Country country;
-
-
-    @Column(name = "price")
-    private Integer price;
+    @JoinColumn(name = "wineId", nullable = false)
+    private Wine wine;
 
     /**
      * 당도
@@ -76,4 +69,22 @@ public class Wine extends BaseEntity {
      */
     @Column(name = "tannins")
     private Integer tannins;
+
+    /**
+     * 여운
+     */
+    @Column(name = "finish")
+    private Integer finish;
+
+    @Column(name = "memo")
+    private String memo;
+
+    @Column(name = "starRating")
+    private Integer starRating;
+
+    @Column(name = "buyAgain")
+    private Boolean buyAgain;
+
+    @Column(name = "isDeleted")
+    private Boolean isDeleted;
 }
