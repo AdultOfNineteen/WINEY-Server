@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Table(name = "`Image`")
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicUpdate
