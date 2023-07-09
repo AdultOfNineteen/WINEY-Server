@@ -1,5 +1,6 @@
 package com.example.wineydomain.tastingNote.entity;
 
+import com.example.wineydomain.common.model.BaseEntity;
 import com.example.wineydomain.common.model.Color;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -16,7 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
-public class TastingNote {
+public class TastingNote extends BaseEntity {
 
     @Id
     @Column(name = "id")
