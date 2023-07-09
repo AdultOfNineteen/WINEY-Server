@@ -1,4 +1,4 @@
-package com.example.wineydomain.tastingNote.preference.entity;
+package com.example.wineydomain.preference.entity;
 
 import com.example.wineydomain.common.model.BaseEntity;
 import lombok.*;
