@@ -1,6 +1,5 @@
-package com.example.wineydomain.badge.entity;
+package com.example.wineydomain.wine.entity;
 
-import com.example.wineydomain.common.model.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -8,7 +7,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "`WineBadge`")
+@Table(name = "`Country`")
 @Getter
 @Setter
 @Builder
@@ -16,7 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
-public class WineBadge extends BaseEntity {
+public class Country {
 
     @Id
     @Column(name = "id")
@@ -25,7 +24,4 @@ public class WineBadge extends BaseEntity {
 
     @Column(name = "name")
     private String name;
-
-    @Column(name = "description")
-    private String description;
 }

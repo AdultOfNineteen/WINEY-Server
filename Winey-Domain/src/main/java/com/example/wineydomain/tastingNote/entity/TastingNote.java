@@ -2,6 +2,8 @@ package com.example.wineydomain.tastingNote.entity;
 
 import com.example.wineydomain.common.model.BaseEntity;
 import com.example.wineydomain.common.model.Color;
+import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.wine.entity.Wine;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -27,7 +29,13 @@ public class TastingNote extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Color color;
 
-    // todo : 향 키워드
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wineId", nullable = false)
+    private Wine wine;
 
     /**
      * 당도
