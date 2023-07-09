@@ -1,4 +1,4 @@
-package com.example.wineydomain.badge.entity;
+package com.example.wineydomain.tastingNote.entity;
 
 import com.example.wineydomain.common.model.BaseEntity;
 import lombok.*;
@@ -8,7 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "`WineBadge`")
+@Table(name = "`Pairing`")
 @Getter
 @Setter
 @Builder
@@ -16,7 +16,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
-public class WineBadge extends BaseEntity {
+public class Pairing extends BaseEntity {
 
     @Id
     @Column(name = "id")
@@ -26,8 +26,7 @@ public class WineBadge extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
-    private String description;
-
-    // todo : 이미지
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tastingNoteId", nullable = false)
+    private TastingNote tastingNote;
 }
