@@ -3,8 +3,6 @@ name: dev Winey API Server CI/CD
 on:
   push:
     branches: [develop]
-      #tags:
-    # - Dev-Api-v*.*.*
   workflow_dispatch: # 수동 실행 옵션 (생략)
 
 jobs:
