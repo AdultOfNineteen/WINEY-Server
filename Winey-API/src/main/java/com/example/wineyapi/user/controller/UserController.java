@@ -1,18 +1,17 @@
 package com.example.wineyapi.user.controller;
 
+import com.example.wineyapi.user.dto.UserRequest;
 import com.example.wineyapi.user.dto.UserResponse;
 import com.example.wineycommon.reponse.CommonResponse;
 import com.example.wineydomain.user.entity.SocialType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
 
     @PostMapping("/login/{socialType}")
-    public CommonResponse<UserResponse.LoginUserDTO> login(@PathVariable SocialType socialType) {
+    public CommonResponse<UserResponse.LoginUserDTO> login(@PathVariable SocialType socialType,
+                                                           @RequestBody UserRequest.LoginUserDTO request) {
         return null;
     }
 

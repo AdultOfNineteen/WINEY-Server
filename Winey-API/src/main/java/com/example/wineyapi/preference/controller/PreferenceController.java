@@ -15,7 +15,7 @@ public class PreferenceController {
 
     @PatchMapping("/users/{userId}/preferences")
     public CommonResponse<PreferenceResponse.UpdatePreferenceDTO> updatePreference(@PathVariable Long userId,
-                                                                                @RequestBody PreferenceRequest.UpdatePreferenceDTO request) {
+                                                                                   @RequestBody PreferenceRequest.UpdatePreferenceDTO request) {
         return null;
     }
 }
