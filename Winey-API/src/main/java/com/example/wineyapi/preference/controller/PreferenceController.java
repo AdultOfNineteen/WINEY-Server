@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 public class PreferenceController {
 
     @GetMapping("/users/{userId}/preferences")
-    public CommonResponse<PreferenceResponse.GetPreference> getPreference(@PathVariable Long userId) {
+    public CommonResponse<PreferenceResponse.PreferenceDTO> getPreference(@PathVariable Long userId) {
         return null;
     }
 
     @PatchMapping("/users/{userId}/preferences")
-    public CommonResponse<PreferenceResponse.UpdatePreference> updatePreference(@PathVariable Long userId,
-                                                                                @RequestBody PreferenceRequest.UpdatePreference request) {
+    public CommonResponse<PreferenceResponse.UpdatePreferenceDTO> updatePreference(@PathVariable Long userId,
+                                                                                @RequestBody PreferenceRequest.UpdatePreferenceDTO request) {
         return null;
     }
 }

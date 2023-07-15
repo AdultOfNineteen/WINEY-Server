@@ -5,7 +5,7 @@ import lombok.Getter;
 public class PreferenceRequest {
 
     @Getter
-    public static class UpdatePreference {
+    public static class UpdatePreferenceDTO {
         private String field;
     }
 }

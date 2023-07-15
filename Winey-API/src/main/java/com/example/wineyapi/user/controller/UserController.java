@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @PostMapping("/login/{socialType}")
-    public CommonResponse<UserResponse.LoginUser> login(@PathVariable SocialType socialType) {
+    public CommonResponse<UserResponse.LoginUserDTO> login(@PathVariable SocialType socialType) {
         return null;
     }
 
     @DeleteMapping("/users/{userId}")
-    public CommonResponse<UserResponse.DeleteUser> deleteUser(@PathVariable Long userId) {
+    public CommonResponse<UserResponse.DeleteUserDTO> deleteUser(@PathVariable Long userId) {
         return null;
     }
 }

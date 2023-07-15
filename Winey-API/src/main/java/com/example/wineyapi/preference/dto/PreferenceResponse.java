@@ -11,7 +11,7 @@ public class PreferenceResponse {
     @Getter
     @AllArgsConstructor
     @Builder
-    public static class GetPreference {
+    public static class PreferenceDTO {
         private String field;
     }
 
@@ -19,7 +19,8 @@ public class PreferenceResponse {
     @Getter
     @AllArgsConstructor
     @Builder
-    public static class UpdatePreference {
+    public static class UpdatePreferenceDTO {
         private String field;
     }
+
 }
