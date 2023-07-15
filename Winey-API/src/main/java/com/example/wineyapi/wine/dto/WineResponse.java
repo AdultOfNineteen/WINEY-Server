@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 public class WineResponse {
 
     @NoArgsConstructor
@@ -20,7 +22,8 @@ public class WineResponse {
     @AllArgsConstructor
     @Builder
     public static class WineListDTO {
-        private String field;
+        private List<WineDTO> wineList;
+        private Integer size;
     }
 
     @NoArgsConstructor
