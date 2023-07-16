@@ -6,6 +6,6 @@ public class UserRequest {
 
     @Getter
     public static class LoginUserDTO {
-        private String field;
+        private String accessToken;
     }
 }
