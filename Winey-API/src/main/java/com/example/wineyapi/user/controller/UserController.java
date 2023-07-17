@@ -29,6 +29,13 @@ public class UserController {
         return CommonResponse.onSuccess(UserConverter.toLoginUserDTO(user, accessToken, refreshToken));
     }
 
+    @GetMapping("/login/kakao")
+    public CommonResponse<String> getAccessTokenKakao(@RequestParam(required = false) String code){
+        String accessToken = userService.getKakaoAccessToken(code);
+        System.out.println("ACCESS TOKEN : " + accessToken);
+        return CommonResponse.onSuccess(accessToken);
+    }
+
     @DeleteMapping("/users/{userId}")
     public CommonResponse<UserResponse.DeleteUserDTO> deleteUser(@PathVariable Long userId) {
         return null;

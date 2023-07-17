@@ -37,8 +37,8 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "profileImgUrl")
     private String profileImgUrl;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "nickName")
+    private String nickName;
 
     @Column(name = "email")
     private String email;
@@ -47,15 +47,11 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "socialId")
     private String socialId;
 
-    @Column(name = "birth")
-    private LocalDate birth;
-
     @Enumerated(EnumType.STRING)
     private SocialType socialType = SocialType.normal;
 
     @Column(name = "phoneNumber")
     private String phoneNumber;
-
 
     @Column(name = "level")
     private Integer level;
