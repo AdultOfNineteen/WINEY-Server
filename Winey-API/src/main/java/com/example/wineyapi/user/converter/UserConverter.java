@@ -1,10 +1,12 @@
 package com.example.wineyapi.user.converter;
 
 import com.example.wineyapi.user.dto.UserResponse;
+import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.user.entity.Authority;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineyinfrastructure.oauth.kakao.dto.KakaoUserInfoDto;
+import com.example.wineyinfrastructure.user.client.NickNameFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -17,11 +19,14 @@ import java.util.Collections;
 public class UserConverter {
 
     private final PasswordEncoder passwordEncoder;
+    private final NickNameFeignClient nickNameFeignClient;
     private static PasswordEncoder staticPasswordEncoder;
+    private static NickNameFeignClient staticNickNameFeignClient;
 
     @PostConstruct
     void init() {
-        this.staticPasswordEncoder = passwordEncoder;
+        staticPasswordEncoder = this.passwordEncoder;
+        staticNickNameFeignClient = this.nickNameFeignClient;
     }
 
     public static Authority userAuthority() {
@@ -39,17 +44,20 @@ public class UserConverter {
     }
 
     public static User toUser(KakaoUserInfoDto kakaoUserInfoDto) {
+
+        String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
+        System.out.println("NICKNAME : " + nickName);
+
         return User.builder()
                 .profileImgUrl(kakaoUserInfoDto.getProfileUrl())
                 .password(staticPasswordEncoder.encode(kakaoUserInfoDto.getId()))
                 .socialId(kakaoUserInfoDto.getId())
-                .nickName(kakaoUserInfoDto.getName())
-                .username(kakaoUserInfoDto.getName())
+                .nickName(nickName)
+                .username(kakaoUserInfoDto.getId())
                 .authorities(Collections.singleton(userAuthority()))
                 .socialType(SocialType.KAKAO)
-                .email("swa07016@winey.com")
-                .phoneNumber("01012341234")
                 .level(1)
+                .status(Status.INACTIVE)
                 .build();
     }
 }
