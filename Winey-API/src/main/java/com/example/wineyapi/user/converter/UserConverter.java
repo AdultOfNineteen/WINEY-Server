@@ -29,10 +29,14 @@ public class UserConverter {
         staticNickNameFeignClient = this.nickNameFeignClient;
     }
 
-    public static Authority userAuthority() {
+    public static Authority createUserAuthority() {
         return Authority.builder()
                 .authorityName("ROLE_USER")
                 .build();
+    }
+
+    public static String createUserName(SocialType socialType, String socialId) {
+        return socialType.name() + "-" + socialId;
     }
 
     public static UserResponse.LoginUserDTO toLoginUserDTO(User user, String accessToken, String refreshToken) {
@@ -46,15 +50,14 @@ public class UserConverter {
     public static User toUser(KakaoUserInfoDto kakaoUserInfoDto) {
 
         String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
-        System.out.println("NICKNAME : " + nickName);
 
         return User.builder()
                 .profileImgUrl(kakaoUserInfoDto.getProfileUrl())
                 .password(staticPasswordEncoder.encode(kakaoUserInfoDto.getId()))
                 .socialId(kakaoUserInfoDto.getId())
                 .nickName(nickName)
-                .username(kakaoUserInfoDto.getId())
-                .authorities(Collections.singleton(userAuthority()))
+                .username(createUserName(SocialType.KAKAO, kakaoUserInfoDto.getId()))
+                .authorities(Collections.singleton(createUserAuthority()))
                 .socialType(SocialType.KAKAO)
                 .level(1)
                 .status(Status.INACTIVE)

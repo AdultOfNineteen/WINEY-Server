@@ -9,6 +9,7 @@ import com.example.wineycommon.reponse.CommonResponse;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +21,7 @@ public class UserController {
 
     @PostMapping("/login/{socialType}")
     public CommonResponse<UserResponse.LoginUserDTO> login(@PathVariable SocialType socialType,
-                                                           @RequestBody UserRequest.LoginUserDTO request) {
+                                                           @RequestBody UserRequest.LoginUserDTO request) throws ConversionFailedException {
 
         User user = userService.login(socialType, request);
         String accessToken = jwtService.createToken(user.getId());
@@ -29,11 +30,22 @@ public class UserController {
         return CommonResponse.onSuccess(UserConverter.toLoginUserDTO(user, accessToken, refreshToken));
     }
 
+    /**
+     * 인가 코드를 바탕으로 카카오 서버에 요청하여 AccessToken을 받는 테스트용 API
+     */
     @GetMapping("/login/kakao")
-    public CommonResponse<String> getAccessTokenKakao(@RequestParam(required = false) String code){
+    public CommonResponse<String> getAccessTokenKakao(@RequestParam String code) {
         String accessToken = userService.getKakaoAccessToken(code);
-        System.out.println("ACCESS TOKEN : " + accessToken);
         return CommonResponse.onSuccess(accessToken);
+    }
+
+    /**
+     * KAKAO 서버로부터 인가 코드를 받는 테스트용 API
+     */
+    @GetMapping("/auth/kakao")
+    public CommonResponse<String> getAuthorizationCodeKakao(@RequestParam String code) {
+        String message = "Go to " + "/login/kakao?code=" + code;
+        return CommonResponse.onSuccess(message);
     }
 
     @DeleteMapping("/users/{userId}")
