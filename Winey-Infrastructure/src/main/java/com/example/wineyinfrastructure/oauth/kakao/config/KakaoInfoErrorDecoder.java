@@ -6,6 +6,8 @@ import feign.FeignException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 
+import static com.example.wineycommon.exception.errorcode.OtherServerErrorCode.*;
+
 public class KakaoInfoErrorDecoder implements ErrorDecoder {
 
     @Override
@@ -13,13 +15,13 @@ public class KakaoInfoErrorDecoder implements ErrorDecoder {
         if (response.status() >= 400) {
             switch (response.status()) {
                 case 401:
-                    throw OtherServerUnauthorizedException.EXCEPTION;
+                    throw new OtherServerException(OTHER_SERVER_UNAUTHORIZED);
                 case 403:
-                    throw OtherServerForbiddenException.EXCEPTION;
+                    throw new OtherServerException(OTHER_SERVER_FORBIDDEN);
                 case 419:
-                    throw OtherServerExpiredTokenException.EXCEPTION;
+                    throw new OtherServerException(OTHER_SERVER_EXPIRED_TOKEN);
                 default:
-                    throw OtherServerBadRequestException.EXCEPTION;
+                    throw new OtherServerException(OTHER_SERVER_BAD_REQUEST);
             }
         }
 
