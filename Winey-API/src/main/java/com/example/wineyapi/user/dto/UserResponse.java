@@ -12,7 +12,9 @@ public class UserResponse {
     @AllArgsConstructor
     @Builder
     public static class LoginUserDTO {
-        private String field;
+        private Long userId;
+        private String accessToken;
+        private String refreshToken;
     }
 
     @NoArgsConstructor
