@@ -55,6 +55,7 @@ public class UserController {
 
     @DeleteMapping("/users/{userId}")
     public CommonResponse<UserResponse.DeleteUserDTO> deleteUser(@PathVariable Long userId) {
-        return null;
+        Long deletedUserId = userService.delete(userId);
+        return CommonResponse.onSuccess(UserConverter.toDeleteUserDTO(deletedUserId));
     }
 }

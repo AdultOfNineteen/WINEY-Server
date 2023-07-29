@@ -67,4 +67,10 @@ public class UserServiceImpl implements UserService {
     private User loginWithApple(UserRequest.LoginUserDTO request) {
         return null;
     }
+
+    @Override
+    public Long delete(Long id) {
+        userRepository.deleteById(id);
+        return id;
+    }
 }

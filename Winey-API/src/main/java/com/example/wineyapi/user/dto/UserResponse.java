@@ -1,9 +1,12 @@
 package com.example.wineyapi.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 public class UserResponse {
 
@@ -22,6 +25,8 @@ public class UserResponse {
     @AllArgsConstructor
     @Builder
     public static class DeleteUserDTO {
-        private String field;
+        private Long userId;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        private LocalDateTime deletedAt;
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 @Component
@@ -61,6 +62,13 @@ public class UserConverter {
                 .socialType(SocialType.KAKAO)
                 .level(1)
                 .status(Status.INACTIVE)
+                .build();
+    }
+
+    public static UserResponse.DeleteUserDTO toDeleteUserDTO(Long deletedUserId) {
+        return UserResponse.DeleteUserDTO.builder()
+                .userId(deletedUserId)
+                .deletedAt(LocalDateTime.now())
                 .build();
     }
 }

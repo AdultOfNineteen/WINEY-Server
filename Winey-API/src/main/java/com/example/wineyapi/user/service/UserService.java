@@ -8,4 +8,6 @@ public interface UserService {
     User login(SocialType socialType, UserRequest.LoginUserDTO request);
 
     String getKakaoAccessToken(String code);
+
+    Long delete(Long id);
 }
