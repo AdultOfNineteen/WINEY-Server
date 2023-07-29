@@ -2,6 +2,7 @@ package com.example.wineyinfrastructure.config;
 
 
 import com.example.wineyinfrastructure.oauth.BaseFeignClientPackage;
+import com.example.wineyinfrastructure.user.UserFeignClientPackage;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -14,7 +15,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableFeignClients(basePackageClasses = BaseFeignClientPackage.class)
+@EnableFeignClients(basePackageClasses = {
+        BaseFeignClientPackage.class,
+        UserFeignClientPackage.class
+})
 public class FeignCommonConfig {
     @Bean
     public Decoder feignDecoder() {
