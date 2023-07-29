@@ -1,6 +1,6 @@
 package com.example.wineyapi.security;
 
-import com.example.wineycommon.exception.CommonResponseStatus;
+import com.example.wineycommon.exception.errorcode.CommonResponseStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.security.core.AuthenticationException;

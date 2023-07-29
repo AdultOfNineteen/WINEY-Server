@@ -36,7 +36,10 @@ public class Wine extends BaseEntity {
     @Column(name = "varietal")
     private String varietal;
 
-    // todo : 국가
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "countryId", nullable = false)
+    private Country country;
+
 
     @Column(name = "price")
     private Integer price;

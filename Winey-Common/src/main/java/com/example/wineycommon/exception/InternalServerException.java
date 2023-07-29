@@ -1,22 +1,11 @@
 package com.example.wineycommon.exception;
 
+import com.example.wineycommon.exception.errorcode.BaseErrorCode;
 import lombok.Getter;
 
 @Getter
 public class InternalServerException extends BaseException {
-    private String message;
-
-    public InternalServerException(String message) {
-        super(CommonResponseStatus._INTERNAL_SERVER_ERROR);
-        this.message = message;
-    }
-
-    public InternalServerException(CommonResponseStatus errorCode, String message) {
-        super(errorCode);
-        this.message = message;
-    }
-
-    public InternalServerException(CommonResponseStatus errorCode) {
+    public InternalServerException(BaseErrorCode errorCode) {
         super(errorCode);
     }
 }

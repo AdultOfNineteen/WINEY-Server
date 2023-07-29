@@ -28,6 +28,4 @@ public class WineBadge extends BaseEntity {
 
     @Column(name = "description")
     private String description;
-
-    // todo : 이미지
 }

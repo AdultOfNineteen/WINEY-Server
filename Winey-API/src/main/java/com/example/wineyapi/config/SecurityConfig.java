@@ -3,12 +3,15 @@ package com.example.wineyapi.config;
 import com.example.wineyapi.security.JwtSecurityConfig;
 import com.example.wineyapi.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -16,6 +19,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtService jwtService;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -59,9 +67,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/profile").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/test/**").permitAll()
-                .antMatchers("/login/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/health/**").permitAll()
+                .antMatchers("/v3/api-docs").permitAll()
+                .antMatchers("/api-docs/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

@@ -1,6 +1,7 @@
 package com.example.wineydomain.preference.entity;
 
 import com.example.wineydomain.common.model.BaseEntity;
+import com.example.wineydomain.user.entity.User;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -22,6 +23,10 @@ public class Preference extends BaseEntity {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", nullable = false)
+    private User user;
 
     // todo : 기획 확정되면 필드들 추가
 }

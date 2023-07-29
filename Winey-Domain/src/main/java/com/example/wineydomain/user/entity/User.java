@@ -1,6 +1,7 @@
 package com.example.wineydomain.user.entity;
 
 import com.example.wineydomain.common.model.BaseEntity;
+import com.example.wineydomain.common.model.Status;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -37,18 +38,11 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "profileImgUrl")
     private String profileImgUrl;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "email")
-    private String email;
-
+    @Column(name = "nickName")
+    private String nickName;
 
     @Column(name = "socialId")
     private String socialId;
-
-    @Column(name = "birth")
-    private LocalDate birth;
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType = SocialType.normal;
@@ -56,9 +50,11 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "phoneNumber")
     private String phoneNumber;
 
-
     @Column(name = "level")
     private Integer level;
+
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.INACTIVE;
 
     @ManyToMany
     @JoinTable(
