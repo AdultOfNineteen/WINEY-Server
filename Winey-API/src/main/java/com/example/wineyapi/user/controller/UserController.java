@@ -4,6 +4,8 @@ import com.example.wineyapi.security.JwtService;
 import com.example.wineyapi.user.converter.UserConverter;
 import com.example.wineyapi.user.dto.UserRequest;
 import com.example.wineyapi.user.dto.UserResponse;
+import com.example.wineycommon.annotation.ApiErrorCodeExample;
+import com.example.wineycommon.exception.errorcode.OtherServerErrorCode;
 import com.example.wineyapi.user.service.UserService;
 import com.example.wineycommon.reponse.CommonResponse;
 import com.example.wineydomain.user.entity.SocialType;
@@ -16,9 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
 
+
     private final UserService userService;
     private final JwtService jwtService;
-
+  
+    @ApiErrorCodeExample(OtherServerErrorCode.class)
     @PostMapping("/login/{socialType}")
     public CommonResponse<UserResponse.LoginUserDTO> login(@PathVariable SocialType socialType,
                                                            @RequestBody UserRequest.LoginUserDTO request) throws ConversionFailedException {
@@ -47,6 +51,7 @@ public class UserController {
         String message = "Go to " + "/login/kakao?code=" + code;
         return CommonResponse.onSuccess(message);
     }
+
 
     @DeleteMapping("/users/{userId}")
     public CommonResponse<UserResponse.DeleteUserDTO> deleteUser(@PathVariable Long userId) {

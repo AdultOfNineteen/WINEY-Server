@@ -4,8 +4,8 @@ import com.example.wineycommon.exception.errorcode.BaseErrorCode;
 import lombok.Getter;
 
 @Getter
-public class InternalServerException extends BaseException {
-    public InternalServerException(BaseErrorCode errorCode) {
+public class OtherServerException extends BaseException{
+    public OtherServerException(BaseErrorCode errorCode) {
         super(errorCode);
     }
 }

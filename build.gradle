@@ -34,9 +34,8 @@ subprojects{
     dependencies {
 
         // swagger dependency
-        implementation "io.springfox:springfox-boot-starter:3.0.0"
-        implementation "io.springfox:springfox-swagger-ui:3.0.0"
-        implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+        implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'
+
 
         implementation 'org.springframework.boot:spring-boot-starter-tomcat'
         annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"

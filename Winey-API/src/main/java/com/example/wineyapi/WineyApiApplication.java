@@ -1,5 +1,7 @@
 package com.example.wineyapi;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.servers.Server;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +17,7 @@ import java.util.Arrays;
 
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 @ComponentScan(basePackages = {"com.example.wineyapi","com.example.wineydomain","com.example.wineyinfrastructure", "com.example.wineycommon"})
+@OpenAPIDefinition(servers = {@Server(url = "${server.servlet.context-path}", description = "Default Server URL")})
 @RequiredArgsConstructor
 @Slf4j
 public class WineyApiApplication implements ApplicationListener<ApplicationReadyEvent> {
