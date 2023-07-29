@@ -25,9 +25,12 @@ public class UserServiceImpl implements UserService {
     public User login(SocialType socialType, UserRequest.LoginUserDTO request) {
         User user = null;
         switch (socialType) {
-            case KAKAO -> user = loginWithKakao(request);
-            case GOOGLE -> user = loginWithGoogle(request);
-            case APPLE -> user = loginWithApple(request);
+            case KAKAO :
+                user = loginWithKakao(request);
+            case GOOGLE :
+                user = loginWithGoogle(request);
+            case APPLE :
+                user = loginWithApple(request);
         }
         return user;
     }
