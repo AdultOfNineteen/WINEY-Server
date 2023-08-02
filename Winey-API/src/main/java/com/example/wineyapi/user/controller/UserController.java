@@ -1,5 +1,6 @@
 package com.example.wineyapi.user.controller;
 
+import com.example.wineyapi.common.annotation.CheckIdExistence;
 import com.example.wineyapi.security.JwtService;
 import com.example.wineyapi.user.converter.UserConverter;
 import com.example.wineyapi.user.dto.UserRequest;
@@ -54,6 +55,7 @@ public class UserController {
 
 
     @DeleteMapping("/users/{userId}")
+    @CheckIdExistence
     public CommonResponse<UserResponse.DeleteUserDTO> deleteUser(@PathVariable Long userId) {
         Long deletedUserId = userService.delete(userId);
         return CommonResponse.onSuccess(UserConverter.toDeleteUserDTO(deletedUserId));
