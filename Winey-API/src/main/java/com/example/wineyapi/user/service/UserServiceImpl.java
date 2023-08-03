@@ -25,9 +25,15 @@ public class UserServiceImpl implements UserService {
     public User login(SocialType socialType, UserRequest.LoginUserDTO request) {
         User user = null;
         switch (socialType) {
-            case KAKAO -> user = loginWithKakao(request);
-            case GOOGLE -> user = loginWithGoogle(request);
-            case APPLE -> user = loginWithApple(request);
+            case KAKAO :
+                user = loginWithKakao(request);
+                break;
+            case GOOGLE :
+                user = loginWithGoogle(request);
+                break;
+            case APPLE :
+                user = loginWithApple(request);
+                break;
         }
         return user;
     }
@@ -60,5 +66,11 @@ public class UserServiceImpl implements UserService {
 
     private User loginWithApple(UserRequest.LoginUserDTO request) {
         return null;
+    }
+
+    @Override
+    public Long delete(Long id) {
+        userRepository.deleteById(id);
+        return id;
     }
 }
