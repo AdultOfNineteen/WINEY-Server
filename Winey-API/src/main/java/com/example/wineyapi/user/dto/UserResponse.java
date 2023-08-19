@@ -1,5 +1,6 @@
 package com.example.wineyapi.user.dto;
 
+import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +36,9 @@ public class UserResponse {
     @AllArgsConstructor
     @Builder
     public static class SendCodeDTO {
+        private String phoneNumber;
         private LocalDateTime sentAt;
+        private LocalDateTime expireAt;
     }
 
     @NoArgsConstructor
@@ -43,6 +46,8 @@ public class UserResponse {
     @AllArgsConstructor
     @Builder
     public static class VerifyCodeDTO {
-        private String field;
+        private String phoneNumber;
+        private VerifyMessageStatus status;
+        private Integer mismatchAttempts;
     }
 }

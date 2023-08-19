@@ -9,8 +9,10 @@ import com.example.wineycommon.annotation.ApiErrorCodeExample;
 import com.example.wineycommon.exception.errorcode.OtherServerErrorCode;
 import com.example.wineyapi.user.service.UserService;
 import com.example.wineycommon.reponse.CommonResponse;
+import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.verificationMessage.VerificationMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.web.bind.annotation.*;
@@ -68,8 +70,8 @@ public class UserController {
     @CheckIdExistence
     public CommonResponse<UserResponse.SendCodeDTO> sendCode(@PathVariable Long userId,
                                                              @RequestBody UserRequest.SendCodeDTO request) {
-        userService.sendCode(userId, request);
-        return null;
+        VerificationMessage sentVerificationMessage = userService.sendCode(userId, request);
+        return CommonResponse.onSuccess(UserConverter.toSendCodeDTO(sentVerificationMessage));
     }
 
     /**
@@ -79,6 +81,7 @@ public class UserController {
     @CheckIdExistence
     public CommonResponse<UserResponse.VerifyCodeDTO> verifyCode(@PathVariable Long userId,
                                                                  @RequestBody UserRequest.VerifyCodeDTO request) {
-        return null;
+        VerificationMessage updatedVerificationMessage = userService.verifyCode(userId, request);
+        return CommonResponse.onSuccess(UserConverter.VerifyCodeDTO(updatedVerificationMessage));
     }
 }

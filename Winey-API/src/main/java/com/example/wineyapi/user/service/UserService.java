@@ -1,8 +1,10 @@
 package com.example.wineyapi.user.service;
 
 import com.example.wineyapi.user.dto.UserRequest;
+import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.verificationMessage.VerificationMessage;
 
 public interface UserService {
     User login(SocialType socialType, UserRequest.LoginUserDTO request);
@@ -12,5 +14,7 @@ public interface UserService {
     Long delete(Long id);
 
 
-    void sendCode(Long userId, UserRequest.SendCodeDTO request);
+    VerificationMessage sendCode(Long userId, UserRequest.SendCodeDTO request);
+
+    VerificationMessage verifyCode(Long userId, UserRequest.VerifyCodeDTO request);
 }
