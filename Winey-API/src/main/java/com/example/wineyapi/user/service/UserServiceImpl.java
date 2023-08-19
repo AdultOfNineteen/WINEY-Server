@@ -73,4 +73,9 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
         return id;
     }
+
+    @Override
+    public void sendCode(Long userId, UserRequest.SendCodeDTO request) {
+        return ;
+    }
 }

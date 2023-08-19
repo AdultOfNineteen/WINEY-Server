@@ -10,4 +10,7 @@ public interface UserService {
     String getKakaoAccessToken(String code);
 
     Long delete(Long id);
+
+
+    void sendCode(Long userId, UserRequest.SendCodeDTO request);
 }

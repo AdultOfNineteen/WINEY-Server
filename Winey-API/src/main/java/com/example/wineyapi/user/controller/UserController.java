@@ -60,4 +60,25 @@ public class UserController {
         Long deletedUserId = userService.delete(userId);
         return CommonResponse.onSuccess(UserConverter.toDeleteUserDTO(deletedUserId));
     }
+
+    /**
+     * 전화번호를 받아 인증코드를 전송하거나 가입을 중단하는 API
+     */
+    @PostMapping("/users/{userId}/phone/code/send")
+    @CheckIdExistence
+    public CommonResponse<UserResponse.SendCodeDTO> sendCode(@PathVariable Long userId,
+                                                             @RequestBody UserRequest.SendCodeDTO request) {
+        userService.sendCode(userId, request);
+        return null;
+    }
+
+    /**
+     * 인증코드를 검사하는 API
+     */
+    @PostMapping("/users/{userId}/phone/code/verify")
+    @CheckIdExistence
+    public CommonResponse<UserResponse.VerifyCodeDTO> verifyCode(@PathVariable Long userId,
+                                                                 @RequestBody UserRequest.VerifyCodeDTO request) {
+        return null;
+    }
 }

@@ -8,4 +8,14 @@ public class UserRequest {
     public static class LoginUserDTO {
         private String accessToken;
     }
+
+    @Getter
+    public static class SendCodeDTO {
+        private String phoneNumber;
+    }
+
+    @Getter
+    public static class VerifyCodeDTO {
+        private String verificationCode;
+    }
 }
