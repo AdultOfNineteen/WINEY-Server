@@ -9,8 +9,10 @@ import com.example.wineycommon.annotation.ApiErrorCodeExample;
 import com.example.wineycommon.exception.errorcode.OtherServerErrorCode;
 import com.example.wineyapi.user.service.UserService;
 import com.example.wineycommon.reponse.CommonResponse;
+import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.verificationMessage.VerificationMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.web.bind.annotation.*;
@@ -59,5 +61,27 @@ public class UserController {
     public CommonResponse<UserResponse.DeleteUserDTO> deleteUser(@PathVariable Long userId) {
         Long deletedUserId = userService.delete(userId);
         return CommonResponse.onSuccess(UserConverter.toDeleteUserDTO(deletedUserId));
+    }
+
+    /**
+     * 전화번호를 받아 인증코드를 전송하거나 가입을 중단하는 API
+     */
+    @PostMapping("/users/{userId}/phone/code/send")
+    @CheckIdExistence
+    public CommonResponse<UserResponse.SendCodeDTO> sendCode(@PathVariable Long userId,
+                                                             @RequestBody UserRequest.SendCodeDTO request) {
+        VerificationMessage sentVerificationMessage = userService.sendCode(userId, request);
+        return CommonResponse.onSuccess(UserConverter.toSendCodeDTO(sentVerificationMessage));
+    }
+
+    /**
+     * 인증코드를 검사하는 API
+     */
+    @PostMapping("/users/{userId}/phone/code/verify")
+    @CheckIdExistence
+    public CommonResponse<UserResponse.VerifyCodeDTO> verifyCode(@PathVariable Long userId,
+                                                                 @RequestBody UserRequest.VerifyCodeDTO request) {
+        VerificationMessage updatedVerificationMessage = userService.verifyCode(userId, request);
+        return CommonResponse.onSuccess(UserConverter.VerifyCodeDTO(updatedVerificationMessage));
     }
 }

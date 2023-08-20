@@ -3,14 +3,17 @@ package com.example.wineyapi.user.service;
 import com.example.wineyapi.user.converter.UserConverter;
 import com.example.wineyapi.user.dto.UserRequest;
 import com.example.wineycommon.properties.KakaoProperties;
+import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.user.repository.UserRepository;
+import com.example.wineydomain.verificationMessage.VerificationMessage;
 import com.example.wineyinfrastructure.oauth.kakao.client.KakaoFeignClient;
 import com.example.wineyinfrastructure.oauth.kakao.client.KakaoLoginFeignClient;
 import com.example.wineyinfrastructure.oauth.kakao.dto.KakaoUserInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -72,5 +75,17 @@ public class UserServiceImpl implements UserService {
     public Long delete(Long id) {
         userRepository.deleteById(id);
         return id;
+    }
+
+    @Transactional
+    @Override
+    public VerificationMessage sendCode(Long userId, UserRequest.SendCodeDTO request) {
+        return null;
+    }
+
+    @Transactional
+    @Override
+    public VerificationMessage verifyCode(Long userId, UserRequest.VerifyCodeDTO request) {
+        return null;
     }
 }
