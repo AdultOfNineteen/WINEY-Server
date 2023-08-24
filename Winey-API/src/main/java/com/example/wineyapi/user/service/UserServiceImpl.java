@@ -3,9 +3,12 @@ package com.example.wineyapi.user.service;
 import com.example.wineyapi.user.converter.UserConverter;
 import com.example.wineyapi.user.dto.UserRequest;
 import com.example.wineycommon.exception.MessageException;
+import com.example.wineycommon.exception.NotFoundException;
+import com.example.wineycommon.exception.UserException;
 import com.example.wineycommon.exception.errorcode.CommonResponseStatus;
 import com.example.wineycommon.properties.CoolSmsProperties;
 import com.example.wineycommon.properties.KakaoProperties;
+import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
@@ -26,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -120,9 +124,20 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public VerificationMessage sendCode(Long userId, UserRequest.SendCodeDTO request) {
+
+        Optional<User> optionalUser = userRepository.findByPhoneNumber(request.getPhoneNumber());
+
+        if(optionalUser.isPresent()) {
+            // 0. 1~2를 수행한 소셜로그인 계정 hard delete & 안내문구전송
+            User user = optionalUser.get();
+            String errorMessageWithSocialType = user.getPhoneNumber() + "님은 " + user.getSocialType().name() + " 소셜 회원으로 가입하신 기록이 있어요";
+            userRepository.deleteById(userId);
+            throw new UserException(CommonResponseStatus.USER_ALREADY_EXISTS, errorMessageWithSocialType);
+        }
+
         try {
             // 1. 4자리 인증 번호 생성
-            String verificationNumber = numberGen(4);
+            String verificationNumber = numberGen(6);
 
             // 2. 발송할 메시지 객체 준비
             Message message = new Message();
@@ -169,6 +184,13 @@ public class UserServiceImpl implements UserService {
             verificationMessage.setStatus(VerifyMessageStatus.FAILED);
             throw new MessageException(CommonResponseStatus.VERIFICATION_DID_NOT_MATCH);
         }
+
+        // 4. 사용자 상태 업데이트
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(CommonResponseStatus.NOT_EXIST_USER));
+        user.setStatus(Status.ACTIVE);
+        user.setPhoneNumber(request.getPhoneNumber());
+        userRepository.save(user);
 
         return verificationMessageRepository.save(verificationMessage);
     }
