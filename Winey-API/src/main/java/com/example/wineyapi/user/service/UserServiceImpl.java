@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
 
     private User loginWithKakao(UserRequest.LoginUserDTO request) {
         String accessToken = request.getAccessToken();
-        KakaoUserInfoDto kakaoUserInfoDto = kakaoFeignClient.getInfo(accessToken);
+        KakaoUserInfoDto kakaoUserInfoDto = kakaoFeignClient.getInfo("Bearer " + accessToken);
         return userRepository.findBySocialIdAndSocialType(kakaoUserInfoDto.getId(), SocialType.KAKAO)
                 .orElseGet(() -> createUser(kakaoUserInfoDto));
     }
