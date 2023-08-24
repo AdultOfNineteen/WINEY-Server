@@ -16,6 +16,7 @@ public class UserRequest {
 
     @Getter
     public static class VerifyCodeDTO {
+        private String phoneNumber;
         private String verificationCode;
     }
 }

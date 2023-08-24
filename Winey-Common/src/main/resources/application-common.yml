@@ -14,3 +14,9 @@ jwt:
   access-token-seconds: 31536000
   refresh-token-seconds: 31536000
 
+
+cool-sms:
+  api-key: ${COOL_SMS_API_KEY}
+  api-secret: ${COOL_SMS_API_SECRET}
+  from-number: ${COOL_SMS_FROM_NUMBER}
+  domain: ${COOL_SMS_DOMAIN}
