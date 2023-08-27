@@ -37,7 +37,9 @@ public class UserResponse {
     @Builder
     public static class SendCodeDTO {
         private String phoneNumber;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime sentAt;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime expireAt;
     }
 
