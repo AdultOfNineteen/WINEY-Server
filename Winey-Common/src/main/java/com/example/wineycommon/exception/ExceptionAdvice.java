@@ -120,15 +120,39 @@ public class ExceptionAdvice{
                 baseDynamicException.getStatus().getErrorReasonHttpStatus().getHttpStatus());
     }
 
+    /**
+     * 가입된 소셜 타입을 동적으로 알려주어야하는 예외가 있어서 핸들러를 따로 구성했습니다.
+     * @param userException
+     * @param user
+     * @param request
+     * @return
+     */
+    @ExceptionHandler(value = UserException.class)
+    public ResponseEntity onUserException(UserException userException,
+                                          @AuthenticationPrincipal User user, HttpServletRequest request) {
+        getExceptionStackTrace(userException, user, request);
 
+        String errorMessage = userException.getErrorReasonHttpStatus().getMessage();
 
-    @ExceptionHandler(value = Exception.class)
-    public ResponseEntity onException(Exception exception, @AuthenticationPrincipal User user,
-                                      HttpServletRequest request) {
-        getExceptionStackTrace(exception, user, request);
-        return new ResponseEntity<>(CommonResponse.onFailure("500", exception.getMessage(), null), null,
-                HttpStatus.INTERNAL_SERVER_ERROR);
+        // `errorMessageWithSocialType`를 사용하여 메시지를 구성
+        if(userException.getErrorMessageWithSocialType() != null) {
+            errorMessage = userException.getErrorMessageWithSocialType();
+        }
+
+        return new ResponseEntity<>(
+                CommonResponse.onFailure(userException.getErrorReasonHttpStatus().getCode(), errorMessage, userException.getErrorReasonHttpStatus().getResult()),
+                null, userException.getErrorReasonHttpStatus().getHttpStatus());
     }
+
+
+
+//    @ExceptionHandler(value = Exception.class)
+//    public ResponseEntity onException(Exception exception, @AuthenticationPrincipal User user,
+//                                      HttpServletRequest request) {
+//        getExceptionStackTrace(exception, user, request);
+//        return new ResponseEntity<>(CommonResponse.onFailure("500", exception.getMessage(), null), null,
+//                HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
 
 

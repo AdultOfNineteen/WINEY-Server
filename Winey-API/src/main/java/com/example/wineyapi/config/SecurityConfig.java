@@ -32,6 +32,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/h2-console/**"
                         ,"/favicon.ico"
+                        ,"/swagger-ui/**"
+                        ,"/swagger-resources/**"
+                        ,"/api-docs/**"
+                        ,"/v3/api-docs/**"
+                        ,"/users/**" // TODO : 인가처리시 제외하기
+                        ,"/health/**"
                 )
                 ;
 
@@ -58,19 +64,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/swagger-resources/**").permitAll()
-                .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()
-                .antMatchers("/v3/api-docs").permitAll()
                 .antMatchers("/image/**").permitAll()
                 .antMatchers("/users/refresh").permitAll()
                 .antMatchers("/profile").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/test/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/health/**").permitAll()
-                .antMatchers("/v3/api-docs").permitAll()
-                .antMatchers("/api-docs/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

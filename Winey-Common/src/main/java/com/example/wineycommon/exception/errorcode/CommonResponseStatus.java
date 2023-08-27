@@ -76,13 +76,17 @@ public enum CommonResponseStatus implements BaseErrorCode {
     POST_USERS_EMPTY_NICKNAME(BAD_REQUEST,"U007","닉네임을 입력해주세요."),
 
     FAILED_TO_LOGIN(BAD_REQUEST, "U008", "로그인에 실패하였습니다."),
-    NOT_EXIST_USER(BAD_REQUEST,"U009" , "해당 유저가 존재하지 않습니다."),;
+    NOT_EXIST_USER(BAD_REQUEST,"U009" , "해당 유저가 존재하지 않습니다."),
+    USER_ALREADY_EXISTS(CONFLICT, "U010", "이미 가입된 유저입니다."),
 
 
-
-
-
-
+    /**
+     * MXXX : Message 관련 에러
+     */
+    MESSAGE_SEND_FAILED(BAD_REQUEST, "M001", "메시지 전송이 실패했습니다. 올바른 번호인지 확인하세요."),
+    MESSAGE_NOT_FOUND(NOT_FOUND, "M002", "인증번호 전송 기록이 존재하지 않습니다."),
+    MESSAGE_VERIFICATION_TIMEOUT(BAD_REQUEST, "M003","인증 번호가 만료되었습니다."),
+    VERIFICATION_DID_NOT_MATCH(BAD_REQUEST, "M004", "인증 번호가 일치하지 않습니다.");
 
 
 
