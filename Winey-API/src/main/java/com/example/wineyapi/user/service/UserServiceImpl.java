@@ -182,6 +182,7 @@ public class UserServiceImpl implements UserService {
             verificationMessage.setStatus(VerifyMessageStatus.VERIFIED);
         } else {
             verificationMessage.setStatus(VerifyMessageStatus.FAILED);
+            verificationMessage.setMismatchAttempts(verificationMessage.getMismatchAttempts() + 1);
             throw new MessageException(CommonResponseStatus.VERIFICATION_DID_NOT_MATCH);
         }
 
