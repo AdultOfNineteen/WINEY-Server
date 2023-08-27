@@ -1,4 +1,4 @@
-package com.example.wineydomain.verificationMessage;
+package com.example.wineydomain.verificationMessage.entity;
 
 import com.example.wineydomain.common.model.BaseEntity;
 import com.example.wineydomain.common.model.VerifyMessageStatus;
