@@ -24,8 +24,7 @@ public class WineServiceImpl implements WineService {
     private final WineRepository wineRepository;
     @Override
     public List<WineResponse.RecommendWineDTO> recommendWine(User user) {
-
-        Optional<Preference> preferences = preferenceRepository.findByUser(user);
+        Preference preferences = user.getPreference();
         List<TastingNote> tastingNotes = tastingNoteRepository.findTop3ByUserOrderByStarRatingDescCreatedAtDesc(user);
 
 
@@ -38,18 +37,18 @@ public class WineServiceImpl implements WineService {
 
         List<WineResponse.RecommendWineDTO> recommendWineDTO = null;
 
-        if(preferences.isEmpty() & tastingNotes.size() == 0) {
+        if(preferences==null & tastingNotes.size() == 0) {
             List<TastingNoteRepository.WineList> wineLists = tastingNoteRepository.recommendCountWine();
             recommendWineDTO = wineConvertor.RecommendWineCountByWine(wineLists);
         }
-        else if(preferences.isEmpty() & tastingNotes.size() != 0 ){
+        else if(preferences==null & tastingNotes.size() != 0 ){
             Wine wine = tastingNotes.get(0).getWine();
 
             List<Wine> wines = wineRepository.findTop3ByIdNotAndBodyAndTanninsAndSweetnessAndAcidityAndVarietal(wine.getId(), wine.getBody(), wine.getTannins(), wine.getSweetness(), wine.getAcidity(), wine.getVarietal());
 
             recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
         }
-        else if(preferences.isPresent() & tastingNotes.size() != 0 ){
+        else if(preferences!=null & tastingNotes.size() != 0 ){
             Wine wine = tastingNotes.get(0).getWine();
 
             List<Wine> wines = wineRepository.findTop3ByIdNotAndBodyAndTanninsAndSweetnessAndAcidityAndVarietal(wine.getId(), wine.getBody(), wine.getTannins(), wine.getSweetness(), wine.getAcidity(), wine.getVarietal());
@@ -57,8 +56,7 @@ public class WineServiceImpl implements WineService {
             recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
         }
         else{
-            Preference preference = user.getPreference();
-            List<Wine> wines = wineRepository.findTop3BySweetnessAndAcidityAndBodyAndTannins(preference.getSweetness(), preference.getAcidity(), preference.getBody(), preference.getTannins());
+            List<Wine> wines = wineRepository.findTop3BySweetnessAndAcidityAndBodyAndTannins(preferences.getSweetness(), preferences.getAcidity(), preferences.getBody(), preferences.getTannins());
             recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
         }
 
