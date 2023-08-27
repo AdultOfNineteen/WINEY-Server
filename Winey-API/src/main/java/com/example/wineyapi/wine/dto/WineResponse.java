@@ -33,4 +33,22 @@ public class WineResponse {
     public static class CreateWineDTO {
         private String field;
     }
+
+    @NoArgsConstructor
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class RecommendWineDTO {
+        private Long wineId;
+
+        private String country;
+
+        private String kind;
+
+        private String type;
+
+        private List<String> varietal;
+
+        private int price;
+    }
 }
