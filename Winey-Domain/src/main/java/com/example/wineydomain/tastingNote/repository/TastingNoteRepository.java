@@ -14,11 +14,9 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
 
     @Query(value = "select W.id as 'wineId',W.name, W.country, W.type, avg(W.price)'price', W.varietal " +
             "from TastingNote TN join Wine W on TN.wineId = W.id " +
-            "group by TN.wineId order by count(TN.wineId) limit 3",
+            "group by TN.wineId order by count(TN.wineId) asc, TN.createdAt desc limit 3",
             nativeQuery = true)
     List<WineList> recommendCountWine();
-
-    List<TastingNote> findByUserOrderByStarRatingDescCreatedAtDesc(User user);
 
     List<TastingNote> findTop3ByUserOrderByStarRatingDescCreatedAtDesc(User user);
 

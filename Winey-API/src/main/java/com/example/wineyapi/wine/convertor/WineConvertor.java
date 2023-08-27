@@ -23,6 +23,7 @@ public class WineConvertor {
         wineLists.forEach(
                 result -> recommendWineDTOS.add(
                         WineResponse.RecommendWineDTO.builder()
+                                .name(result.getName())
                                 .wineId(result.getWineId())
                                 .country(result.getCountry())
                                 .price(result.getPrice())
@@ -46,6 +47,7 @@ public class WineConvertor {
         wineLists.forEach(
                 result -> recommendWineDTOS.add(
                         WineResponse.RecommendWineDTO.builder()
+                                .name(result.getName())
                                 .wineId(result.getId())
                                 .country(result.getCountry())
                                 .price(result.getPrice() != null ? result.getPrice() : 0)

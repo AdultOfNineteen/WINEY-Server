@@ -10,10 +10,11 @@ import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Wine;
 import com.example.wineydomain.wine.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,26 +38,25 @@ public class WineServiceImpl implements WineService {
 
         List<WineResponse.RecommendWineDTO> recommendWineDTO = null;
 
+        Pageable pageable = PageRequest.of(0, 3);
+
+
         if(preferences==null & tastingNotes.size() == 0) {
             List<TastingNoteRepository.WineList> wineLists = tastingNoteRepository.recommendCountWine();
             recommendWineDTO = wineConvertor.RecommendWineCountByWine(wineLists);
         }
         else if(preferences==null & tastingNotes.size() != 0 ){
             Wine wine = tastingNotes.get(0).getWine();
-
-            List<Wine> wines = wineRepository.findTop3ByIdNotAndBodyAndTanninsAndSweetnessAndAcidityAndVarietal(wine.getId(), wine.getBody(), wine.getTannins(), wine.getSweetness(), wine.getAcidity(), wine.getVarietal());
-
+            List<Wine> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins(), pageable);
             recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
         }
         else if(preferences!=null & tastingNotes.size() != 0 ){
             Wine wine = tastingNotes.get(0).getWine();
-
-            List<Wine> wines = wineRepository.findTop3ByIdNotAndBodyAndTanninsAndSweetnessAndAcidityAndVarietal(wine.getId(), wine.getBody(), wine.getTannins(), wine.getSweetness(), wine.getAcidity(), wine.getVarietal());
-
+            List<Wine> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins(), pageable);
             recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
         }
         else{
-            List<Wine> wines = wineRepository.findTop3BySweetnessAndAcidityAndBodyAndTannins(preferences.getSweetness(), preferences.getAcidity(), preferences.getBody(), preferences.getTannins());
+            List<Wine> wines = wineRepository.recommendWine(preferences.getAcidity(), preferences.getSweetness(), preferences.getBody(), preferences.getTannins(), pageable);
             recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
         }
 

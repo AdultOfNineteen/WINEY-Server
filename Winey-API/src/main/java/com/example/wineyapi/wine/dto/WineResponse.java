@@ -41,9 +41,9 @@ public class WineResponse {
     public static class RecommendWineDTO {
         private Long wineId;
 
-        private String country;
+        private String name;
 
-        private String kind;
+        private String country;
 
         private String type;
 
