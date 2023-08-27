@@ -1,10 +1,13 @@
 package com.example.wineyapi.user.converter;
 
+import com.example.wineyapi.user.dto.UserRequest;
 import com.example.wineyapi.user.dto.UserResponse;
 import com.example.wineydomain.common.model.Status;
+import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.user.entity.Authority;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.verificationMessage.entity.VerificationMessage;
 import com.example.wineyinfrastructure.oauth.kakao.dto.KakaoUserInfoDto;
 import com.example.wineyinfrastructure.user.client.NickNameFeignClient;
 import lombok.RequiredArgsConstructor;
@@ -69,6 +72,33 @@ public class UserConverter {
         return UserResponse.DeleteUserDTO.builder()
                 .userId(deletedUserId)
                 .deletedAt(LocalDateTime.now())
+                .build();
+    }
+
+    public static UserResponse.SendCodeDTO toSendCodeDTO(VerificationMessage verificationMessage) {
+        return UserResponse.SendCodeDTO.builder()
+                .phoneNumber(verificationMessage.getPhoneNumber())
+                .sentAt(verificationMessage.getCreatedAt())
+                .expireAt(verificationMessage.getExpireAt())
+                .build();
+    }
+
+    public static UserResponse.VerifyCodeDTO toVerifyCodeDTO(VerificationMessage verificationMessage) {
+        return UserResponse.VerifyCodeDTO.builder()
+                .phoneNumber(verificationMessage.getPhoneNumber())
+                .status(verificationMessage.getStatus())
+                .mismatchAttempts(verificationMessage.getMismatchAttempts())
+                .build();
+    }
+
+    public static VerificationMessage toVerificationMessage(UserRequest.SendCodeDTO request, String verificationNumber) {
+        return VerificationMessage.builder()
+                .status(VerifyMessageStatus.PENDING)
+                .verificationNumber(verificationNumber)
+                .requestedAt(LocalDateTime.now())
+                .expireAt(LocalDateTime.now().plusMinutes(5))
+                .phoneNumber(request.getPhoneNumber())
+                .mismatchAttempts(0)
                 .build();
     }
 }
