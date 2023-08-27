@@ -5,7 +5,9 @@ import com.example.wineyapi.wine.dto.WineResponse;
 import com.example.wineyapi.wine.service.WineService;
 import com.example.wineycommon.reponse.CommonResponse;
 import com.example.wineydomain.user.entity.User;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "02-Wine🍷",description = "와인 관련 API")
 @Slf4j
 public class WineController {
     private final WineService wineService;
@@ -34,6 +37,7 @@ public class WineController {
         return null;
     }
     @GetMapping("/wines/recommend")
+    @Operation(summary= "02-01 Wine🍷 홈화면 와인 조회",description = "홈화면 와인 추천 조회입니다.")
     public CommonResponse<List<WineResponse.RecommendWineDTO>> recommendWine(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
         return CommonResponse.onSuccess(wineService.recommendWine(user));
     }
