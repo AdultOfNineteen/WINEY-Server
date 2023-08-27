@@ -32,6 +32,10 @@ jobs:
           oauth.kakao.admin-key: ${{ secrets.KAKAO_ADMIN_KEY }}
           jwt.secret: ${{ secrets.JWT_SECRET_KEY }}
           jwt.refresh: ${{ secrets.JWT_REFRESH_KEY }}
+          cool-sms.api-key: ${{ secrets.COOL_SMS_API_KEY }}
+          cool-sms.api-secret: ${{ secrets.COOL_SMS_API_SECRET }}
+          cool-sms.from-number: ${{ secrets.COOL_SMS_FROM_NUMBER }}
+          cool-sms.domain: ${{ secrets.COOL_SMS_DOMAIN }}
 
       - name: Set Environment - Domain DEV Yml
         uses: microsoft/variable-substitution@v1
