@@ -35,6 +35,7 @@ springdoc:
       enabled: true
   cache:
     disabled: true
+  use-fqn: true
 
 ---
 spring:
