@@ -41,23 +41,24 @@ public class WineServiceImpl implements WineService {
         Pageable pageable = PageRequest.of(0, 3);
 
 
-        if(preferences==null & tastingNotes.size() == 0) {
-            List<TastingNoteRepository.WineList> wineLists = tastingNoteRepository.recommendCountWine();
-            recommendWineDTO = wineConvertor.RecommendWineCountByWine(wineLists);
-        }
-        else if(preferences==null & tastingNotes.size() != 0 ){
-            Wine wine = tastingNotes.get(0).getWine();
-            List<Wine> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins(), pageable);
-            recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
-        }
-        else if(preferences!=null & tastingNotes.size() != 0 ){
-            Wine wine = tastingNotes.get(0).getWine();
-            List<Wine> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins(), pageable);
-            recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
-        }
-        else{
-            List<Wine> wines = wineRepository.recommendWine(preferences.getAcidity(), preferences.getSweetness(), preferences.getBody(), preferences.getTannins(), pageable);
-            recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
+        if (preferences == null) {
+            if (tastingNotes.size() == 0) {
+                List<TastingNoteRepository.WineList> wineLists = tastingNoteRepository.recommendCountWine();
+                recommendWineDTO = wineConvertor.RecommendWineCountByWine(wineLists);
+            } else {
+                Wine wine = tastingNotes.get(0).getWine();
+                List<Wine> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins(), pageable);
+                recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
+            }
+        } else {
+            if (tastingNotes.size() == 0) {
+                List<Wine> wines = wineRepository.recommendWine(preferences.getAcidity(), preferences.getSweetness(), preferences.getBody(), preferences.getTannins(), pageable);
+                recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
+            } else {
+                Wine wine = tastingNotes.get(0).getWine();
+                List<Wine> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins(), pageable);
+                recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
+            }
         }
 
 
