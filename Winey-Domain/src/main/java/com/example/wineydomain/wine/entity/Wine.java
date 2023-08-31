@@ -27,6 +27,7 @@ public class Wine extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Color color;
 
+
     @Column(name = "name")
     private String name;
 
@@ -36,9 +37,9 @@ public class Wine extends BaseEntity {
     @Column(name = "varietal")
     private String varietal;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "countryId", nullable = false)
-    private Country country;
+    private String country;
+
+    private String region;
 
 
     @Column(name = "price")
@@ -56,11 +57,15 @@ public class Wine extends BaseEntity {
     @Column(name = "acidity")
     private Integer acidity;
 
+
     /**
      * 바디
      */
     @Column(name = "body")
     private Integer body;
+
+    @Enumerated(EnumType.STRING)
+    private WineType type;
 
     /**
      * 도수
