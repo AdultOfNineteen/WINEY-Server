@@ -1,5 +1,6 @@
 package com.example.wineyapi.preference.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class PreferenceResponse {
     @Builder
     public static class UpdatePreferenceDTO {
         private Long preferenceId;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime updatedAt;
     }
 }

@@ -2,6 +2,7 @@ package com.example.wineydomain.user.entity;
 
 import com.example.wineydomain.common.model.BaseEntity;
 import com.example.wineydomain.common.model.Status;
+import com.example.wineydomain.preference.entity.Preference;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -55,6 +56,9 @@ public class User extends BaseEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Status status = Status.INACTIVE;
+
+    @OneToOne(mappedBy = "user")
+    private Preference preference;
 
     @ManyToMany
     @JoinTable(

@@ -7,7 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Chocolate {
     MILK("밀크초콜릿"),
-    DARK("다크초콜릿");
+    DARK("다크초콜릿"),
+    NONE("응답안함");
 
     private final String description;
 }
