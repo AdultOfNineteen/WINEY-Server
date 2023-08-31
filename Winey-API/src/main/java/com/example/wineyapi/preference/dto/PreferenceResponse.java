@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 public class PreferenceResponse {
 
     @NoArgsConstructor
@@ -12,7 +14,7 @@ public class PreferenceResponse {
     @AllArgsConstructor
     @Builder
     public static class PreferenceDTO {
-        private String field;
+        private Long field;
     }
 
     @NoArgsConstructor
@@ -20,7 +22,7 @@ public class PreferenceResponse {
     @AllArgsConstructor
     @Builder
     public static class UpdatePreferenceDTO {
-        private String field;
+        private Long preferenceId;
+        private LocalDateTime updatedAt;
     }
-
 }
