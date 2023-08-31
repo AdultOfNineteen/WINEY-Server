@@ -69,8 +69,7 @@ public class Preference extends BaseEntity {
      */
     @Column(name = "tannins")
     private Integer tannins;
-
-
+  
     /**
      * 양방향 연관관계 편의 메소드입니다.
      * @param user - 유저 엔티티

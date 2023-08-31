@@ -18,7 +18,7 @@ spring:
     # create-drop: create와 같으나 종료 시점에 테이블 DROP
     # none: 사용하지 않음
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
