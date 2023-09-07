@@ -26,5 +26,5 @@ public class WineTip extends BaseEntity {
 
     private String title;
 
-    private String markdown;
+    private String blogUrl;
 }

@@ -17,15 +17,8 @@ public class WineTipResponse {
         private String thumbNail;
 
         private String title;
+
+        private String url;
     }
 
-    @NoArgsConstructor
-    @Getter
-    @AllArgsConstructor
-    @Builder
-    public static class WineTipDetailDto {
-        private Long wineTipId;
-
-        private String markDown;
-    }
 }

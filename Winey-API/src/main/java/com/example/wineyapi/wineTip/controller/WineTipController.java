@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequestMapping("/wine-tip")
 @Tag(name = "💡WineTip" , description = "와인팁 관련 API 입니다.")
 @RequiredArgsConstructor
+@Slf4j
 public class WineTipController {
     private final WineTipService wineTipService;
     @GetMapping("")
@@ -26,14 +28,6 @@ public class WineTipController {
     ){
         PageResponse<List<WineTipResponse.WineTipDto>> wineTip = wineTipService.getWineTip(page, size);
         return CommonResponse.onSuccess(wineTip);
-    }
-
-    @GetMapping("/{wineTipId}")
-    @Operation(summary = "WineTip 단건 조회")
-    public CommonResponse<WineTipResponse.WineTipDetailDto> getWineTipDetail(
-            @PathVariable Long wineTipId){
-
-        return CommonResponse.onSuccess()
     }
 
 
