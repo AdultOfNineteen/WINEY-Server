@@ -22,8 +22,7 @@ public class SmellKeywordTastingNote {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "smellKeywordId", nullable = false)
+    @Enumerated(EnumType.STRING)
     private SmellKeyword smellKeyword;
 
     @ManyToOne(fetch = FetchType.LAZY)

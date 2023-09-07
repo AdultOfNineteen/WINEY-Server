@@ -7,22 +7,30 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "`SmellKeyword`")
 @Getter
-@Setter
-@Builder
 @AllArgsConstructor
-@NoArgsConstructor
-@DynamicUpdate
-@DynamicInsert
-public class SmellKeyword extends BaseEntity {
+public enum SmellKeyword {
+    FRUIT("FRUIT","FRUIT"),
+    BERRY("FRUIT","BERRY"),
+    LEMONANDLIME("FRUIT","LEMONANDLIME"),
+    APPLEPEAR("FRUIT","APPLEPEAR"),
+    PEACHPLUM("FRUIT","PEACHPLUM"),
+    TROPICALFRUIT("FRUIT","TROPICALFRUIT"),
+    FLOWER("NATURAL", "FLOWER"),
+    GRASSWOOD("NATURAL", "GRASSWOOD"),
+    HERB("NATURAL","HERB"),
+    OAK("OAK","OAK"),
+    SPICE("OAK","SPICE"),
+    NUTS("OAK","NUTS"),
+    VANILLA("OAK","VANILLA"),
+    CARAMELCHOCOLATE("OAK","CARAMELCHOCOLATE"),
+    FLINT("OTHER","FLINT"),
+    BREAD("OTHER", "BREAD"),
+    RUBBER("OTHER","RUBBER"),
+    EARTHASH("OTHER","EARTASH"),
+    MEDICINE("OTHER", "MEDICNE");
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+   private final String type;
 
-    @Column(name = "name")
-    private String name;
+   private final String value;
 }
