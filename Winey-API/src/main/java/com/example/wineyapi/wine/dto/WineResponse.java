@@ -1,11 +1,9 @@
 package com.example.wineyapi.wine.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
+import java.util.Map;
 
 public class WineResponse {
 
@@ -50,5 +48,38 @@ public class WineResponse {
         private List<String> varietal;
 
         private int price;
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class TasteAnalysisDTO {
+        private String recommendCountry;
+
+        private String recommendVarietal;
+
+        private String recommendWineType;
+
+        private int totalWineCnt;
+
+        private int buyAgainCnt;
+
+        private int redCnt;
+
+        private int whiteCnt;
+
+        private int sparklingCnt;
+
+        private int roseCnt;
+
+        private int fortifiedCnt;
+
+        private int otherCnt;
+
+        Map<String, Integer> top3Country;
+
+        Map<String, Integer> top3Varietal;
     }
 }

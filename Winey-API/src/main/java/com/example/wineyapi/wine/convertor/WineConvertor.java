@@ -49,7 +49,7 @@ public class WineConvertor {
                         WineResponse.RecommendWineDTO.builder()
                                 .name(result.getName())
                                 .wineId(result.getId())
-                                .country(result.getCountry())
+                                .country(result.getCountry().getValue())
                                 .price(result.getPrice() != null ? result.getPrice() : 0)
                                 .varietal(
                                         result.getVarietal() != null

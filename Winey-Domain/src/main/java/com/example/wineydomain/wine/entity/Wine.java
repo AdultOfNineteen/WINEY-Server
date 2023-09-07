@@ -37,7 +37,8 @@ public class Wine extends BaseEntity {
     @Column(name = "varietal")
     private String varietal;
 
-    private String country;
+    @Enumerated(EnumType.STRING)
+    private Country country;
 
     private String region;
 

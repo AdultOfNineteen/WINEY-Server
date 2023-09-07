@@ -1,5 +1,6 @@
 package com.example.wineyapi.wine.service;
 
+import com.example.wineyapi.tastingNote.convertor.TastingNoteConvertor;
 import com.example.wineyapi.wine.convertor.WineConvertor;
 import com.example.wineyapi.wine.dto.WineResponse;
 import com.example.wineydomain.preference.entity.Preference;
@@ -22,6 +23,7 @@ public class WineServiceImpl implements WineService {
     private final TastingNoteRepository tastingNoteRepository;
     private final PreferenceRepository preferenceRepository;
     private final WineConvertor wineConvertor;
+    private final TastingNoteConvertor tastingNoteConvertor;
     private final WineRepository wineRepository;
     @Override
     public List<WineResponse.RecommendWineDTO> recommendWine(User user) {
@@ -63,5 +65,13 @@ public class WineServiceImpl implements WineService {
 
 
         return recommendWineDTO;
+    }
+
+    @Override
+    public WineResponse.TasteAnalysisDTO tasteAnalysis(User user) {
+        List<TastingNote> tastingNotes = tastingNoteRepository.findByUser(user);
+
+
+        return tastingNoteConvertor.TasteAnalysis(tastingNotes);
     }
 }
