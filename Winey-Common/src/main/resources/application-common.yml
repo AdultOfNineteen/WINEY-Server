@@ -20,3 +20,11 @@ cool-sms:
   api-secret: ${COOL_SMS_API_SECRET}
   from-number: ${COOL_SMS_FROM_NUMBER}
   domain: ${COOL_SMS_DOMAIN}
+
+aws:
+  s3:
+    bucket: ${AWS_BUCKET}
+    base-url: ${AWS_BASE_URL}
+    access-key: ${ACCESS_S3_ACCESS_KEY}
+    secret-key: ${ACCESS_S3_SECRET_KEY}
+
