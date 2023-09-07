@@ -122,7 +122,7 @@ public class TastingNoteConvertor {
             HashMap<String,String> country = new HashMap<>();
             country.put("country", sortCountry.get(i).getKey());
             double wineCountPercent = calculateAvgPercent(sortCountry.get(i).getValue(),totalWineCnt);
-            String percentString = String.format("%.1f%%", Math.round(wineCountPercent * 10.0) / 10.0);
+            String percentString = String.format("%.1f", Math.round(wineCountPercent * 10.0) / 10.0);
             country.put("percent", percentString);
             top3Country.add(country);
         }
@@ -131,7 +131,7 @@ public class TastingNoteConvertor {
             HashMap<String,String> varietal = new HashMap<>();
             varietal.put("varietal", sortVarietal.get(i).getKey());
             double cntPercent = calculateAvgPercent(sortVarietal.get(i).getValue(),totalWineCnt);
-            String percentString = String.format("%.1f%%", Math.round(cntPercent * 10.0) / 10.0);
+            String percentString = String.format("%.1f", Math.round(cntPercent * 10.0) / 10.0);
             varietal.put("percent", percentString);
             top3Varietal.add(varietal);
         }
@@ -140,7 +140,7 @@ public class TastingNoteConvertor {
             HashMap<String,String> smell = new HashMap<>();
             smell.put("smell", sortSmellKeyword.get(i).getKey());
             double cntPercent = (double) sortSmellKeyword.get(i).getValue() / totalSmellCount * 100.0;
-            String percentString = String.format("%.1f%%", Math.round(cntPercent * 10.0) / 10.0);
+            String percentString = String.format("%.1f", Math.round(cntPercent * 10.0) / 10.0);
             smell.put("percent", percentString);
             top7Smell.add(smell);
         }

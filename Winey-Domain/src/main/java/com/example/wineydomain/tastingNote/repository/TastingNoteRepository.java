@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,TastingNoteCustomRepository {
-    @EntityGraph(attributePaths = "wine")
+    @EntityGraph(attributePaths = {"wine","smellKeywordTastingNote"})
     List<TastingNote> findByUser(User user);
 
 

@@ -1,5 +1,6 @@
 package com.example.wineyapi.wine.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.util.List;
@@ -78,13 +79,17 @@ public class WineResponse {
 
         private int otherCnt;
 
+        @Schema(description = "key = country, value = percent 식인 List 해쉬맵입니다. 유동적으로 바뀌기 떄문에 Map 을 사용해 구현했습니다.")
         List<Map<String, String>> top3Country;
 
-        private Taste taste;
-
+        @Schema(description = "key = varietal, value = percent 식인 List 해쉬맵입니다. 유동적으로 바뀌기 떄문에 Map 을 사용해 구현했습니다.")
         List<Map<String, String>> top3Varietal;
 
+        @Schema(description = "key = smell, value = percent 식인 List 해쉬맵입니다. 유동적으로 바뀌기 떄문에 Map 을 사용해 구현했습니다.")
         List<Map<String, String>> top7Smell;
+
+
+        private Taste taste;
 
         private int avgPrice;
 
