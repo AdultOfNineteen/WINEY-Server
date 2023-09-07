@@ -1,6 +1,5 @@
 package com.example.wineydomain.wine.entity;
 
-import com.example.wineydomain.common.model.Color;
 import com.example.wineydomain.common.model.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -24,8 +23,7 @@ public class Wine extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Color color;
+    private String color;
 
 
     @Column(name = "name")

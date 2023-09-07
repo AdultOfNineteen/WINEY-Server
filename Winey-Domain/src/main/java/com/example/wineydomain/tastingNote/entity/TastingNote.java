@@ -1,7 +1,6 @@
 package com.example.wineydomain.tastingNote.entity;
 
 import com.example.wineydomain.common.model.BaseEntity;
-import com.example.wineydomain.common.model.Color;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Wine;
 import lombok.*;
@@ -9,6 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "`TastingNote`")
@@ -26,8 +26,7 @@ public class TastingNote extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Color color;
+    private String color;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = false)
@@ -36,6 +35,10 @@ public class TastingNote extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wineId", nullable = false)
     private Wine wine;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tastingNoteId")
+    private List<SmellKeywordTastingNote> smellKeywordTastingNote;
 
     /**
      * 당도
@@ -75,6 +78,8 @@ public class TastingNote extends BaseEntity {
      */
     @Column(name = "finish")
     private Integer finish;
+
+    private Integer price;
 
     @Column(name = "memo")
     private String memo;

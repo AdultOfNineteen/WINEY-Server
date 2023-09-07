@@ -78,8 +78,34 @@ public class WineResponse {
 
         private int otherCnt;
 
-        Map<String, Integer> top3Country;
+        List<Map<String, String>> top3Country;
 
-        Map<String, Integer> top3Varietal;
+        private Taste taste;
+
+        List<Map<String, String>> top3Varietal;
+
+        List<Map<String, String>> top7Smell;
+
+        private int avgPrice;
+
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class Taste{
+        private double sweetness;
+
+        private double acidity;
+
+        private double alcohol;
+
+        private double body;
+
+        private double tannin;
+
+        private double finish;
     }
 }

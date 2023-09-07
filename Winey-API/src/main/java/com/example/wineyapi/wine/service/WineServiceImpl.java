@@ -74,4 +74,6 @@ public class WineServiceImpl implements WineService {
 
         return tastingNoteConvertor.TasteAnalysis(tastingNotes);
     }
+
+
 }
