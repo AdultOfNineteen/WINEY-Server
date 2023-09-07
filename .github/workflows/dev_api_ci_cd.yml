@@ -36,6 +36,12 @@ jobs:
           cool-sms.api-secret: ${{ secrets.COOL_SMS_API_SECRET }}
           cool-sms.from-number: ${{ secrets.COOL_SMS_FROM_NUMBER }}
           cool-sms.domain: ${{ secrets.COOL_SMS_DOMAIN }}
+          aws.s3.bucket: ${{ secrets.AWS_BUCKET }}
+          aws.s3.base-url: ${{ secrets.AWS_BASE_URL }}
+          aws.s3.access-key: ${{ secrets.ACCESS_S3_ACCESS_KEY }}
+          aws.s3.secret-key: ${{ secrets.ACCESS_S3_SECRET_KEY }}
+
+
 
       - name: Set Environment - Domain DEV Yml
         uses: microsoft/variable-substitution@v1
