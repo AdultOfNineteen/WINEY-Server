@@ -43,9 +43,9 @@ public class TastingNoteConvertor {
         Map<String, Integer> wineCountByType = new HashMap<>();
         Map<String, Integer> wineCountBySmell = new HashMap<>();
 
-        List<Map<String, String>> top3Country = new ArrayList<>();
-        List<Map<String, String>>top3Varietal =new ArrayList<>();
-        List<Map<String, String>> top7Smell = new ArrayList<>();
+        List<WineResponse.Top3Country> top3Country = new ArrayList<>();
+        List<WineResponse.Top3Varietal>top3Varietal =new ArrayList<>();
+        List<WineResponse.Top7Smell> top7Smell = new ArrayList<>();
 
 
         for (TastingNote tastingNote : tastingNotes){
@@ -119,30 +119,33 @@ public class TastingNoteConvertor {
         }
 
         for (int i = 0; i < Math.min(3, sortCountry.size()); i++) {
-            HashMap<String,String> country = new HashMap<>();
-            country.put("country", sortCountry.get(i).getKey());
             double wineCountPercent = calculateAvgPercent(sortCountry.get(i).getValue(),totalWineCnt);
-            String percentString = String.format("%.1f", Math.round(wineCountPercent * 10.0) / 10.0);
-            country.put("percent", percentString);
-            top3Country.add(country);
+            top3Country.add(
+                    WineResponse.Top3Country
+                            .builder()
+                            .country(sortCountry.get(i).getKey())
+                            .percent((int) (Math.round(wineCountPercent * 10.0) / 10.0))
+                    .build());
         }
 
         for (int i = 0; i < Math.min(3, sortVarietal.size()); i++) {
-            HashMap<String,String> varietal = new HashMap<>();
-            varietal.put("varietal", sortVarietal.get(i).getKey());
             double cntPercent = calculateAvgPercent(sortVarietal.get(i).getValue(),totalWineCnt);
-            String percentString = String.format("%.1f", Math.round(cntPercent * 10.0) / 10.0);
-            varietal.put("percent", percentString);
-            top3Varietal.add(varietal);
+            top3Varietal.add(
+                    WineResponse.Top3Varietal
+                            .builder()
+                            .varietal(sortVarietal.get(i).getKey())
+                            .percent((int) (Math.round(cntPercent * 10.0) / 10.0))
+                            .build());
         }
 
         for (int i = 0; i < Math.min(7, sortSmellKeyword.size()); i++) {
-            HashMap<String,String> smell = new HashMap<>();
-            smell.put("smell", sortSmellKeyword.get(i).getKey());
             double cntPercent = (double) sortSmellKeyword.get(i).getValue() / totalSmellCount * 100.0;
-            String percentString = String.format("%.1f", Math.round(cntPercent * 10.0) / 10.0);
-            smell.put("percent", percentString);
-            top7Smell.add(smell);
+            top7Smell.add(
+                    WineResponse.Top7Smell
+                            .builder()
+                            .smell(sortSmellKeyword.get(i).getKey())
+                            .percent((int) (Math.round(cntPercent * 10.0) / 10.0))
+                            .build());
         }
 
         double avgPriceDouble =  calculateAvg(totalPrice, totalWineCnt);

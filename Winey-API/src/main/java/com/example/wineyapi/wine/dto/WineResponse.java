@@ -79,14 +79,14 @@ public class WineResponse {
 
         private int otherCnt;
 
-        @Schema(description = "key = country, value = percent 식인 List 해쉬맵입니다. 유동적으로 바뀌기 떄문에 Map 을 사용해 구현했습니다.")
-        List<Map<String, String>> top3Country;
+        @Schema(description = "key = country, value = percent 식인 List 입니다.")
+        private List<Top3Country> top3Country;
 
-        @Schema(description = "key = varietal, value = percent 식인 List 해쉬맵입니다. 유동적으로 바뀌기 떄문에 Map 을 사용해 구현했습니다.")
-        List<Map<String, String>> top3Varietal;
+        @Schema(description = "key = varietal, value = percent 식인 List 입니다.")
+        private List<Top3Varietal> top3Varietal;
 
-        @Schema(description = "key = smell, value = percent 식인 List 해쉬맵입니다. 유동적으로 바뀌기 떄문에 Map 을 사용해 구현했습니다.")
-        List<Map<String, String>> top7Smell;
+        @Schema(description = "key = smell, value = percent 식인 List 입니다. ")
+        private List<Top7Smell> top7Smell;
 
 
         private Taste taste;
@@ -113,4 +113,38 @@ public class WineResponse {
 
         private double finish;
     }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class Top3Country{
+        private String country;
+
+        private int percent;
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class Top3Varietal{
+        private String varietal;
+
+        private int percent;
+    }
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+
+    public static class Top7Smell{
+        private String smell;
+
+        private int percent;
+    }
+
 }
