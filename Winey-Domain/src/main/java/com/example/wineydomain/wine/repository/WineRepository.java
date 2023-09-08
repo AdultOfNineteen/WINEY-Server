@@ -14,7 +14,7 @@ public interface WineRepository extends JpaRepository<Wine, Long> {
             "(w.acidity != :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins = :tannins) or " +
             "(w.acidity = :acidity and w.sweetness != :sweetness and w.body = :body and w.tannins = :tannins) or " +
             "(w.acidity = :acidity and w.sweetness = :sweetness and w.body != :body and w.tannins = :tannins) or" +
-            "(w.acidity = :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins != :tannins))")
+            "(w.acidity = :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins != :tannins)) order by rand()")
     List<Wine> recommendWineByTastingNote(@Param("id") Long id, @Param("acidity") Integer acidity, @Param("sweetness") Integer sweetness, @Param("body") Integer body, @Param("tannins") Integer tannins, Pageable pageable);
 
     @Query("SELECT w FROM Wine w where" +
@@ -22,6 +22,6 @@ public interface WineRepository extends JpaRepository<Wine, Long> {
             "(w.acidity != :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins = :tannins) or " +
             "(w.acidity = :acidity and w.sweetness != :sweetness and w.body = :body and w.tannins = :tannins) or " +
             "(w.acidity = :acidity and w.sweetness = :sweetness and w.body != :body and w.tannins = :tannins) or" +
-            "(w.acidity = :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins != :tannins))")
+            "(w.acidity = :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins != :tannins)) order by rand()")
     List<Wine> recommendWine(@Param("acidity") Integer acidity, @Param("sweetness") Integer sweetness, @Param("body") Integer body, @Param("tannins") Integer tannins, Pageable pageable);
 }

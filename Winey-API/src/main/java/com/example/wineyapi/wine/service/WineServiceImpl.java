@@ -55,10 +55,12 @@ public class WineServiceImpl implements WineService {
         } else {
             if (tastingNotes.size() == 0) {
                 List<Wine> wines = wineRepository.recommendWine(preferences.getAcidity(), preferences.getSweetness(), preferences.getBody(), preferences.getTannins(), pageable);
+                System.out.println(wines.size());
                 recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
             } else {
                 Wine wine = tastingNotes.get(0).getWine();
                 List<Wine> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins(), pageable);
+                System.out.println(wines.size());
                 recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
             }
         }
