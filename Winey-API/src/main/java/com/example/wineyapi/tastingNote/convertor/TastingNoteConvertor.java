@@ -10,10 +10,7 @@ import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Wine;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class TastingNoteConvertor {
@@ -105,9 +102,16 @@ public class TastingNoteConvertor {
         }
 
         List<Map.Entry<String, Integer>> sortType = new ArrayList<>(wineCountByType.entrySet());
+        Collections.sort(sortType, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> entry1, Map.Entry<String, Integer> entry2) {
+                return entry2.getValue().compareTo(entry1.getValue());
+            }
+        });
         if (!sortType.isEmpty()) {
             recommendWineType = sortType.get(0).getKey();
         }
+
 
         List<Map.Entry<String, Integer>> sortVarietal = new ArrayList<>(wineCountByVarietal.entrySet());
         if (!sortVarietal.isEmpty()) {
@@ -115,6 +119,14 @@ public class TastingNoteConvertor {
         }
 
         List<Map.Entry<String, Integer>> sortSmellKeyword = new ArrayList<>(wineCountBySmell.entrySet());
+
+        Collections.sort(sortSmellKeyword, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> entry1, Map.Entry<String, Integer> entry2) {
+                return entry2.getValue().compareTo(entry1.getValue());
+            }
+        });
+
 
         for (Map.Entry<String, Integer> varietal : sortSmellKeyword) {
             totalSmellCount += varietal.getValue();
