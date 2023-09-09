@@ -31,7 +31,7 @@ public class TastingNoteResponse {
     @AllArgsConstructor
     @Builder
     public static class CreateTastingNoteDTO {
-        private String field;
+        private Long tastingNoteId;
     }
 
     @NoArgsConstructor

@@ -1,8 +1,12 @@
 package com.example.wineyapi.tastingNote.convertor;
 
+import com.example.wineyapi.tastingNote.dto.TastingNoteRequest;
 import com.example.wineyapi.wine.dto.WineResponse;
+import com.example.wineydomain.image.entity.TastingNoteImage;
+import com.example.wineydomain.tastingNote.entity.SmellKeyword;
 import com.example.wineydomain.tastingNote.entity.SmellKeywordTastingNote;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
+import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Wine;
 import org.springframework.stereotype.Component;
 
@@ -10,8 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.example.wineydomain.wine.entity.WineType.RED;
 
 @Component
 public class TastingNoteConvertor {
@@ -196,4 +198,36 @@ public class TastingNoteConvertor {
     }
 
 
+    public TastingNote CreateTastingNote(TastingNoteRequest.CreateTastingNoteDTO request, User user) {
+        return TastingNote.builder()
+                .color(request.getColor())
+                .user(user)
+                .sweetness(request.getSweetness())
+                .acidity(request.getAcidity())
+                .body(request.getBody())
+                .alcohol(request.getAlcohol())
+                .vintage(request.getVintage())
+                .tannins(request.getTannin())
+                .finish(request.getFinish())
+                .price(request.getPrice())
+                .memo(request.getMemo())
+                .buyAgain(request.getBuyAgain())
+                .starRating(request.getRating())
+                .build();
+    }
+
+    public SmellKeywordTastingNote SmellKeyword(SmellKeyword smellKeyword, TastingNote tastingNote) {
+        return SmellKeywordTastingNote.builder()
+                .smellKeyword(smellKeyword)
+                .tastingNote(tastingNote)
+                .build();
+    }
+
+    public TastingNoteImage TastingImg(TastingNote tastingNote, String imgUrl) {
+        return TastingNoteImage
+                .builder()
+                .tastingNote(tastingNote)
+                .url(imgUrl)
+                .build();
+    }
 }
