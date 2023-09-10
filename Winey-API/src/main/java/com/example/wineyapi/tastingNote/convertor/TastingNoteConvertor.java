@@ -213,8 +213,9 @@ public class TastingNoteConvertor {
     }
 
 
-    public TastingNote CreateTastingNote(TastingNoteRequest.CreateTastingNoteDTO request, User user) {
+    public TastingNote CreateTastingNote(TastingNoteRequest.CreateTastingNoteDTO request, User user, Wine wine) {
         return TastingNote.builder()
+                .wine(wine)
                 .color(request.getColor())
                 .user(user)
                 .sweetness(request.getSweetness())
@@ -228,6 +229,7 @@ public class TastingNoteConvertor {
                 .memo(request.getMemo())
                 .buyAgain(request.getBuyAgain())
                 .starRating(request.getRating())
+                .isDeleted(false)
                 .build();
     }
 
