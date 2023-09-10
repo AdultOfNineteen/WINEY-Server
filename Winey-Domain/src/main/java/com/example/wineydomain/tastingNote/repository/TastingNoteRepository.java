@@ -13,7 +13,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,TastingNoteCustomRepository {
-    @EntityGraph(attributePaths = {"wine","smellKeywordTastingNote"})
     List<TastingNote> findByUser(User user);
 
 
@@ -58,6 +57,8 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
     Page<TastingNote> findByUserAndIsDeletedAndBuyAgainAndWine_CountryInAndWine_TypeInOrderByStarRatingAsc(User user, boolean b, boolean b1, List<Country> countries, List<WineType> wineTypes, Pageable pageable);
 
     Page<TastingNote> findByUserAndIsDeletedAndWine_TypeInOrderByStarRatingAsc(User user, boolean b, List<WineType> wineTypes, Pageable pageable);
+
+    List<TastingNote> findByUserAndBuyAgain(User user, boolean b);
 
     interface WineList{
         Long getWineId();

@@ -73,8 +73,7 @@ public class WineServiceImpl implements WineService {
 
     @Override
     public WineResponse.TasteAnalysisDTO tasteAnalysis(User user) {
-        List<TastingNote> tastingNotes = tastingNoteRepository.findByUser(user);
-
+        List<TastingNote> tastingNotes = tastingNoteRepository.findByUserAndBuyAgain(user, true);
 
         return tastingNoteConvertor.TasteAnalysis(tastingNotes);
     }
