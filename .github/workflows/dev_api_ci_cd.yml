@@ -38,8 +38,8 @@ jobs:
           cool-sms.domain: ${{ secrets.COOL_SMS_DOMAIN }}
           aws.s3.bucket: ${{ secrets.AWS_BUCKET }}
           aws.s3.base-url: ${{ secrets.AWS_BASE_URL }}
-          aws.s3.access-key: ${{ secrets.ACCESS_S3_ACCESS_KEY }}
-          aws.s3.secret-key: ${{ secrets.ACCESS_S3_SECRET_KEY }}
+          aws.s3.access-key: ${{ secrets.AWS_S3_ACCESS_KEY }}
+          aws.s3.secret-key: ${{ secrets.AWS_S3_SECRET_KEY }}
 
 
 
