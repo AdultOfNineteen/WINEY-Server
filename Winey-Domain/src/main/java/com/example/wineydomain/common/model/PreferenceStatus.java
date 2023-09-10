@@ -5,10 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum VerifyMessageStatus {
-    PENDING("인증전"),
-    VERIFIED("인증완료"),
-    FAILED("인증실패"),
+public enum PreferenceStatus {
+    DONE("설정완료"),
     NONE("기록없음");
 
     private final String description;

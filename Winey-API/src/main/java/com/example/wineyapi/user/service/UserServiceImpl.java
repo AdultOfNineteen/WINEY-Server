@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> optionalUser = userRepository.findByPhoneNumber(request.getPhoneNumber());
 
-        if(optionalUser.isPresent()) {
+        if(optionalUser.isPresent() && optionalUser.get().getStatus() == Status.ACTIVE) {
             // 0. 1~2를 수행한 소셜로그인 계정 hard delete & 안내문구전송
             User user = optionalUser.get();
             String errorMessageWithSocialType = user.getPhoneNumber() + "님은 " + user.getSocialType().name() + " 소셜 회원으로 가입하신 기록이 있어요";
@@ -189,10 +189,21 @@ public class UserServiceImpl implements UserService {
         // 4. 사용자 상태 업데이트
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(CommonResponseStatus.NOT_EXIST_USER));
-        user.setStatus(Status.ACTIVE);
         user.setPhoneNumber(request.getPhoneNumber());
         userRepository.save(user);
 
         return verificationMessageRepository.save(verificationMessage);
+    }
+
+    @Override
+    public VerifyMessageStatus findVerifyMessageStatusByUser(User user) {
+        // 1. 전화번호가 설정되어 있는 경우 - 인증을 완료했음.
+        // 2. 전화번호가 설정되지 않은 경우 - 인증절차를 거치지 않음.
+        Optional<String> optionalPhoneNumber = Optional.ofNullable(user.getPhoneNumber());
+        return optionalPhoneNumber.map(phoneNumber -> verificationMessageRepository.findByPhoneNumber(phoneNumber)
+                    .map(VerificationMessage::getStatus)
+                    .orElse(VerifyMessageStatus.NONE)
+                )
+                .orElse(VerifyMessageStatus.NONE);
     }
 }
