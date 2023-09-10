@@ -194,4 +194,16 @@ public class UserServiceImpl implements UserService {
 
         return verificationMessageRepository.save(verificationMessage);
     }
+
+    @Override
+    public VerifyMessageStatus findVerifyMessageStatusByUser(User user) {
+        // 1. 전화번호가 설정되어 있는 경우 - 인증을 완료했음.
+        // 2. 전화번호가 설정되지 않은 경우 - 인증절차를 거치지 않음.
+        Optional<String> optionalPhoneNumber = Optional.ofNullable(user.getPhoneNumber());
+        return optionalPhoneNumber.map(phoneNumber -> verificationMessageRepository.findByPhoneNumber(phoneNumber)
+                    .map(VerificationMessage::getStatus)
+                    .orElse(VerifyMessageStatus.NONE)
+                )
+                .orElse(VerifyMessageStatus.NONE);
+    }
 }
