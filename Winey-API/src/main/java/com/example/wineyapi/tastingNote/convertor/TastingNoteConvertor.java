@@ -1,13 +1,16 @@
 package com.example.wineyapi.tastingNote.convertor;
 
 import com.example.wineyapi.tastingNote.dto.TastingNoteRequest;
+import com.example.wineyapi.tastingNote.dto.TastingNoteResponse;
 import com.example.wineyapi.wine.dto.WineResponse;
+import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.image.entity.TastingNoteImage;
 import com.example.wineydomain.tastingNote.entity.SmellKeyword;
 import com.example.wineydomain.tastingNote.entity.SmellKeywordTastingNote;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Wine;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -241,5 +244,25 @@ public class TastingNoteConvertor {
                 .tastingNote(tastingNote)
                 .url(imgUrl)
                 .build();
+    }
+
+    public PageResponse<List<TastingNoteResponse.TastingNoteListDTO>> TastingNoteList(Page<TastingNote> tastingNotes) {
+        List<TastingNoteResponse.TastingNoteListDTO> tastingNoteListDTOS = new ArrayList<>();
+
+        tastingNotes.getContent().forEach(
+                result -> {
+                    tastingNoteListDTOS.add(
+                    new TastingNoteResponse.TastingNoteListDTO(
+                            result.getId(),
+                            result.getWine().getName(),
+                            result.getWine().getCountry(),
+                            result.getStarRating(),
+                            result.getBuyAgain(),
+                            result.getWine().getType()
+                    ));
+                }
+        );
+
+        return new PageResponse<>( tastingNotes.isLast(),tastingNotes.getTotalElements(), tastingNoteListDTOS);
     }
 }

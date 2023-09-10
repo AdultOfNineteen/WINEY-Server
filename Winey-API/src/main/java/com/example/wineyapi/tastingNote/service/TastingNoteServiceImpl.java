@@ -4,16 +4,22 @@ import com.example.wineyapi.tastingNote.convertor.TastingNoteConvertor;
 import com.example.wineyapi.tastingNote.dto.TastingNoteRequest;
 import com.example.wineyapi.tastingNote.dto.TastingNoteResponse;
 import com.example.wineycommon.exception.BadRequestException;
+import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.image.repository.TastingNoteImageRepository;
 import com.example.wineydomain.tastingNote.entity.SmellKeyword;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.tastingNote.repository.SmellKeywordTastingNoteRepository;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.wine.entity.Country;
 import com.example.wineydomain.wine.entity.Wine;
+import com.example.wineydomain.wine.entity.WineType;
 import com.example.wineydomain.wine.repository.WineRepository;
 import com.example.wineyinfrastructure.amazonS3.service.S3UploadService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -47,5 +53,84 @@ public class TastingNoteServiceImpl implements TastingNoteService{
         }
 
         return new TastingNoteResponse.CreateTastingNoteDTO(tastingNote.getId());
+    }
+
+    @Override
+    public PageResponse<List<TastingNoteResponse.TastingNoteListDTO>> getTastingNoteList(User user, Integer page, Integer size, Integer order, List<Country> countries, List<WineType> wineTypes, Integer buyAgain) {
+        Pageable pageable = PageRequest.of(page, size);
+        /*
+         1. 기본 최신순 정렬
+            1-0. 최신순
+                1-1-1 최신순 + 재구매 O
+                1-1-2 최신순 + 재구매 X
+            1-1. 최신순 + 국가 정렬
+                1-1-1 최신순 + 국가 + 재구매 O
+                1-1-2 최신순 + 국가 + 재구매 X
+            1-2. 최신순 + 와인 타입 정렬
+                1-2-1 최신순 + 와인 타입 + 재구매 O
+                1-2-2 최신순 + 와인 타입 + 재구매 X
+            1-3. 최신순 + 국가 + 와인 타입 정렬
+                1-3-1 최신순 + 국가 + 와인 타입 + 재구매 O
+                1-3-2 최신순 + 국가 + 와인 타입 + 재구매 X
+         2. 기본 평점순 정렬
+            2-1. 최신순 + 국가 정렬
+                2-1-1 평점순 + 국가 + 재구매 O
+                2-1-2 평점순 + 국가 + 재구매 X
+            2-2. 평점순 + 와인 타입 정렬
+                2-2-1 평점순 + 와인 타입 + 재구매 O
+                2-2-2 평점순 + 와인 타입 + 재구매 X
+            2-3. 평점순 + 국가 + 와인 타입 정렬
+                2-3-1 평점순 + 국가 + 와인 타입 + 재구매 O
+                2-3-2 평점순 + 국가 + 와인 타입 + 재구매 X
+
+         */
+
+        Page<TastingNote> tastingNotes = null;
+
+        if(order.equals(0)){
+            if(countries == null  && wineTypes == null) {
+                if(buyAgain == null) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedOrderByCreatedAtDesc(user, false, pageable);
+                else if(buyAgain == 1) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainOrderByCreatedAtDesc(user, false, true, pageable);
+                else tastingNotes= tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainOrderByCreatedAtDesc(user,false,true, pageable);
+            }
+            else if(countries != null && wineTypes == null){
+                if(buyAgain == null) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndWine_CountryInOrderByCreatedAtDesc(user, false, countries, pageable);
+                else if(buyAgain.equals(1)) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_CountryInOrderByCreatedAtDesc(user, false, true, countries, pageable);
+                else tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_CountryInOrderByCreatedAtDesc(user,false, false, countries, pageable);
+            }
+            else if(countries == null){
+                if(buyAgain == null) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndWine_TypeInOrderByCreatedAtDesc(user, false, wineTypes, pageable);
+                else if(buyAgain.equals(1)) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_TypeInOrderByCreatedAtDesc(user, false, true, wineTypes, pageable);
+                else tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_TypeInOrderByCreatedAtDesc(user,false, false, wineTypes, pageable);
+            }
+            else{
+                if(buyAgain == null) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndWine_CountryInAndWine_TypeInOrderByCreatedAtDesc(user, false, countries ,wineTypes, pageable);
+                else if(buyAgain.equals(1)) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_CountryInAndWine_TypeInOrderByCreatedAtDesc(user, false, true,countries ,wineTypes, pageable);
+                else tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_CountryInAndWine_TypeInOrderByCreatedAtDesc(user, false, false,countries ,wineTypes, pageable);
+            }
+        }else{
+            if(countries == null  && wineTypes == null) {
+                if(buyAgain == null) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedOrderByStarRatingAsc(user, false, pageable);
+                else if(buyAgain == 1) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainOrderByStarRatingAsc(user, false, true, pageable);
+                else tastingNotes= tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainOrderByStarRatingAsc(user,false,true, pageable);
+            }
+            else if(countries != null && wineTypes == null){
+                if(buyAgain == null) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndWine_CountryInOrderByStarRatingAsc(user, false, countries, pageable);
+                else if(buyAgain.equals(1)) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_CountryInOrderByStarRatingAsc(user, false, true, countries, pageable);
+                else tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_CountryInOrderByStarRatingAsc(user,false, false, countries, pageable);
+            }
+            else if(countries == null){
+                if(buyAgain == null) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndWine_TypeInOrderByStarRatingAsc(user, false, wineTypes, pageable);
+                else if(buyAgain.equals(1)) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_TypeInOrderByStarRatingAsc(user, false, true, wineTypes, pageable);
+                else tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_TypeInOrderByStarRatingAsc(user,false, false, wineTypes, pageable);
+            }
+            else{
+                if(buyAgain == null) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndWine_CountryInAndWine_TypeInOrderByStarRatingAsc(user, false, countries ,wineTypes, pageable);
+                else if(buyAgain.equals(1)) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_CountryInAndWine_TypeInOrderByStarRatingAsc(user, false, true,countries ,wineTypes, pageable);
+                else tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_CountryInAndWine_TypeInOrderByStarRatingAsc(user, false, false,countries ,wineTypes, pageable);
+            }
+        }
+
+        return tastingNoteConvertor.TastingNoteList(tastingNotes);
     }
 }

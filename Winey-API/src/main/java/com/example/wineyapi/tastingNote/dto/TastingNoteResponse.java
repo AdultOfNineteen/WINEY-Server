@@ -1,5 +1,7 @@
 package com.example.wineyapi.tastingNote.dto;
 
+import com.example.wineydomain.wine.entity.Country;
+import com.example.wineydomain.wine.entity.WineType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,17 +15,18 @@ public class TastingNoteResponse {
     @Getter
     @AllArgsConstructor
     @Builder
-    public static class TastingNoteDTO {
-        private String field;
-    }
-
-    @NoArgsConstructor
-    @Getter
-    @AllArgsConstructor
-    @Builder
     public static class TastingNoteListDTO {
-        private List<TastingNoteDTO> tastingNoteList;
-        private Integer size;
+        private Long noteId;
+
+        private String wineName;
+
+        private Country country;
+
+        private int starRating;
+
+        private boolean buyAgain;
+
+        private WineType wineType;
     }
 
     @NoArgsConstructor
@@ -48,5 +51,8 @@ public class TastingNoteResponse {
     @Builder
     public static class DeleteTastingNoteDTO {
         private String field;
+    }
+
+    public static  class TastingNoteDTO {
     }
 }
