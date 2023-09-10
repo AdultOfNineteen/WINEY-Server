@@ -51,22 +51,20 @@ public class WineServiceImpl implements WineService {
                 recommendWineDTO = wineConvertor.RecommendWineCountByWine(wineLists);
             } else {
                 Wine wine = tastingNotes.get(0).getWine();
-                List<Wine> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins(), pageable);
+                List<WineRepository.WineList> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins());
                 recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
             }
         } else {
             if (tastingNotes.size() == 0) {
-                List<Wine> wines = wineRepository.recommendWine(preferences.getAcidity(), preferences.getSweetness(), preferences.getBody(), preferences.getTannins(), pageable);
-                System.out.println(wines.size());
+                List<WineRepository.WineList> wines = wineRepository.recommendWine(preferences.getAcidity(), preferences.getSweetness(), preferences.getBody(), preferences.getTannins());
                 recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
             } else {
                 Wine wine = tastingNotes.get(0).getWine();
-                List<Wine> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins(), pageable);
-                System.out.println(wines.size());
+                System.out.println(wine.getId());
+                List<WineRepository.WineList> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins());
                 recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
             }
         }
-
 
         return recommendWineDTO;
     }

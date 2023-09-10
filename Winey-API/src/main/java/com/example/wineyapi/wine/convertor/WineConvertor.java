@@ -5,6 +5,7 @@ import com.example.wineyapi.wine.service.WineHelper;
 import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.wine.entity.Wine;
+import com.example.wineydomain.wine.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -43,16 +44,16 @@ public class WineConvertor {
         return recommendWineDTOS;
     }
 
-    public List<WineResponse.RecommendWineDTO> RecommendWineByTastingNote(List<Wine> wineLists) {
+    public List<WineResponse.RecommendWineDTO> RecommendWineByTastingNote(List<WineRepository.WineList> wineLists) {
         List<WineResponse.RecommendWineDTO> recommendWineDTOS = new ArrayList<>();
 
         wineLists.forEach(
                 result -> recommendWineDTOS.add(
                         WineResponse.RecommendWineDTO.builder()
-                                .name(result.getName())
                                 .wineId(result.getId())
-                                .country(result.getCountry().getValue())
-                                .price(result.getPrice() != null ? result.getPrice() : 0)
+                                .name(result.getName())
+                                .country(result.getCountry())
+                                .price(result.getPrice())
                                 .varietal(
                                         result.getVarietal() != null
                                                 ? Stream.of(result.getVarietal())
@@ -60,7 +61,7 @@ public class WineConvertor {
                                                 .collect(Collectors.toList())
                                                 : Collections.emptyList()
                                 )
-                                .type(result.getType().getValue())
+                                .type(result.getType())
                                 .build()
                 )
         );
