@@ -3,6 +3,7 @@ package com.example.wineyapi.wine.service;
 import com.example.wineyapi.tastingNote.convertor.TastingNoteConvertor;
 import com.example.wineyapi.wine.convertor.WineConvertor;
 import com.example.wineyapi.wine.dto.WineResponse;
+import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.preference.entity.Preference;
 import com.example.wineydomain.preference.repository.PreferenceRepository;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
@@ -11,6 +12,7 @@ import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Wine;
 import com.example.wineydomain.wine.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -75,6 +77,18 @@ public class WineServiceImpl implements WineService {
 
 
         return tastingNoteConvertor.TasteAnalysis(tastingNotes);
+    }
+
+    @Override
+    public PageResponse<List<WineResponse.SearchWineDto>> searchWineList(Integer page, Integer size, String content) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Wine> wines = null;
+        if(content == null){
+            wines = wineRepository.findAll(pageable);
+        }else{
+            wines = wineRepository.findByNameContaining(content,pageable);
+        }
+        return wineConvertor.SearchWineList(wines);
     }
 
 
