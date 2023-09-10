@@ -2,6 +2,8 @@ package com.example.wineyapi.user.converter;
 
 import com.example.wineyapi.user.dto.UserRequest;
 import com.example.wineyapi.user.dto.UserResponse;
+import com.example.wineyapi.user.service.UserService;
+import com.example.wineydomain.common.model.PreferenceStatus;
 import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.user.entity.Authority;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -24,13 +27,17 @@ public class UserConverter {
 
     private final PasswordEncoder passwordEncoder;
     private final NickNameFeignClient nickNameFeignClient;
+    private final UserService userService;
+
     private static PasswordEncoder staticPasswordEncoder;
     private static NickNameFeignClient staticNickNameFeignClient;
+    private static UserService staticUserService;
 
     @PostConstruct
     void init() {
         staticPasswordEncoder = this.passwordEncoder;
         staticNickNameFeignClient = this.nickNameFeignClient;
+        staticUserService = this.userService;
     }
 
     public static Authority createUserAuthority() {
@@ -44,10 +51,19 @@ public class UserConverter {
     }
 
     public static UserResponse.LoginUserDTO toLoginUserDTO(User user, String accessToken, String refreshToken) {
+        VerifyMessageStatus verifyMessageStatus = staticUserService.findVerifyMessageStatusByUser(user);
+        PreferenceStatus preferenceStatus =
+                Optional.ofNullable(user.getPreference())
+                        .map(preference -> PreferenceStatus.DONE)
+                        .orElse(PreferenceStatus.NONE);
+
         return UserResponse.LoginUserDTO.builder()
                 .userId(user.getId())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .userStatus(user.getStatus())
+                .messageStatus(verifyMessageStatus)
+                .preferenceStatus(preferenceStatus)
                 .build();
     }
 
