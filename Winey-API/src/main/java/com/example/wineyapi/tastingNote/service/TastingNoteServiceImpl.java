@@ -44,6 +44,13 @@ public class TastingNoteServiceImpl implements TastingNoteService{
 
         return tastingNoteConvertor.TasteAnalysis(tastingNotes);
     }
+
+    @Override
+    public TastingNoteResponse.CheckTastingNote checkTastingNote(User user) {
+        boolean checkTastingNote = tastingNoteRepository.existsByUserAndBuyAgain(user, true);
+        return new TastingNoteResponse.CheckTastingNote(checkTastingNote);
+    }
+
     @Override
     @Transactional
     public TastingNoteResponse.CreateTastingNoteDTO createTastingNote(User user, TastingNoteRequest.CreateTastingNoteDTO request) {

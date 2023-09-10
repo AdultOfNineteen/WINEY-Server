@@ -161,4 +161,13 @@ public class TastingNoteResponse {
 
         private int percent;
     }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class CheckTastingNote {
+        private boolean tastingNoteExists;
+    }
 }

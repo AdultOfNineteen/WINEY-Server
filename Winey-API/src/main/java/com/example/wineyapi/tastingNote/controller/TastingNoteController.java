@@ -38,6 +38,12 @@ public class TastingNoteController {
                                                                              @PathVariable Long noteId) {
         return null;
     }
+    @Operation(summary= "04-04 테이스팅노트📝 테이스팅 노트 작성(구매의사) 유무 확인 API #FRAME 001_03_와인 취향 분석 ",description = "내 취향 분석 API 입니다")
+    @ApiErrorCodeExample(UserAuthErrorCode.class)
+    @GetMapping("/check")
+    public CommonResponse<TastingNoteResponse.CheckTastingNote> checkTastingNote(@Parameter(hidden = true) @AuthenticationPrincipal User user){
+        return CommonResponse.onSuccess(tastingNoteService.checkTastingNote(user));
+    }
 
     @GetMapping("/taste-analysis")
     @ApiErrorCodeExample(UserAuthErrorCode.class)
