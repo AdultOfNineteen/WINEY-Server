@@ -91,5 +91,8 @@ public class WineServiceImpl implements WineService {
         return wineConvertor.SearchWineList(wines);
     }
 
-
+    @Override
+    public WineResponse.WineDTO getWineById(Long wineId) {
+        return null;
+    }
 }

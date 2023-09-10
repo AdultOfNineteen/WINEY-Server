@@ -5,6 +5,7 @@ import com.example.wineydomain.wine.entity.WineType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import javax.persistence.Column;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +16,30 @@ public class WineResponse {
     @AllArgsConstructor
     @Builder
     public static class WineDTO {
-        private String field;
+        private Long wineId;
+        private String type;
+        private String name;
+        private String country;
+        private String varietal;
+        private Double avgPrice;
+
+        private Integer sweetness;
+        private Integer avgSweetness;
+
+        private Integer acidity;
+        private Integer avgAcidity;
+
+        private Integer body;
+        private Integer avgBody;
+
+        private Integer tannins;
+        private Integer avgTannins;
+        /*
+         TODO - 평균 값 묶어서 조회할때 해당 클래스 기준으로 조회하기
+         ex) WineDetails
+        */
     }
+
 
     @NoArgsConstructor
     @Getter
