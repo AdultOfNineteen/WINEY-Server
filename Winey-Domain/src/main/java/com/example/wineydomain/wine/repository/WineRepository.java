@@ -1,6 +1,7 @@
 package com.example.wineydomain.wine.repository;
 
 import com.example.wineydomain.wine.entity.Wine;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +15,7 @@ public interface WineRepository extends JpaRepository<Wine, Long> {
             "(w.acidity != :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins = :tannins) or " +
             "(w.acidity = :acidity and w.sweetness != :sweetness and w.body = :body and w.tannins = :tannins) or " +
             "(w.acidity = :acidity and w.sweetness = :sweetness and w.body != :body and w.tannins = :tannins) or" +
-            "(w.acidity = :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins != :tannins))")
+            "(w.acidity = :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins != :tannins)) order by rand()")
     List<Wine> recommendWineByTastingNote(@Param("id") Long id, @Param("acidity") Integer acidity, @Param("sweetness") Integer sweetness, @Param("body") Integer body, @Param("tannins") Integer tannins, Pageable pageable);
 
     @Query("SELECT w FROM Wine w where" +
@@ -22,6 +23,8 @@ public interface WineRepository extends JpaRepository<Wine, Long> {
             "(w.acidity != :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins = :tannins) or " +
             "(w.acidity = :acidity and w.sweetness != :sweetness and w.body = :body and w.tannins = :tannins) or " +
             "(w.acidity = :acidity and w.sweetness = :sweetness and w.body != :body and w.tannins = :tannins) or" +
-            "(w.acidity = :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins != :tannins))")
+            "(w.acidity = :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins != :tannins)) order by rand()")
     List<Wine> recommendWine(@Param("acidity") Integer acidity, @Param("sweetness") Integer sweetness, @Param("body") Integer body, @Param("tannins") Integer tannins, Pageable pageable);
+
+    Page<Wine> findByNameContaining(String content, Pageable pageable);
 }

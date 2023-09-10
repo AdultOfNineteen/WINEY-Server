@@ -1,7 +1,9 @@
 package com.example.wineyapi.wine.service;
 
+import com.example.wineyapi.tastingNote.convertor.TastingNoteConvertor;
 import com.example.wineyapi.wine.convertor.WineConvertor;
 import com.example.wineyapi.wine.dto.WineResponse;
+import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.preference.entity.Preference;
 import com.example.wineydomain.preference.repository.PreferenceRepository;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
@@ -10,6 +12,7 @@ import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Wine;
 import com.example.wineydomain.wine.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ public class WineServiceImpl implements WineService {
     private final TastingNoteRepository tastingNoteRepository;
     private final PreferenceRepository preferenceRepository;
     private final WineConvertor wineConvertor;
+    private final TastingNoteConvertor tastingNoteConvertor;
     private final WineRepository wineRepository;
     @Override
     public List<WineResponse.RecommendWineDTO> recommendWine(User user) {
@@ -53,10 +57,12 @@ public class WineServiceImpl implements WineService {
         } else {
             if (tastingNotes.size() == 0) {
                 List<Wine> wines = wineRepository.recommendWine(preferences.getAcidity(), preferences.getSweetness(), preferences.getBody(), preferences.getTannins(), pageable);
+                System.out.println(wines.size());
                 recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
             } else {
                 Wine wine = tastingNotes.get(0).getWine();
                 List<Wine> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins(), pageable);
+                System.out.println(wines.size());
                 recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
             }
         }
@@ -64,4 +70,26 @@ public class WineServiceImpl implements WineService {
 
         return recommendWineDTO;
     }
+
+    @Override
+    public WineResponse.TasteAnalysisDTO tasteAnalysis(User user) {
+        List<TastingNote> tastingNotes = tastingNoteRepository.findByUser(user);
+
+
+        return tastingNoteConvertor.TasteAnalysis(tastingNotes);
+    }
+
+    @Override
+    public PageResponse<List<WineResponse.SearchWineDto>> searchWineList(Integer page, Integer size, String content) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Wine> wines = null;
+        if(content == null){
+            wines = wineRepository.findAll(pageable);
+        }else{
+            wines = wineRepository.findByNameContaining(content,pageable);
+        }
+        return wineConvertor.SearchWineList(wines);
+    }
+
+
 }

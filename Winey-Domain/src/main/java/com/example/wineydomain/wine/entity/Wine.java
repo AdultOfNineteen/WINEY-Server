@@ -1,8 +1,8 @@
 package com.example.wineydomain.wine.entity;
 
-import com.example.wineydomain.common.model.Color;
 import com.example.wineydomain.common.model.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -17,6 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
+@BatchSize(size = 100)
 public class Wine extends BaseEntity {
 
     @Id
@@ -24,8 +25,7 @@ public class Wine extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Color color;
+    private String color;
 
 
     @Column(name = "name")
@@ -37,7 +37,8 @@ public class Wine extends BaseEntity {
     @Column(name = "varietal")
     private String varietal;
 
-    private String country;
+    @Enumerated(EnumType.STRING)
+    private Country country;
 
     private String region;
 

@@ -1,4 +1,4 @@
-package com.example.wineyinfrastructure.amazonS3.exception;
+package com.example.wineydomain.tastingNote.exception;
 
 import com.example.wineycommon.annotation.ExplainError;
 import com.example.wineycommon.exception.errorcode.BaseErrorCode;
@@ -10,24 +10,24 @@ import org.springframework.http.HttpStatus;
 import java.lang.reflect.Field;
 import java.util.Objects;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+
 
 @Getter
 @AllArgsConstructor
-public enum FileUploadException implements BaseErrorCode {
+public enum UploadTastingNoteErrorCode implements BaseErrorCode {
+    /*
+       인증 관련 에러코드
+    */
 
-    /**
-     * 잘못된 요청
-     */
-    FILE_UPLOAD_EXCEPTION(BAD_REQUEST, "FILE001", "파일 형식이 잘못되었습니다."),
-    FILE_UPLOAD_NOT_EMPTY(BAD_REQUEST, "FILE002", "파일이 비어있습니다."),
-    IMAGE_UPLOAD_ERROR(FORBIDDEN,"FILE003","파일 업로드에 실패했습니다.");
+    @ExplainError("해당 와인이 없는 경우")
+    NOT_FOUNT_WINE(BAD_REQUEST,"UPLOAD_TASTE_001", "해당 와인이 존재허지 않습니다..");
 
 
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;
-
 
     @Override
     public ErrorReason getErrorReason() {
