@@ -26,15 +26,13 @@ public class TastingNoteRequest {
         @Schema(name = "wineId", required = true)
         private Long wineId;
 
-        @Schema(name = "vintage", required = true)
-        @NotNull(message = "빈티지 를 입력해주세요")
+        @Schema(name = "vintage", required = false)
         private Integer vintage;
 
-        @NotNull(message = "공식 알코올 도수를 입력해주세요")
-        @Schema(name = "officialAlcohol", required = true)
+        @Schema(name = "officialAlcohol", required = false)
         private Double officialAlcohol;
 
-        @Schema(name = "price",description= "가격", required = true)
+        @Schema(name = "price",description= "가격", required = false)
         private Integer price;
 
         @NotNull(message = "색상 코드를 입력해주세요")
@@ -88,8 +86,7 @@ public class TastingNoteRequest {
         @Schema(name = "multipartFiles")
         private List<MultipartFile> multipartFiles;
 
-        @NotNull(message = "향 키워들 리스트를 입력해주세요")
-        @Schema(name = "smellKeywordList",description = "향 키워드 리스트", required = true)
+        @Schema(name = "smellKeywordList",description = "향 키워드 리스트", required = false)
         private List<SmellKeyword> smellKeywordList;
 
         public Boolean getBuyAgain() {

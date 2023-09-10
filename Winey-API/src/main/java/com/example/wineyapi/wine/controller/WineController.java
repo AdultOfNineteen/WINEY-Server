@@ -48,7 +48,7 @@ public class WineController {
 
     @GetMapping("/wines/taste-analysis")
     @ApiErrorCodeExample(UserAuthErrorCode.class)
-    @Operation(summary= "02-02 Wine🍷 내 취향 분석 #FRAME 001_01_홈/메인페이지 카드 노출 ",description = "내 취향 분석 API 입니다")
+    @Operation(summary= "02-02 Wine🍷 내 취향 분석 #FRAME 001_03_와인 취향 분석 ",description = "내 취향 분석 API 입니다")
     public CommonResponse<WineResponse.TasteAnalysisDTO> tasteAnalysis(@Parameter(hidden = true) @AuthenticationPrincipal User user){
         return CommonResponse.onSuccess(wineService.tasteAnalysis(user));
     }
