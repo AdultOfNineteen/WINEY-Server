@@ -2,6 +2,7 @@ package com.example.wineydomain.wine.entity;
 
 import com.example.wineydomain.common.model.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -16,6 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
+@BatchSize(size = 100)
 public class Wine extends BaseEntity {
 
     @Id

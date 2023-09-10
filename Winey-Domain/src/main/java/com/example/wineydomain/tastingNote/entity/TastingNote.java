@@ -4,6 +4,7 @@ import com.example.wineydomain.common.model.BaseEntity;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Wine;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
+@BatchSize(size = 100)
 public class TastingNote extends BaseEntity {
 
     @Id
@@ -38,6 +40,7 @@ public class TastingNote extends BaseEntity {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "tastingNoteId")
+    @BatchSize(size = 100)
     private List<SmellKeywordTastingNote> smellKeywordTastingNote;
 
     /**
