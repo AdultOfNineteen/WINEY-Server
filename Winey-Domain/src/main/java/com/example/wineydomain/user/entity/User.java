@@ -60,6 +60,9 @@ public class User extends BaseEntity implements UserDetails {
     @OneToOne(mappedBy = "user")
     private Preference preference;
 
+    @Column(name = "role")
+    private String role = UserRole.ROLE_USER.getValue();
+
     @ManyToMany
     @JoinTable(
             name = "UserAuthority",
@@ -69,7 +72,10 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        for(String role : role.split(","))
+            authorities.add(new SimpleGrantedAuthority(role));
+        return authorities;
     }
 
     @Override

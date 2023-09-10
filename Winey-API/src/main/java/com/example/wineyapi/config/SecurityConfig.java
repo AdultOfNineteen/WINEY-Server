@@ -1,5 +1,7 @@
 package com.example.wineyapi.config;
 
+import com.example.wineyapi.security.JwtAccessDeniedHandler;
+import com.example.wineyapi.security.JwtAuthenticationEntryPoint;
 import com.example.wineyapi.security.JwtSecurityConfig;
 import com.example.wineyapi.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtService jwtService;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -61,6 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .exceptionHandling()
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
 
                 .and()
                 .authorizeRequests()
@@ -71,6 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/test/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
 
                 .and()
