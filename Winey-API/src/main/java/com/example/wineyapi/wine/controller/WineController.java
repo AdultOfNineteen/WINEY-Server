@@ -46,12 +46,6 @@ public class WineController {
         return CommonResponse.onSuccess(wineService.recommendWine(user));
     }
 
-    @GetMapping("/wines/taste-analysis")
-    @ApiErrorCodeExample(UserAuthErrorCode.class)
-    @Operation(summary= "02-02 Wine🍷 내 취향 분석 #FRAME 001_03_와인 취향 분석 ",description = "내 취향 분석 API 입니다")
-    public CommonResponse<WineResponse.TasteAnalysisDTO> tasteAnalysis(@Parameter(hidden = true) @AuthenticationPrincipal User user){
-        return CommonResponse.onSuccess(wineService.tasteAnalysis(user));
-    }
 
     @GetMapping("/wines/search")
     @ApiErrorCodeExample(UserAuthErrorCode.class)

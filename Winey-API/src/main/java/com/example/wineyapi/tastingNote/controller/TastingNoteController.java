@@ -3,6 +3,7 @@ package com.example.wineyapi.tastingNote.controller;
 import com.example.wineyapi.tastingNote.dto.TastingNoteRequest;
 import com.example.wineyapi.tastingNote.dto.TastingNoteResponse;
 import com.example.wineyapi.tastingNote.service.TastingNoteService;
+import com.example.wineyapi.wine.dto.WineResponse;
 import com.example.wineycommon.annotation.ApiErrorCodeExample;
 import com.example.wineycommon.exception.errorcode.RequestErrorCode;
 import com.example.wineycommon.reponse.CommonResponse;
@@ -37,6 +38,14 @@ public class TastingNoteController {
                                                                              @PathVariable Long noteId) {
         return null;
     }
+
+    @GetMapping("/taste-analysis")
+    @ApiErrorCodeExample(UserAuthErrorCode.class)
+    @Operation(summary= "04-03 테이스팅노트📝 내 취향 분석 #FRAME 001_03_와인 취향 분석 ",description = "내 취향 분석 API 입니다")
+    public CommonResponse<TastingNoteResponse.TasteAnalysisDTO> tasteAnalysis(@Parameter(hidden = true) @AuthenticationPrincipal User user){
+        return CommonResponse.onSuccess(tastingNoteService.tasteAnalysis(user));
+    }
+
 
     @GetMapping("")
     @Operation(summary = "04-02 테이스팅 노트📝 조회 API 입니다 #FRAME_노트_리스트 조회", description = "노트 리스트 조회")

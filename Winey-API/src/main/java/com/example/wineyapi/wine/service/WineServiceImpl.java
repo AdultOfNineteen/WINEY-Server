@@ -71,12 +71,6 @@ public class WineServiceImpl implements WineService {
         return recommendWineDTO;
     }
 
-    @Override
-    public WineResponse.TasteAnalysisDTO tasteAnalysis(User user) {
-        List<TastingNote> tastingNotes = tastingNoteRepository.findByUserAndBuyAgain(user, true);
-
-        return tastingNoteConvertor.TasteAnalysis(tastingNotes);
-    }
 
     @Override
     public PageResponse<List<WineResponse.SearchWineDto>> searchWineList(Integer page, Integer size, String content) {
