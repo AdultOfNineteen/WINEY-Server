@@ -67,6 +67,8 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
 
     List<TastingNote> findTop3ByUserOrderByStarRatingDescCreatedAtDesc(User user);
 
+    List<TastingNote> findTop3ByUserAndBuyAgainOrderByStarRatingDescCreatedAtDesc(User user, boolean b);
+
     interface WineList{
         Long getWineId();
 

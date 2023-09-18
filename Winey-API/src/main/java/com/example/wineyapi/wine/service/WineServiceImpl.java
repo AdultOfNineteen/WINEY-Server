@@ -30,11 +30,11 @@ public class WineServiceImpl implements WineService {
     @Override
     public List<WineResponse.RecommendWineDTO> recommendWine(User user) {
         Preference preferences = user.getPreference();
-        List<TastingNote> tastingNotes = tastingNoteRepository.findTop3ByUserOrderByStarRatingDescCreatedAtDesc(user);
+        List<TastingNote> tastingNotes = tastingNoteRepository.findTop3ByUserAndBuyAgainOrderByStarRatingDescCreatedAtDesc(user, true);
 
 
         /*
-        1. 취향설정X * 노트작성X : 가장 많이 데이터가 쌓인 (=가장 많은 유저들이 마셔본) 와인 정보 노출
+        1. 취향설정X * 노트작성X : 가장 많이 데이터가 쌓인 (=가장 많은 유저들이 마셔본) 와인 정보 노출®
         2. 취향설정X * 노트작성 O * 추천 X : 사용자가 작성한 테이스팅 노트 중 가장 점수가 높은 와인과 비슷한 와인 정보 노출
         3. 취향설정O * 노트작성 O * 추천X : 위와 동일
         4. 취향설정O * 노트 작성 X : 설정한 취향과 비슷한 와인 정보 노출
