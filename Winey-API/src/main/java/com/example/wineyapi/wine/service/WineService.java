@@ -14,5 +14,5 @@ public interface WineService {
 
     PageResponse<List<WineResponse.SearchWineDto>> searchWineList(Integer page, Integer size, String content);
 
-    WineResponse.WineDTO getWineById(Long wineId);
+    WineResponse.WineDTO getWineDTOById(Long wineId);
 }

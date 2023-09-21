@@ -3,6 +3,8 @@ package com.example.wineyapi.wine.service;
 import com.example.wineyapi.tastingNote.convertor.TastingNoteConvertor;
 import com.example.wineyapi.wine.convertor.WineConvertor;
 import com.example.wineyapi.wine.dto.WineResponse;
+import com.example.wineycommon.exception.NotFoundException;
+import com.example.wineycommon.exception.errorcode.CommonResponseStatus;
 import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.preference.entity.Preference;
 import com.example.wineydomain.preference.repository.PreferenceRepository;
@@ -10,6 +12,7 @@ import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Wine;
+import com.example.wineydomain.wine.entity.WineSummary;
 import com.example.wineydomain.wine.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -92,7 +95,11 @@ public class WineServiceImpl implements WineService {
     }
 
     @Override
-    public WineResponse.WineDTO getWineById(Long wineId) {
-        return null;
+    public WineResponse.WineDTO getWineDTOById(Long wineId) {
+        Wine wine = wineRepository.findById(wineId)
+                .orElseThrow(() -> new NotFoundException(CommonResponseStatus.NOT_EXIST_WINE));
+        WineSummary wineSummary = tastingNoteRepository.findWineSummaryByWineId(wineId)
+                .orElseGet(() -> new WineSummary(0.0, 0, 0, 0, 0));
+        return wineConvertor.toWineDTO(wine, wineSummary);
     }
 }

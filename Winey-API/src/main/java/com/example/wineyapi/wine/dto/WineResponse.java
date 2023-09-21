@@ -1,6 +1,7 @@
 package com.example.wineyapi.wine.dto;
 
 import com.example.wineydomain.wine.entity.Country;
+import com.example.wineydomain.wine.entity.WineSummary;
 import com.example.wineydomain.wine.entity.WineType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -21,23 +22,13 @@ public class WineResponse {
         private String name;
         private String country;
         private String varietal;
-        private Double avgPrice;
 
         private Integer sweetness;
-        private Integer avgSweetness;
-
         private Integer acidity;
-        private Integer avgAcidity;
-
         private Integer body;
-        private Integer avgBody;
-
         private Integer tannins;
-        private Integer avgTannins;
-        /*
-         TODO - 평균 값 묶어서 조회할때 해당 클래스 기준으로 조회하기
-         ex) WineDetails
-        */
+
+        private WineSummary wineSummary;
     }
 
 

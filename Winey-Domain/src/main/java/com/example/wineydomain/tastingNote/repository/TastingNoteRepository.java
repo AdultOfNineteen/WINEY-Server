@@ -3,20 +3,24 @@ package com.example.wineydomain.tastingNote.repository;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Country;
+import com.example.wineydomain.wine.entity.WineSummary;
 import com.example.wineydomain.wine.entity.WineType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,TastingNoteCustomRepository {
     @EntityGraph(attributePaths = {"wine","smellKeywordTastingNote"})
     List<TastingNote> findByUser(User user);
 
-
+    @Query("SELECT new com.example.wineydomain.wine.entity.WineSummary(avg(t.price), avg(t.sweetness), avg(t.acidity), avg(t.body), avg(t.tannins)) FROM TastingNote t WHERE t.wine.id = :wineId AND t.buyAgain = true")
+    Optional<WineSummary> findWineSummaryByWineId(@Param("wineId") Long wineId);
 
     @Query(value = "select W.id as 'wineId',W.name, W.country, W.type, avg(W.price)'price', W.varietal " +
             "from TastingNote TN join Wine W on TN.wineId = W.id " +
