@@ -41,7 +41,7 @@ public class WineController {
     }
     @GetMapping("/wines/recommend")
     @ApiErrorCodeExample(UserAuthErrorCode.class)
-    @Operation(summary= "02-01 Wine🍷 홈화면 와인 조회 API #FRAME 001_01_홈/메인페이지",description = "홈화면 와인 추천 조회입니다.")
+    @Operation(summary= "02-01 Wine🍷 홈화면 와인 조회 API #FRAME 001_01_홈/메인페이지 Made BY Austin",description = "홈화면 와인 추천 조회입니다.")
     public CommonResponse<List<WineResponse.RecommendWineDTO>> recommendWine(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
         return CommonResponse.onSuccess(wineService.recommendWine(user));
     }
@@ -49,7 +49,7 @@ public class WineController {
 
     @GetMapping("/wines/search")
     @ApiErrorCodeExample(UserAuthErrorCode.class)
-    @Operation(summary = "02-03 Wine🍷테이스팅 노트 작성용 와인 검색 #FRAME_테이스팅_노트_작성 검색어 입력 안할시 전체 조회입니다.", description = "04-01 사용 전 검색 API 입니다.")
+    @Operation(summary = "02-03 Wine🍷테이스팅 노트 작성용 와인 검색 #FRAME_테이스팅_노트_작성 검색어 입력 안할시 전체 조회입니다. Made BY Austin", description = "04-01 사용 전 검색 API 입니다.")
     public CommonResponse<PageResponse<List<WineResponse.SearchWineDto>>> searchWineList(
             @Parameter(hidden = true) @AuthenticationPrincipal User user,
             @Parameter(description = "페이지", example = "0") @RequestParam(required = false, defaultValue = "0") Integer page,
