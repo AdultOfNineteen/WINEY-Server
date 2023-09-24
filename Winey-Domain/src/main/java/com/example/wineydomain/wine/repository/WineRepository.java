@@ -11,7 +11,10 @@ import java.util.List;
 
 public interface WineRepository extends JpaRepository<Wine, Long> {
     @Query(value = "SELECT w.id, w.name, w.country, w.type, COALESCE(AVG(NULLIF(TN.price, 0)), 0) as 'price', w.varietal " +
-            "FROM Wine w left join TastingNote TN on w.id = TN.wineId where w.id = 424 and  w.id != :id or " +
+            "FROM Wine w " +
+            "left join TastingNote TN on w.id = TN.wineId " +
+            "left join RecommendWine RW ON w.id = RW.wineId AND RW.createdAt >= DATE_SUB(NOW(), INTERVAL 1 WEEK) AND RW.userId = :userId " +
+            "where w.id = 424 and  w.id != :id or " +
             "((w.acidity = :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins = :tannins) or " +
             "(w.acidity != :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins = :tannins) or " +
             "(w.acidity = :acidity and w.sweetness != :sweetness and w.body = :body and w.tannins = :tannins) or " +
@@ -19,10 +22,11 @@ public interface WineRepository extends JpaRepository<Wine, Long> {
             "(w.acidity = :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins != :tannins))" +
             " group by w.id order by rand() limit 3"
             ,nativeQuery = true)
-    List<WineList> recommendWineByTastingNote(@Param("id") Long id, @Param("acidity") Integer acidity, @Param("sweetness") Integer sweetness, @Param("body") Integer body, @Param("tannins") Integer tannins);
+    List<WineList> recommendWineByTastingNote(@Param("id") Long id, @Param("acidity") Integer acidity, @Param("sweetness") Integer sweetness, @Param("body") Integer body, @Param("tannins") Integer tannins,@Param("userId") Long userId);
 
     @Query(value = "SELECT w.id, w.name, w.country, w.type, COALESCE(AVG(NULLIF(TN.price, 0)), 0) as 'price', w.varietal " +
             "FROM Wine w LEFT JOIN TastingNote TN ON w.id = TN.wineId " +
+            "left join RecommendWine RW ON w.id = RW.wineId AND RW.createdAt >= DATE_SUB(NOW(), INTERVAL 1 WEEK) AND RW.userId = :userId " +
             "WHERE ((w.acidity = :acidity AND w.sweetness = :sweetness AND w.body = :body AND w.tannins = :tannins) OR " +
             "(w.acidity != :acidity AND w.sweetness = :sweetness AND w.body = :body AND w.tannins = :tannins) OR " +
             "(w.acidity = :acidity AND w.sweetness != :sweetness AND w.body = :body AND w.tannins = :tannins) OR " +
@@ -31,7 +35,7 @@ public interface WineRepository extends JpaRepository<Wine, Long> {
             "GROUP BY w.id " +
             "ORDER BY RAND() LIMIT 3",
             nativeQuery = true)
-    List<WineList> recommendWine(@Param("acidity") Integer acidity, @Param("sweetness") Integer sweetness, @Param("body") Integer body, @Param("tannins") Integer tannins);
+    List<WineList> recommendWine(@Param("acidity") Integer acidity, @Param("sweetness") Integer sweetness, @Param("body") Integer body, @Param("tannins") Integer tannins,@Param("userId") Long userId);
 
     Page<Wine> findByNameContaining(String content, Pageable pageable);
 

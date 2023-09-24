@@ -9,7 +9,10 @@ import com.example.wineydomain.preference.repository.PreferenceRepository;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.wine.entity.RecommendWine;
+import com.example.wineydomain.wine.entity.RecommendWinePk;
 import com.example.wineydomain.wine.entity.Wine;
+import com.example.wineydomain.wine.repository.RecommendWineRepository;
 import com.example.wineydomain.wine.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,11 +31,12 @@ public class WineServiceImpl implements WineService {
     private final WineConvertor wineConvertor;
     private final TastingNoteConvertor tastingNoteConvertor;
     private final WineRepository wineRepository;
+    private final RecommendWineRepository recommendWineRepository;
     @Override
     public List<WineResponse.RecommendWineDTO> recommendWine(User user) {
         Preference preferences = user.getPreference();
         List<TastingNote> tastingNotes = tastingNoteRepository.findTop3ByUserAndBuyAgainOrderByStarRatingDescCreatedAtDesc(user, true);
-
+        List<RecommendWine> recommendWines = new ArrayList<>();
 
         /*
         1. 취향설정X * 노트작성X : 가장 많이 데이터가 쌓인 (=가장 많은 유저들이 마셔본) 와인 정보 노출®
@@ -42,8 +47,6 @@ public class WineServiceImpl implements WineService {
 
         List<WineResponse.RecommendWineDTO> recommendWineDTO = null;
 
-        Pageable pageable = PageRequest.of(0, 3);
-
 
         if (preferences == null) {
             if (tastingNotes.size() == 0) {
@@ -51,20 +54,29 @@ public class WineServiceImpl implements WineService {
                 recommendWineDTO = wineConvertor.RecommendWineCountByWine(wineLists);
             } else {
                 Wine wine = tastingNotes.get(0).getWine();
-                List<WineRepository.WineList> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins());
+                List<WineRepository.WineList> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins(), user.getId());
                 recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
             }
         } else {
             if (tastingNotes.size() == 0) {
-                List<WineRepository.WineList> wines = wineRepository.recommendWine(preferences.getAcidity(), preferences.getSweetness(), preferences.getBody(), preferences.getTannins());
+                List<WineRepository.WineList> wines = wineRepository.recommendWine(preferences.getAcidity(), preferences.getSweetness(), preferences.getBody(), preferences.getTannins(), user.getId());
                 recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
             } else {
                 Wine wine = tastingNotes.get(0).getWine();
                 System.out.println(wine.getId());
-                List<WineRepository.WineList> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins());
+                List<WineRepository.WineList> wines = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins(), user.getId());
                 recommendWineDTO = wineConvertor.RecommendWineByTastingNote(wines);
             }
         }
+
+        for (WineResponse.RecommendWineDTO recommendWine : recommendWineDTO){
+            recommendWines.add(RecommendWine
+                    .builder()
+                            .id(new RecommendWinePk(user.getId(), recommendWine.getWineId()))
+                    .build());
+        }
+
+        recommendWineRepository.saveAll(recommendWines);
 
         return recommendWineDTO;
     }
