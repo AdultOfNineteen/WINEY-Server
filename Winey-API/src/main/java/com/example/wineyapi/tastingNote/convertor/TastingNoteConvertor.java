@@ -18,7 +18,7 @@ import java.util.*;
 @Component
 public class TastingNoteConvertor {
 
-    public WineResponse.TasteAnalysisDTO TasteAnalysis(List<TastingNote> tastingNotes) {
+    public TastingNoteResponse.TasteAnalysisDTO TasteAnalysis(List<TastingNote> tastingNotes) {
         int totalWineCnt = tastingNotes.size();
         int buyAgainCnt = 0;
         int redCnt = 0;
@@ -45,9 +45,9 @@ public class TastingNoteConvertor {
         Map<String, Integer> wineCountByType = new HashMap<>();
         Map<String, Integer> wineCountBySmell = new HashMap<>();
 
-        List<WineResponse.Top3Country> top3Country = new ArrayList<>();
-        List<WineResponse.Top3Varietal>top3Varietal =new ArrayList<>();
-        List<WineResponse.Top7Smell> top7Smell = new ArrayList<>();
+        List<TastingNoteResponse.Top3Country> top3Country = new ArrayList<>();
+        List<TastingNoteResponse.Top3Varietal>top3Varietal =new ArrayList<>();
+        List<TastingNoteResponse.Top7Smell> top7Smell = new ArrayList<>();
 
 
         for (TastingNote tastingNote : tastingNotes){
@@ -138,7 +138,7 @@ public class TastingNoteConvertor {
         for (int i = 0; i < Math.min(3, sortCountry.size()); i++) {
             double wineCountPercent = calculateAvgPercent(sortCountry.get(i).getValue(),totalWineCnt);
             top3Country.add(
-                    WineResponse.Top3Country
+                    TastingNoteResponse.Top3Country
                             .builder()
                             .country(sortCountry.get(i).getKey())
                             .percent((int) (Math.round(wineCountPercent * 10.0) / 10.0))
@@ -148,7 +148,7 @@ public class TastingNoteConvertor {
         for (int i = 0; i < Math.min(3, sortVarietal.size()); i++) {
             double cntPercent = calculateAvgPercent(sortVarietal.get(i).getValue(),totalWineCnt);
             top3Varietal.add(
-                    WineResponse.Top3Varietal
+                    TastingNoteResponse.Top3Varietal
                             .builder()
                             .varietal(sortVarietal.get(i).getKey())
                             .percent((int) (Math.round(cntPercent * 10.0) / 10.0))
@@ -158,7 +158,7 @@ public class TastingNoteConvertor {
         for (int i = 0; i < Math.min(7, sortSmellKeyword.size()); i++) {
             double cntPercent = (double) sortSmellKeyword.get(i).getValue() / totalSmellCount * 100.0;
             top7Smell.add(
-                    WineResponse.Top7Smell
+                    TastingNoteResponse.Top7Smell
                             .builder()
                             .smell(sortSmellKeyword.get(i).getKey())
                             .percent((int) (Math.round(cntPercent * 10.0) / 10.0))
@@ -168,7 +168,7 @@ public class TastingNoteConvertor {
         double avgPriceDouble =  calculateAvg(totalPrice, totalWineCnt);
         int avgPrice = (int) (Math.round(avgPriceDouble * 10.0) / 10.0);
 
-        return WineResponse.TasteAnalysisDTO.builder()
+        return TastingNoteResponse.TasteAnalysisDTO.builder()
                 .recommendCountry(recommendCountry)
                 .recommendVarietal(recommendVarietal)
                 .recommendWineType(recommendWineType)
@@ -184,7 +184,7 @@ public class TastingNoteConvertor {
                 .top3Varietal(top3Varietal)
                 .top7Smell(top7Smell)
                 .avgPrice(avgPrice)
-                .taste(WineResponse.Taste
+                .taste(TastingNoteResponse.Taste
                         .builder()
                         .sweetness(calculateAvg(sweetnessSum, totalWineCnt))
                         .acidity(calculateAvg(aciditySum, totalWineCnt))

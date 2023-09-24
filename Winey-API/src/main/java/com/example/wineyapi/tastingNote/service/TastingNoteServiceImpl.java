@@ -3,6 +3,7 @@ package com.example.wineyapi.tastingNote.service;
 import com.example.wineyapi.tastingNote.convertor.TastingNoteConvertor;
 import com.example.wineyapi.tastingNote.dto.TastingNoteRequest;
 import com.example.wineyapi.tastingNote.dto.TastingNoteResponse;
+import com.example.wineyapi.wine.dto.WineResponse;
 import com.example.wineycommon.exception.BadRequestException;
 import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.image.repository.TastingNoteImageRepository;
@@ -36,6 +37,20 @@ public class TastingNoteServiceImpl implements TastingNoteService{
     private final S3UploadService s3UploadService;
     private final TastingNoteImageRepository tastingNoteImageRepository;
     private final WineRepository wineRepository;
+
+    @Override
+    public TastingNoteResponse.TasteAnalysisDTO tasteAnalysis(User user) {
+        List<TastingNote> tastingNotes = tastingNoteRepository.findByUserAndBuyAgain(user, true);
+
+        return tastingNoteConvertor.TasteAnalysis(tastingNotes);
+    }
+
+    @Override
+    public TastingNoteResponse.CheckTastingNote checkTastingNote(User user) {
+        boolean checkTastingNote = tastingNoteRepository.existsByUserAndBuyAgain(user, true);
+        return new TastingNoteResponse.CheckTastingNote(checkTastingNote);
+    }
+
     @Override
     @Transactional
     public TastingNoteResponse.CreateTastingNoteDTO createTastingNote(User user, TastingNoteRequest.CreateTastingNoteDTO request) {

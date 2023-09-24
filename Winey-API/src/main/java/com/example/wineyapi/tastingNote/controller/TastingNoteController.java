@@ -3,6 +3,7 @@ package com.example.wineyapi.tastingNote.controller;
 import com.example.wineyapi.tastingNote.dto.TastingNoteRequest;
 import com.example.wineyapi.tastingNote.dto.TastingNoteResponse;
 import com.example.wineyapi.tastingNote.service.TastingNoteService;
+import com.example.wineyapi.wine.dto.WineResponse;
 import com.example.wineycommon.annotation.ApiErrorCodeExample;
 import com.example.wineycommon.exception.errorcode.RequestErrorCode;
 import com.example.wineycommon.reponse.CommonResponse;
@@ -27,7 +28,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/tasting-notes")
-@Tag(name = "03-Tasting Note📝",description = "테이스팅 노트 관련 API")
+@Tag(name = "04-Tasting Note📝",description = "테이스팅 노트 관련 API")
 @Slf4j
 public class TastingNoteController {
     private final TastingNoteService tastingNoteService;
@@ -37,9 +38,23 @@ public class TastingNoteController {
                                                                              @PathVariable Long noteId) {
         return null;
     }
+    @Operation(summary= "04-04 테이스팅노트📝 테이스팅 노트 작성(구매의사) 유무 확인 API #FRAME 001_03_와인 취향 분석 ",description = "내 취향 분석 API 입니다")
+    @ApiErrorCodeExample(UserAuthErrorCode.class)
+    @GetMapping("/check")
+    public CommonResponse<TastingNoteResponse.CheckTastingNote> checkTastingNote(@Parameter(hidden = true) @AuthenticationPrincipal User user){
+        return CommonResponse.onSuccess(tastingNoteService.checkTastingNote(user));
+    }
+
+    @GetMapping("/taste-analysis")
+    @ApiErrorCodeExample(UserAuthErrorCode.class)
+    @Operation(summary= "04-03 테이스팅노트📝 내 취향 분석 #FRAME 001_03_와인 취향 분석 ",description = "내 취향 분석 API 입니다")
+    public CommonResponse<TastingNoteResponse.TasteAnalysisDTO> tasteAnalysis(@Parameter(hidden = true) @AuthenticationPrincipal User user){
+        return CommonResponse.onSuccess(tastingNoteService.tasteAnalysis(user));
+    }
+
 
     @GetMapping("")
-    @Operation(summary = "03-02 테이스팅 노트📝 조회 API 입니다 #FRAME_노트_리스트 조회", description = "노트 리스트 조회")
+    @Operation(summary = "04-02 테이스팅 노트📝 조회 API 입니다 #FRAME_노트_리스트 조회", description = "노트 리스트 조회")
     @ApiErrorCodeExample(UserAuthErrorCode.class)
     public CommonResponse<PageResponse<List<TastingNoteResponse.TastingNoteListDTO>>> getTastingNoteList(@Parameter(hidden = true) @AuthenticationPrincipal User user,
                                                                                                          @Parameter(description = "페이지", example = "0") @RequestParam(required = false, defaultValue = "0") Integer page,
@@ -53,7 +68,7 @@ public class TastingNoteController {
     }
 
     @RequestMapping(value = "", consumes = {"multipart/form-data"}, method = RequestMethod.POST)
-    @Operation(summary = "03-01 테이스팅 노트📝 작성 API 입니다. multi-form data 형식입니다.  02-03 와인 검색용 API 와 함께 사용. #FRAME_노트 작성", description = "테이스팅 노트 작성 API")
+    @Operation(summary = "04-01 테이스팅 노트📝 작성 API 입니다. multi-form data 형식입니다.  02-03 와인 검색용 API 와 함께 사용. #FRAME_노트 작성", description = "테이스팅 노트 작성 API")
     @ApiErrorCodeExample({UploadTastingNoteErrorCode.class, UserAuthErrorCode.class, FileUploadException.class, RequestErrorCode.class})
     public CommonResponse<TastingNoteResponse.CreateTastingNoteDTO> createTastingNote(@Parameter(hidden = true) @AuthenticationPrincipal User user,
                                                                                       @Valid @ModelAttribute TastingNoteRequest.CreateTastingNoteDTO request) {
