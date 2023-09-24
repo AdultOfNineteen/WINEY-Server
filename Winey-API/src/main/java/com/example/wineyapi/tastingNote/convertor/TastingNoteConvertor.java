@@ -11,8 +11,10 @@ import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Wine;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
@@ -95,7 +97,7 @@ public class TastingNoteConvertor {
             wineCountByVarietal.put(varietal, wineCountByVarietal.getOrDefault(varietal,0) + 1);
             wineCountByType.put(wine.getType().getValue(), wineCountByType.getOrDefault(wine.getType().getValue() ,0)+1);
             for(SmellKeywordTastingNote smellKeywordTastingNote : tastingNote.getSmellKeywordTastingNote()) {
-                wineCountBySmell.put(smellKeywordTastingNote.getSmellKeyword().getValue(), wineCountBySmell.getOrDefault(smellKeywordTastingNote.getSmellKeyword().getValue(), 0) + 1);
+                wineCountBySmell.put(smellKeywordTastingNote.getSmellKeyword().getName(), wineCountBySmell.getOrDefault(smellKeywordTastingNote.getSmellKeyword().getName(), 0) + 1);
             }
         }
 
@@ -218,6 +220,7 @@ public class TastingNoteConvertor {
                 .wine(wine)
                 .color(request.getColor())
                 .user(user)
+                .officialAlcohol(request.getOfficialAlcohol())
                 .sweetness(request.getSweetness())
                 .acidity(request.getAcidity())
                 .body(request.getBody())
@@ -266,5 +269,75 @@ public class TastingNoteConvertor {
         );
 
         return new PageResponse<>( tastingNotes.isLast(),tastingNotes.getTotalElements(), tastingNoteListDTOS);
+    }
+
+    public TastingNoteResponse.TastingNoteDTO TastingNote(TastingNote tastingNote) {
+        Wine wine = tastingNote.getWine();
+        List<TastingNoteImage> tastingNoteImages = tastingNote.getTastingNoteImages();
+        List<SmellKeywordTastingNote> smellKeywordTastingNotes = tastingNote.getSmellKeywordTastingNote();
+        LocalDateTime createdAt = tastingNote.getCreatedAt();
+
+        return TastingNoteResponse.TastingNoteDTO
+                .builder()
+                .noteId(tastingNote.getId())
+                .noteDate(createdAt.getYear()+"."+createdAt.getMonthValue()+"."+createdAt.getDayOfMonth())
+                .wineType(wine.getType())
+                .wineName(wine.getName())
+                .region(wine.getRegion())
+                .star(tastingNote.getStarRating())
+                .color(tastingNote.getColor())
+                .buyAgain(tastingNote.getBuyAgain())
+                .varietal(wine.getVarietal())
+                .price(tastingNote.getPrice())
+                .officialAlcohol(tastingNote.getOfficialAlcohol())
+                .smellKeywordList(SmellKeywordList(smellKeywordTastingNotes))
+                .myWineTaste(MyWineTaste(tastingNote))
+                .defaultWineTaste(DefaultWineTaste(wine))
+                .tastingNoteImage(TastingNoteImageRes(tastingNoteImages))
+                .memo(tastingNote.getMemo())
+                .build();
+    }
+
+    private List<TastingNoteResponse.TastingNoteImage> TastingNoteImageRes(List<TastingNoteImage> tastingNoteImages) {
+        List<TastingNoteResponse.TastingNoteImage> tastingNoteImageList = new ArrayList<>();
+
+        for (TastingNoteImage tastingNoteImage : tastingNoteImages) {
+            tastingNoteImageList.add(
+                    new TastingNoteResponse.TastingNoteImage(tastingNoteImage.getId(), tastingNoteImage.getUrl())
+            );
+        }
+        return tastingNoteImageList;
+    }
+
+    private TastingNoteResponse.DefaultWineTaste DefaultWineTaste(Wine wine) {
+        return TastingNoteResponse.DefaultWineTaste
+                .builder()
+                .sweetness(wine.getSweetness())
+                .acidity(wine.getAcidity())
+                .body(wine.getBody())
+                .tannin(wine.getTannins())
+                .build();
+    }
+
+    private TastingNoteResponse.MyWineTaste MyWineTaste(TastingNote tastingNote) {
+        return TastingNoteResponse.MyWineTaste
+                .builder()
+                .sweetness(tastingNote.getSweetness())
+                .acidity(tastingNote.getAcidity())
+                .alcohol(tastingNote.getAlcohol())
+                .body(tastingNote.getBody())
+                .tannin(tastingNote.getTannins())
+                .finish(tastingNote.getFinish())
+                .build();
+    }
+
+    private List<String> SmellKeywordList(List<SmellKeywordTastingNote> smellKeywordTastingNotes) {
+        List<String> smellKeywordList = new ArrayList<>();
+
+        for(SmellKeywordTastingNote smellKeywordTastingNote : smellKeywordTastingNotes){
+            smellKeywordList.add(smellKeywordTastingNote.getSmellKeyword().getName());
+        }
+
+        return smellKeywordList;
     }
 }

@@ -10,6 +10,7 @@ import com.example.wineydomain.image.repository.TastingNoteImageRepository;
 import com.example.wineydomain.tastingNote.entity.SmellKeyword;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.tastingNote.repository.SmellKeywordTastingNoteRepository;
+import com.example.wineydomain.tastingNote.repository.TastingNoteCustomRepository;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Country;
@@ -18,6 +19,7 @@ import com.example.wineydomain.wine.entity.WineType;
 import com.example.wineydomain.wine.repository.WineRepository;
 import com.example.wineyinfrastructure.amazonS3.service.S3UploadService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+import static com.example.wineydomain.tastingNote.exception.GetTastingNoteErrorCode.NOT_FOUND_TASTING_NOTE;
 import static com.example.wineydomain.tastingNote.exception.UploadTastingNoteErrorCode.NOT_FOUNT_WINE;
 
 @Service
@@ -49,6 +52,13 @@ public class TastingNoteServiceImpl implements TastingNoteService{
     public TastingNoteResponse.CheckTastingNote checkTastingNote(User user) {
         boolean checkTastingNote = tastingNoteRepository.existsByUserAndBuyAgain(user, true);
         return new TastingNoteResponse.CheckTastingNote(checkTastingNote);
+    }
+
+    @Override
+    public TastingNoteResponse.TastingNoteDTO getTastingNote(Long noteId) {
+        TastingNote tastingNote = tastingNoteRepository.getTastingNote(noteId, false);
+        if(tastingNote == null) throw new BadRequestException(NOT_FOUND_TASTING_NOTE);
+        return tastingNoteConvertor.TastingNote(tastingNote);
     }
 
     @Override
