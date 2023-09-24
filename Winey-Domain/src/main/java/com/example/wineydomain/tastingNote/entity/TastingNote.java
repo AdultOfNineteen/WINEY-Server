@@ -1,6 +1,7 @@
 package com.example.wineydomain.tastingNote.entity;
 
 import com.example.wineydomain.common.model.BaseEntity;
+import com.example.wineydomain.image.entity.TastingNoteImage;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Wine;
 import lombok.*;
@@ -40,8 +41,15 @@ public class TastingNote extends BaseEntity {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "tastingNoteId")
-    @BatchSize(size = 100)
+    @BatchSize(size = 20)
     private List<SmellKeywordTastingNote> smellKeywordTastingNote;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tastingNoteId")
+    @BatchSize(size = 10)
+    private List<TastingNoteImage> tastingNoteImages;
+
+    private Double officialAlcohol;
 
     /**
      * 당도
