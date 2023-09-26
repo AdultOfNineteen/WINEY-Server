@@ -2,7 +2,6 @@ package com.example.wineyapi.tastingNote.convertor;
 
 import com.example.wineyapi.tastingNote.dto.TastingNoteRequest;
 import com.example.wineyapi.tastingNote.dto.TastingNoteResponse;
-import com.example.wineyapi.wine.dto.WineResponse;
 import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.image.entity.TastingNoteImage;
 import com.example.wineydomain.tastingNote.entity.SmellKeyword;
@@ -11,7 +10,6 @@ import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Wine;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -50,7 +48,6 @@ public class TastingNoteConvertor {
         List<TastingNoteResponse.Top3Country> top3Country = new ArrayList<>();
         List<TastingNoteResponse.Top3Varietal>top3Varietal =new ArrayList<>();
         List<TastingNoteResponse.Top7Smell> top7Smell = new ArrayList<>();
-
 
         for (TastingNote tastingNote : tastingNotes){
 
@@ -102,6 +99,7 @@ public class TastingNoteConvertor {
         }
 
         List<Map.Entry<String, Integer>> sortCountry = new ArrayList<>(wineCountByCountry.entrySet());
+
         if (!sortCountry.isEmpty()) {
             recommendCountry = sortCountry.get(0).getKey();
         }
@@ -116,7 +114,6 @@ public class TastingNoteConvertor {
         if (!sortType.isEmpty()) {
             recommendWineType = sortType.get(0).getKey();
         }
-
 
         List<Map.Entry<String, Integer>> sortVarietal = new ArrayList<>(wineCountByVarietal.entrySet());
         if (!sortVarietal.isEmpty()) {
@@ -138,12 +135,11 @@ public class TastingNoteConvertor {
         }
 
         for (int i = 0; i < Math.min(3, sortCountry.size()); i++) {
-            double wineCountPercent = calculateAvgPercent(sortCountry.get(i).getValue(),totalWineCnt);
             top3Country.add(
                     TastingNoteResponse.Top3Country
                             .builder()
                             .country(sortCountry.get(i).getKey())
-                            .percent((int) (Math.round(wineCountPercent * 10.0) / 10.0))
+                            .count(sortCountry.get(i).getValue())
                     .build());
         }
 
@@ -176,16 +172,11 @@ public class TastingNoteConvertor {
                 .recommendWineType(recommendWineType)
                 .totalWineCnt(totalWineCnt)
                 .buyAgainCnt(buyAgainCnt)
-                .redCnt(redCnt)
-                .whiteCnt(whiteCnt)
-                .sparklingCnt(sparklingCnt)
-                .roseCnt(roseCnt)
-                .fortifiedCnt(fortifiedCnt)
-                .otherCnt(otherCnt)
                 .top3Country(top3Country)
                 .top3Varietal(top3Varietal)
                 .top7Smell(top7Smell)
                 .avgPrice(avgPrice)
+                .top3Type(calculateWineTypesPercent(sortType))
                 .taste(TastingNoteResponse.Taste
                         .builder()
                         .sweetness(calculateAvg(sweetnessSum, totalWineCnt))
@@ -196,6 +187,20 @@ public class TastingNoteConvertor {
                         .finish(calculateAvg(finishSum, totalWineCnt))
                         .build())
                 .build();
+    }
+
+    private List<TastingNoteResponse.Top3Type> calculateWineTypesPercent(List<Map.Entry<String, Integer>> sortType) {
+        List<TastingNoteResponse.Top3Type> top3Types = new ArrayList<>();
+        int top3Count = 0;
+
+        for (int i = 0; i < Math.min(3, sortType.size()); i++){
+            top3Count += sortType.get(i).getValue();
+        }
+
+        for (int i = 0; i < Math.min(3, sortType.size()); i++) {
+            top3Types.add(new TastingNoteResponse.Top3Type(sortType.get(i).getKey(), (int) calculateAvgPercent(sortType.get(i).getValue(), top3Count)));
+        }
+        return top3Types;
     }
 
     public double calculateAvg(int sum, int totalCnt){

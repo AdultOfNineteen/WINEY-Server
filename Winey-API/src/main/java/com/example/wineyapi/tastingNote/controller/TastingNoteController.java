@@ -71,7 +71,7 @@ public class TastingNoteController {
     }
 
     @GetMapping("/{noteId}")
-    @Operation(summary= "04-05 테이스팅노트📝 테이스팅 상세조회 #FRAME 001_03_와인 취향 분석 Made By Austin ",description = "내 취향 분석 API 입니다")
+    @Operation(summary= "04-05 테이스팅노트📝 테이스팅 상세조회 #FRAME 001_03_테이스팅 노트 상세조회 Made By Austin ",description = "상세조회 API 입니다")
     public CommonResponse<TastingNoteResponse.TastingNoteDTO> getTastingNote(@PathVariable Long noteId) {
 
         return CommonResponse.onSuccess(tastingNoteService.getTastingNote(noteId));
