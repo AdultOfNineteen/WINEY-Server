@@ -23,7 +23,7 @@ public enum SmellKeyword {
     SPICE("OAK","SPICE","향신료"),
     NUTS("OAK","NUTS","견과류"),
     VANILLA("OAK","VANILLA","바닐라"),
-    CARAMELCHOCOLATE("OAK","CARAMELCHOCOLATE","케러멜/초콜릿"),
+    CHOCOLATE("OAK","CHOCOLATE","초콜릿"),
     FLINT("OTHER","FLINT","부싯돌"),
     BREAD("OTHER", "BREAD","빵"),
     RUBBER("OTHER","RUBBER","고무"),
