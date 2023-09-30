@@ -14,17 +14,17 @@ public class TastingNoteResponse {
     @AllArgsConstructor
     @Builder
     public static class TastingNoteListDTO {
-        @Schema(name = "테이스팅 노트 id")
+        @Schema(description = "테이스팅 노트 id")
         private Long noteId;
-        @Schema(name = "와인 이름")
+        @Schema(description = "와인 이름")
         private String wineName;
-        @Schema(name = "와인 생산지")
+        @Schema(description = "와인 생산지")
         private Country country;
-        @Schema(name = "평점")
+        @Schema(description = "평점")
         private int starRating;
-        @Schema(name = "재구매 유무")
+        @Schema(description = "재구매 유무")
         private boolean buyAgain;
-        @Schema(name = "와인 타입 RED,WHITE 등등")
+        @Schema(description = "와인 타입 RED,WHITE 등등")
         private WineType wineType;
     }
 
@@ -52,9 +52,97 @@ public class TastingNoteResponse {
         private String field;
     }
 
-    public static  class TastingNoteDTO {
+    @NoArgsConstructor
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class TastingNoteDTO {
+        @Schema(name = "noteId")
+        private Long noteId;
+
+        @Schema(description = "작성 날짜")
+        private String noteDate;
+
+        @Schema(description = "와인 타입 RED, WHITE 등등")
+        private WineType wineType;
+
+        @Schema(description = "와인 이름")
+        private String wineName;
+
+        @Schema(description = "와인 생상지")
+        private String region;
+
+        @Schema(description = "별점")
+        private int star;
+
+        @Schema(description = "사용자가 지정한 색")
+        private String color;
+
+        @Schema(description = "재구매 의사")
+        private boolean buyAgain;
+
+        @Schema(description = "varietal")
+        private String varietal;
+
+        @Schema(description = "사용자가 입력한 알코올 도수")
+        private Double officialAlcohol;
+
+        @Schema(description = "사용자가 입력한 가격")
+        private int price;
+
+        private List<String> smellKeywordList;
+
+        @Schema(description = "내가 느낀 와인의 맛")
+        private MyWineTaste myWineTaste;
+
+        @Schema(description = "와인의 기본맛")
+        private DefaultWineTaste defaultWineTaste;
+
+        private List<TastingNoteImage> tastingNoteImage;
+
+        private String memo;
     }
 
+    @NoArgsConstructor
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class TastingNoteImage{
+        private Long imgId;
+
+        private String imgUrl;
+    }
+    @NoArgsConstructor
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class MyWineTaste{
+        private double sweetness;
+
+        private double acidity;
+
+        private double alcohol;
+
+        private double body;
+
+        private double tannin;
+
+        private double finish;
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class DefaultWineTaste{
+        private double sweetness;
+
+        private double acidity;
+
+        private double body;
+
+        private double tannin;
+    }
 
     @NoArgsConstructor
     @Getter
@@ -62,37 +150,37 @@ public class TastingNoteResponse {
     @AllArgsConstructor
     @Builder
     public static class TasteAnalysisDTO {
-        @Schema(name = "추천 국가")
+        @Schema(description = "추천 국가")
         private String recommendCountry;
 
-        @Schema(name = "추천 품종")
+        @Schema(description = "추천 품종")
         private String recommendVarietal;
 
-        @Schema(name = "추천 와인타입")
+        @Schema(description = "추천 와인타입")
         private String recommendWineType;
 
-        @Schema(name = "총 마신 와인 병수")
+        @Schema(description = "총 마신 와인 병수")
         private int totalWineCnt;
 
-        @Schema(name = "재구매 의사가 있는 와인")
+        @Schema(description = "재구매 의사가 있는 와인")
         private int buyAgainCnt;
 
-        @Schema(name = "레드 와인 갯수")
+        @Schema(description = "레드 와인 갯수")
         private int redCnt;
 
-        @Schema(name = "화이트 와인 갯수")
+        @Schema(description = "화이트 와인 갯수")
         private int whiteCnt;
 
-        @Schema(name = "스파클링 와인 갯수")
+        @Schema(description = "스파클링 와인 갯수")
         private int sparklingCnt;
 
-        @Schema(name = "로제와인 갯수")
+        @Schema(description = "로제와인 갯수")
         private int roseCnt;
 
-        @Schema(name = "주정강화 갯수")
+        @Schema(description = "주정강화 갯수")
         private int fortifiedCnt;
 
-        @Schema(name = "기타 와인 갯수")
+        @Schema(description = "기타 와인 갯수")
         private int otherCnt;
 
         @Schema(description = "key = country, value = percent 식인 List 입니다.")
@@ -106,7 +194,7 @@ public class TastingNoteResponse {
 
         private Taste taste;
 
-        @Schema(name = "평균 와인 가격")
+        @Schema(description = "평균 와인 가격")
         private int avgPrice;
 
     }

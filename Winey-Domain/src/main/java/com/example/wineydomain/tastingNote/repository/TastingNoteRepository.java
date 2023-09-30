@@ -22,7 +22,6 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
             "GROUP BY TN.wineId " +
             "ORDER BY COUNT(TN.wineId) DESC, TN.createdAt DESC LIMIT 3",
             nativeQuery = true)
-
     List<WineList> recommendCountWine();
 
 
@@ -66,6 +65,8 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
     List<TastingNote> findTop3ByUserOrderByStarRatingAscCreatedAtDesc(User user);
 
     List<TastingNote> findTop3ByUserOrderByStarRatingDescCreatedAtDesc(User user);
+
+    List<TastingNote> findTop3ByUserAndBuyAgainOrderByStarRatingDescCreatedAtDesc(User user, boolean b);
 
     interface WineList{
         Long getWineId();
