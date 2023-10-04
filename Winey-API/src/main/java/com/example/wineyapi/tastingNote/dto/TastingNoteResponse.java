@@ -1,6 +1,7 @@
 package com.example.wineyapi.tastingNote.dto;
 
 import com.example.wineydomain.wine.entity.Country;
+import com.example.wineydomain.wine.entity.Wine;
 import com.example.wineydomain.wine.entity.WineType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -255,5 +256,38 @@ public class TastingNoteResponse {
     @Builder
     public static class CheckTastingNote {
         private boolean tastingNoteExists;
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class NoteFilterDTO {
+        private List<WineTypeFilter> wineTypes;
+
+        private List<CountryFilter> countries;
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class WineTypeFilter{
+        private String type;
+
+        private String count;
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class CountryFilter{
+        private String country;
+
+        private String count;
     }
 }

@@ -72,10 +72,19 @@ public class TastingNoteController {
 
     @GetMapping("/{noteId}")
     @Operation(summary= "04-05 테이스팅노트📝 테이스팅 상세조회 #FRAME 001_03_테이스팅 노트 상세조회 Made By Austin ",description = "상세조회 API 입니다")
+    @ApiErrorCodeExample(UserAuthErrorCode.class)
     public CommonResponse<TastingNoteResponse.TastingNoteDTO> getTastingNote(@PathVariable Long noteId) {
 
         return CommonResponse.onSuccess(tastingNoteService.getTastingNote(noteId));
     }
+
+    @GetMapping("/filter")
+    @Operation(summary= "04-05 테이스팅노트📝 테이스팅 상세조회 #FRAME 002_01_노트_필터 설정 조회 Made By Austin ",description = "필터 조회 API 입니다")
+    @ApiErrorCodeExample(UserAuthErrorCode.class)
+    public CommonResponse<TastingNoteResponse.NoteFilterDTO> getNoteFilter(@Parameter(hidden = true) @AuthenticationPrincipal User user){
+        return CommonResponse.onSuccess(tastingNoteService.getNoteFilter(user));
+    }
+
 
     @PatchMapping("{noteId}")
     public CommonResponse<TastingNoteResponse.UpdateTastingNoteDTO> updateTastingNote(@PathVariable Long userId,

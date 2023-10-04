@@ -8,7 +8,9 @@ import com.example.wineydomain.tastingNote.entity.SmellKeyword;
 import com.example.wineydomain.tastingNote.entity.SmellKeywordTastingNote;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.wine.entity.Country;
 import com.example.wineydomain.wine.entity.Wine;
+import com.example.wineydomain.wine.entity.WineType;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -344,5 +346,59 @@ public class TastingNoteConvertor {
         }
 
         return smellKeywordList;
+    }
+
+    public TastingNoteResponse.NoteFilterDTO NoteFilter(List<TastingNote> tastingNotes) {
+        Map<WineType, Integer> wineCountByType = new HashMap<>();
+        Map<Country, Integer> wineCountByCountry = new HashMap<>();
+
+        for(TastingNote tastingNote : tastingNotes){
+            Wine wine = tastingNote.getWine();
+            Country country  = wine.getCountry();
+            wineCountByCountry.put(country, wineCountByCountry.getOrDefault(country, 0) + 1);
+            wineCountByType.put(wine.getType(), wineCountByType.getOrDefault(wine.getType() ,0)+1);
+        }
+
+        for (WineType type : WineType.values()) {
+            wineCountByType.putIfAbsent(type, 0);
+        }
+
+        // 모든 Country Enum 값을 순회하면서 없는 경우 0으로 설정
+        for (Country country : Country.values()) {
+            wineCountByCountry.putIfAbsent(country, 0);
+        }
+
+        return TastingNoteResponse.NoteFilterDTO
+                .builder()
+                .wineTypes(wineTypesFilter(wineCountByType,tastingNotes.size()))
+                .countries(countryFilter(wineCountByCountry,tastingNotes.size()))
+                .build();
+    }
+
+    private List<TastingNoteResponse.WineTypeFilter> wineTypesFilter(Map<WineType, Integer> wineCountByType, int size) {
+        List<TastingNoteResponse.WineTypeFilter> wineTypeFilters = new ArrayList<>();
+        wineTypeFilters.add(new TastingNoteResponse.WineTypeFilter("전체", checkValue(size)));
+        for (Map.Entry<WineType, Integer> entry : wineCountByType.entrySet()) {
+            wineTypeFilters.add(new TastingNoteResponse.WineTypeFilter(entry.getKey().getName(), checkValue(entry.getValue())));
+        }
+        return wineTypeFilters;
+    }
+
+    private List<TastingNoteResponse.CountryFilter> countryFilter(Map<Country, Integer> wineCountByCountry, int size) {
+        List<TastingNoteResponse.CountryFilter> countryFilters = new ArrayList<>();
+        countryFilters.add(new TastingNoteResponse.CountryFilter("전체", checkValue(size)));
+        for (Map.Entry<Country, Integer> entry : wineCountByCountry.entrySet()) {
+            countryFilters.add(new TastingNoteResponse.CountryFilter(entry.getKey().getValue(), checkValue(entry.getValue())));
+        }
+        return countryFilters;
+    }
+
+    private String checkValue(int value){
+        if(value > 100){
+            return "100+";
+        }
+        else {
+            return String.valueOf(value);
+        }
     }
 }

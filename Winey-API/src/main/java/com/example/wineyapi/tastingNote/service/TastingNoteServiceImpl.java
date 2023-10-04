@@ -62,6 +62,12 @@ public class TastingNoteServiceImpl implements TastingNoteService{
     }
 
     @Override
+    public TastingNoteResponse.NoteFilterDTO getNoteFilter(User user) {
+        List<TastingNote> tastingNotes = tastingNoteRepository.findByUser(user);
+        return tastingNoteConvertor.NoteFilter(tastingNotes);
+    }
+
+    @Override
     @Transactional
     public TastingNoteResponse.CreateTastingNoteDTO createTastingNote(User user, TastingNoteRequest.CreateTastingNoteDTO request) {
         Wine wine  = wineRepository.findById(request.getWineId()).orElseThrow(() ->  new BadRequestException(NOT_FOUNT_WINE));
