@@ -14,5 +14,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 )
 public interface GoogleOauth2Client {
     @GetMapping("/tokeninfo")
-    GoogleUserInfo verifyToken(@RequestParam("access_token") String accessToken);
+    GoogleUserInfo verifyToken(@RequestParam("id_token") String idToken);
 }
