@@ -15,6 +15,8 @@ import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.user.repository.UserRepository;
 import com.example.wineydomain.verificationMessage.entity.VerificationMessage;
 import com.example.wineydomain.verificationMessage.repository.VerificationMessageRepository;
+import com.example.wineyinfrastructure.oauth.google.client.GoogleOauth2Client;
+import com.example.wineyinfrastructure.oauth.google.dto.GoogleUserInfo;
 import com.example.wineyinfrastructure.oauth.kakao.client.KakaoFeignClient;
 import com.example.wineyinfrastructure.oauth.kakao.client.KakaoLoginFeignClient;
 import com.example.wineyinfrastructure.oauth.kakao.dto.KakaoUserInfoDto;
@@ -38,6 +40,7 @@ public class UserServiceImpl implements UserService {
 
     private final KakaoFeignClient kakaoFeignClient;
     private final KakaoLoginFeignClient kakaoLoginFeignClient;
+    private final GoogleOauth2Client googleOauth2Client;
     private final UserRepository userRepository;
     private final KakaoProperties kakaoProperties;
     private final CoolSmsProperties coolSmsProperties;
@@ -52,6 +55,7 @@ public class UserServiceImpl implements UserService {
                 coolSmsProperties.getDomain());
     }
 
+    @Transactional
     @Override
     public User login(SocialType socialType, UserRequest.LoginUserDTO request) {
         User user = null;
@@ -91,8 +95,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+
     private User loginWithGoogle(UserRequest.LoginUserDTO request) {
-        return null;
+        // 구글에서 사용자 정보 조회
+        GoogleUserInfo googleUserInfo = googleOauth2Client.verifyToken(request.getAccessToken());
+
+        User user = userRepository.findBySocialIdAndSocialType(googleUserInfo.getSub(), SocialType.GOOGLE)
+                .orElseGet(() -> UserConverter.toUser(googleUserInfo));
+
+        return userRepository.save(user);
     }
 
     private User loginWithApple(UserRequest.LoginUserDTO request) {
@@ -130,7 +141,7 @@ public class UserServiceImpl implements UserService {
         if(optionalUser.isPresent() && optionalUser.get().getStatus() == Status.ACTIVE) {
             // 0. 1~2를 수행한 소셜로그인 계정 hard delete & 안내문구전송
             User user = optionalUser.get();
-            String errorMessageWithSocialType = user.getPhoneNumber() + "님은 " + user.getSocialType().name() + " 소셜 회원으로 가입하신 기록이 있어요";
+            String errorMessageWithSocialType = user.getPhoneNumber() + "님은\n" + user.getSocialType().name() + " 소셜 회원으로\n가입하신 기록이 있어요";
             userRepository.deleteById(userId);
             throw new UserException(CommonResponseStatus.USER_ALREADY_EXISTS, errorMessageWithSocialType);
         }

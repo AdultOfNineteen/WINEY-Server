@@ -10,6 +10,7 @@ import com.example.wineydomain.user.entity.Authority;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.verificationMessage.entity.VerificationMessage;
+import com.example.wineyinfrastructure.oauth.google.dto.GoogleUserInfo;
 import com.example.wineyinfrastructure.oauth.kakao.dto.KakaoUserInfoDto;
 import com.example.wineyinfrastructure.user.client.NickNameFeignClient;
 import lombok.RequiredArgsConstructor;
@@ -79,6 +80,22 @@ public class UserConverter {
                 .username(createUserName(SocialType.KAKAO, kakaoUserInfoDto.getId()))
                 .authorities(Collections.singleton(createUserAuthority()))
                 .socialType(SocialType.KAKAO)
+                .level(1)
+                .status(Status.INACTIVE)
+                .build();
+    }
+
+    public static User toUser(GoogleUserInfo googleUserInfo) {
+        String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
+
+        return User.builder()
+                .profileImgUrl(googleUserInfo.getPicture())
+                .password(staticPasswordEncoder.encode(googleUserInfo.getSub()))
+                .socialId(googleUserInfo.getSub())
+                .nickName(nickName)
+                .username(createUserName(SocialType.GOOGLE, googleUserInfo.getSub()))
+                .authorities(Collections.singleton(createUserAuthority()))
+                .socialType(SocialType.GOOGLE)
                 .level(1)
                 .status(Status.INACTIVE)
                 .build();
