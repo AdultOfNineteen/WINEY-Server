@@ -1,6 +1,7 @@
 package com.example.wineyapi.tastingNote.dto;
 
 import com.example.wineydomain.wine.entity.Country;
+import com.example.wineydomain.wine.entity.Wine;
 import com.example.wineydomain.wine.entity.WineType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -165,23 +166,8 @@ public class TastingNoteResponse {
         @Schema(description = "재구매 의사가 있는 와인")
         private int buyAgainCnt;
 
-        @Schema(description = "레드 와인 갯수")
-        private int redCnt;
-
-        @Schema(description = "화이트 와인 갯수")
-        private int whiteCnt;
-
-        @Schema(description = "스파클링 와인 갯수")
-        private int sparklingCnt;
-
-        @Schema(description = "로제와인 갯수")
-        private int roseCnt;
-
-        @Schema(description = "주정강화 갯수")
-        private int fortifiedCnt;
-
-        @Schema(description = "기타 와인 갯수")
-        private int otherCnt;
+        @Schema(description = "key = country, value = percent 식인 List 입니다.")
+        private List<Top3Type> top3Type;
 
         @Schema(description = "key = country, value = percent 식인 List 입니다.")
         private List<Top3Country> top3Country;
@@ -226,8 +212,21 @@ public class TastingNoteResponse {
     public static class Top3Country{
         private String country;
 
+        private int count;
+    }
+
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class Top3Type{
+        private String type;
+
         private int percent;
     }
+
 
     @NoArgsConstructor
     @Getter
@@ -257,5 +256,38 @@ public class TastingNoteResponse {
     @Builder
     public static class CheckTastingNote {
         private boolean tastingNoteExists;
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class NoteFilterDTO {
+        private List<WineTypeFilter> wineTypes;
+
+        private List<CountryFilter> countries;
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class WineTypeFilter{
+        private String type;
+
+        private String count;
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class CountryFilter{
+        private String country;
+
+        private String count;
     }
 }
