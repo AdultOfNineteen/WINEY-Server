@@ -26,19 +26,16 @@ public class WineController {
     private final WineService wineService;
 
     @GetMapping("/wines/{wineId}")
+    @Operation(summary= "02-04 Wine🍷 와인 상세조회 #001_01.1_와인 카드 자세히 보기",description = "와인 상세조회 API입니다.")
     public CommonResponse<WineResponse.WineDTO> getWine(@PathVariable Long wineId) {
-        return null;
-    }
-
-    @GetMapping("/wines")
-    public CommonResponse<WineResponse.WineListDTO> getWineList(@RequestParam String name) {
-        return null;
+        return CommonResponse.onSuccess(wineService.getWineDTOById(wineId));
     }
 
     @PostMapping("/wines")
     public CommonResponse<WineResponse.CreateWineDTO> createWine(@RequestBody WineRequest.CreateWineDTO request) {
         return null;
     }
+
     @GetMapping("/wines/recommend")
     @ApiErrorCodeExample(UserAuthErrorCode.class)
     @Operation(summary= "02-01 Wine🍷 홈화면 와인 조회 API #FRAME 001_01_홈/메인페이지 Made By Austin",description = "홈화면 와인 추천 조회입니다.")
