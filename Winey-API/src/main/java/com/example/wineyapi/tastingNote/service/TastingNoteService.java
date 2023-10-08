@@ -21,6 +21,7 @@ public interface TastingNoteService {
     TastingNoteResponse.TastingNoteDTO getTastingNote(Long noteId);
 
     TastingNoteResponse.NoteFilterDTO getNoteFilter(User user);
-
+  
     void deleteTastingNote(User user, Long noteId);
+
 }

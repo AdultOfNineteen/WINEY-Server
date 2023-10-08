@@ -141,7 +141,9 @@ public class UserServiceImpl implements UserService {
         if(optionalUser.isPresent() && optionalUser.get().getStatus() == Status.ACTIVE) {
             // 0. 1~2를 수행한 소셜로그인 계정 hard delete & 안내문구전송
             User user = optionalUser.get();
+
             String errorMessageWithSocialType = user.getSocialType().name();
+
             userRepository.deleteById(userId);
             throw new UserException(CommonResponseStatus.USER_ALREADY_EXISTS, errorMessageWithSocialType);
         }
