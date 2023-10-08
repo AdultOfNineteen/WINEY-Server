@@ -1,6 +1,10 @@
 package com.example.wineyapi.security;
 
 import com.example.wineycommon.properties.JwtProperties;
+import com.example.wineydomain.redis.entity.AccessToken;
+import com.example.wineydomain.redis.entity.RefreshToken;
+import com.example.wineydomain.redis.repository.AccessTokenRepository;
+import com.example.wineydomain.redis.repository.RefreshTokenRepository;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.user.repository.UserRepository;
 import io.jsonwebtoken.*;
@@ -34,6 +38,8 @@ public class JwtService {
 
     private final UserRepository userRepository;
     private final JwtProperties jwtProperties;
+    private final AccessTokenRepository accessTokenRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
 
     private Key getSecretKey() {
@@ -63,8 +69,7 @@ public class JwtService {
         Date now=new Date();
         final Key encodedKey = getRefreshKey();
 
-
-        return Jwts.builder()
+        String refreshToken=  Jwts.builder()
                 .setHeaderParam("type","refresh")
                 .claim("userId",userId)
                 .setIssuedAt(now)
@@ -72,6 +77,9 @@ public class JwtService {
                 .signWith(encodedKey)
                 .compact();
 
+        refreshTokenRepository.save(RefreshToken.builder().userId(userId.toString()).token(refreshToken).ttl(jwtProperties.getRefreshTokenSeconds()).build());
+
+        return refreshToken;
     }
 
     public Authentication getAuthentication(String token)  {
@@ -99,20 +107,15 @@ public class JwtService {
 
             Long userId = claims.getBody().get("userId",Long.class);
 
-            /*
-
-            String expiredAt= redisService.getValues(token);
+            Optional<AccessToken> accessToken = accessTokenRepository.findById(token);
 
 
-
-            if(expiredAt==null) return true;
-
-            if(expiredAt.equals(String.valueOf(userId))){
-                servletRequest.setAttribute("exception","HijackException");
-                return false;
+            if(accessToken.isPresent()){
+                if(accessToken.get().getToken().equals(token)){
+                    servletRequest.setAttribute("exception","HijackException");
+                    return false;
+                }
             }
-
-             */
 
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
@@ -159,7 +162,5 @@ public class JwtService {
     public RequestContextListener requestContextListener(){
         return new RequestContextListener();
     }
-
-
-
+    
 }
