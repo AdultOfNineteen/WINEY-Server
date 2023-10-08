@@ -40,7 +40,7 @@ jobs:
           aws.s3.base-url: ${{ secrets.AWS_BASE_URL }}
           aws.s3.access-key: ${{ secrets.AWS_S3_ACCESS_KEY }}
           aws.s3.secret-key: ${{ secrets.AWS_S3_SECRET_KEY }}
-
+          spring.redis.host: ${{ secrets.REDIS_HOST }}
 
 
       - name: Set Environment - Domain DEV Yml
