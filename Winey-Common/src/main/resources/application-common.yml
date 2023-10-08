@@ -28,3 +28,8 @@ aws:
     access-key: ${ACCESS_S3_ACCESS_KEY}
     secret-key: ${ACCESS_S3_SECRET_KEY}
 
+spring:
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+
