@@ -162,5 +162,12 @@ public class JwtService {
     public RequestContextListener requestContextListener(){
         return new RequestContextListener();
     }
-    
+
+
+
+    public void logOut(Long userId) {
+        long expiredAccessTokenTime=getExpiredTime(getJwt()).getTime() - new Date().getTime();
+        log.info(String.valueOf(expiredAccessTokenTime));
+        accessTokenRepository.save(AccessToken.builder().token(getJwt()).userId(String.valueOf(userId)).ttl(expiredAccessTokenTime).build());
+    }
 }
