@@ -13,4 +13,12 @@ public interface TastingNoteService {
     TastingNoteResponse.CreateTastingNoteDTO createTastingNote(User user, TastingNoteRequest.CreateTastingNoteDTO request);
 
     PageResponse<List<TastingNoteResponse.TastingNoteListDTO>> getTastingNoteList(User user, Integer page, Integer size, Integer order, List<Country> countries, List<WineType> wineTypes, Integer isBuyAgain);
+
+    TastingNoteResponse.TasteAnalysisDTO tasteAnalysis(User user);
+
+    TastingNoteResponse.CheckTastingNote checkTastingNote(User user);
+
+    TastingNoteResponse.TastingNoteDTO getTastingNote(Long noteId);
+
+    TastingNoteResponse.NoteFilterDTO getNoteFilter(User user);
 }

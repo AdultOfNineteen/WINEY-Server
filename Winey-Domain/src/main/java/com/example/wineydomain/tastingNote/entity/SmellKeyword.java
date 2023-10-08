@@ -10,27 +10,29 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor
 public enum SmellKeyword {
-    FRUIT("FRUIT","FRUIT"),
-    BERRY("FRUIT","BERRY"),
-    LEMONANDLIME("FRUIT","LEMONANDLIME"),
-    APPLEPEAR("FRUIT","APPLEPEAR"),
-    PEACHPLUM("FRUIT","PEACHPLUM"),
-    TROPICALFRUIT("FRUIT","TROPICALFRUIT"),
-    FLOWER("NATURAL", "FLOWER"),
-    GRASSWOOD("NATURAL", "GRASSWOOD"),
-    HERB("NATURAL","HERB"),
-    OAK("OAK","OAK"),
-    SPICE("OAK","SPICE"),
-    NUTS("OAK","NUTS"),
-    VANILLA("OAK","VANILLA"),
-    CARAMELCHOCOLATE("OAK","CARAMELCHOCOLATE"),
-    FLINT("OTHER","FLINT"),
-    BREAD("OTHER", "BREAD"),
-    RUBBER("OTHER","RUBBER"),
-    EARTHASH("OTHER","EARTASH"),
-    MEDICINE("OTHER", "MEDICNE");
+    FRUIT("FRUIT","FRUIT","과일향"),
+    BERRY("FRUIT","BERRY", "베리류"),
+    LEMONANDLIME("FRUIT","LEMONANDLIME","레몬/라임"),
+    APPLEPEAR("FRUIT","APPLEPEAR","사과/배"),
+    PEACHPLUM("FRUIT","PEACHPLUM","복숭아/자두"),
+    TROPICALFRUIT("FRUIT","TROPICALFRUIT","열대과일"),
+    FLOWER("NATURAL", "FLOWER","꽃향"),
+    GRASSWOOD("NATURAL", "GRASSWOOD","풀/나무"),
+    HERB("NATURAL","HERB","허브향"),
+    OAK("OAK","OAK","오크향"),
+    SPICE("OAK","SPICE","향신료"),
+    NUTS("OAK","NUTS","견과류"),
+    VANILLA("OAK","VANILLA","바닐라"),
+    CHOCOLATE("OAK","CHOCOLATE","초콜릿"),
+    FLINT("OTHER","FLINT","부싯돌"),
+    BREAD("OTHER", "BREAD","빵"),
+    RUBBER("OTHER","RUBBER","고무"),
+    EARTHASH("OTHER","EARTASH","흙/재"),
+    MEDICINE("OTHER", "MEDICNE","약품");
 
    private final String type;
 
    private final String value;
+
+   private final String name;
 }

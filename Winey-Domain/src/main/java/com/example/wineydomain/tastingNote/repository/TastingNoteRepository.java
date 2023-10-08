@@ -16,19 +16,18 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,TastingNoteCustomRepository {
-    @EntityGraph(attributePaths = {"wine","smellKeywordTastingNote"})
     List<TastingNote> findByUser(User user);
 
     @Query("SELECT new com.example.wineydomain.wine.entity.WineSummary(avg(t.price), avg(t.sweetness), avg(t.acidity), avg(t.body), avg(t.tannins)) FROM TastingNote t WHERE t.wine.id = :wineId AND t.buyAgain = true")
     Optional<WineSummary> findWineSummaryByWineId(@Param("wineId") Long wineId);
 
-    @Query(value = "select W.id as 'wineId',W.name, W.country, W.type, avg(W.price)'price', W.varietal " +
-            "from TastingNote TN join Wine W on TN.wineId = W.id " +
-            "group by TN.wineId order by count(TN.wineId) asc, TN.createdAt desc limit 3",
+    @Query(value = "SELECT W.id as 'wineId', W.name, W.country, W.type, COALESCE(AVG(CASE WHEN TN.price IS NULL OR TN.price = 0 THEN NULL ELSE TN.price END),0) as 'price', W.varietal " +
+            "FROM TastingNote TN JOIN Wine W ON TN.wineId = W.id " +
+            "GROUP BY TN.wineId " +
+            "ORDER BY COUNT(TN.wineId) DESC, TN.createdAt DESC LIMIT 3",
             nativeQuery = true)
     List<WineList> recommendCountWine();
 
-    List<TastingNote> findTop3ByUserOrderByStarRatingDescCreatedAtDesc(User user);
 
     Page<TastingNote> findByUserAndIsDeletedOrderByCreatedAtDesc(User user, boolean isDeleted, Pageable pageable);
 
@@ -62,6 +61,16 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
     Page<TastingNote> findByUserAndIsDeletedAndBuyAgainAndWine_CountryInAndWine_TypeInOrderByStarRatingAsc(User user, boolean b, boolean b1, List<Country> countries, List<WineType> wineTypes, Pageable pageable);
 
     Page<TastingNote> findByUserAndIsDeletedAndWine_TypeInOrderByStarRatingAsc(User user, boolean b, List<WineType> wineTypes, Pageable pageable);
+
+    List<TastingNote> findByUserAndBuyAgain(User user, boolean b);
+
+    boolean existsByUserAndBuyAgain(User user, boolean b);
+
+    List<TastingNote> findTop3ByUserOrderByStarRatingAscCreatedAtDesc(User user);
+
+    List<TastingNote> findTop3ByUserOrderByStarRatingDescCreatedAtDesc(User user);
+
+    List<TastingNote> findTop3ByUserAndBuyAgainOrderByStarRatingDescCreatedAtDesc(User user, boolean b);
 
     interface WineList{
         Long getWineId();

@@ -1,5 +1,7 @@
 package com.example.wineyapi.user.dto;
 
+import com.example.wineydomain.common.model.PreferenceStatus;
+import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,9 @@ public class UserResponse {
         private Long userId;
         private String accessToken;
         private String refreshToken;
+        private Status userStatus;
+        private VerifyMessageStatus messageStatus;
+        private PreferenceStatus preferenceStatus;
     }
 
     @NoArgsConstructor

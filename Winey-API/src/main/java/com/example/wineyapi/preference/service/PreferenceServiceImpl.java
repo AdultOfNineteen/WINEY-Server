@@ -6,6 +6,7 @@ import com.example.wineycommon.exception.errorcode.CommonResponseStatus;
 import com.example.wineydomain.common.model.Chocolate;
 import com.example.wineydomain.common.model.Coffee;
 import com.example.wineydomain.common.model.Fruit;
+import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.preference.entity.Preference;
 import com.example.wineydomain.preference.repository.PreferenceRepository;
 import com.example.wineydomain.user.entity.User;
@@ -46,6 +47,8 @@ public class PreferenceServiceImpl implements PreferenceService {
         updatePreference(request.getChocolate(), preference, this::setChocolateValues);
         updatePreference(request.getCoffee(), preference, this::setCoffeeValues);
         updatePreference(request.getFruit(), preference, this::setFruitValues);
+
+        user.setStatus(Status.ACTIVE);
 
         return preference;
     }
