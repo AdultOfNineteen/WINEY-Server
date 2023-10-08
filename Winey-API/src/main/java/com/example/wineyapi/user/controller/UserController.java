@@ -6,17 +6,27 @@ import com.example.wineyapi.user.converter.UserConverter;
 import com.example.wineyapi.user.dto.UserRequest;
 import com.example.wineyapi.user.dto.UserResponse;
 import com.example.wineycommon.annotation.ApiErrorCodeExample;
+import com.example.wineycommon.exception.BadRequestException;
 import com.example.wineycommon.exception.errorcode.OtherServerErrorCode;
 import com.example.wineyapi.user.service.UserService;
 import com.example.wineycommon.reponse.CommonResponse;
+import com.example.wineydomain.redis.entity.RefreshToken;
+import com.example.wineydomain.redis.repository.RefreshTokenRepository;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.user.exception.UserAuthErrorCode;
 import com.example.wineydomain.verificationMessage.entity.VerificationMessage;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionFailedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import static com.example.wineycommon.exception.errorcode.CommonResponseStatus.INVALID_REFRESH_TOKEN;
 
 @Tag(name = "01-User\uD83D\uDC64",description = "사용자 관련 API")
 @RestController
@@ -26,6 +36,7 @@ public class UserController {
 
     private final UserService userService;
     private final JwtService jwtService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Operation(summary = "01-01 User\uD83D\uDC64 소셜 로그인 #000_회원가입&로그인", description = "KAKAO, GOOGLE, APPLE 소셜로그인 API입니다.")
     @ApiErrorCodeExample(OtherServerErrorCode.class)
@@ -92,4 +103,31 @@ public class UserController {
         VerificationMessage updatedVerificationMessage = userService.verifyCode(userId, request);
         return CommonResponse.onSuccess(UserConverter.toVerifyCodeDTO(updatedVerificationMessage));
     }
+
+    @Operation(summary = "01-07 User👤 유저 로그아웃 Made By Austin", description = "로그아웃 API 입니다.")
+    @GetMapping("/users/logout")
+    @ApiErrorCodeExample(UserAuthErrorCode.class)
+    public CommonResponse<String> logOut(@Parameter(hidden = true) @AuthenticationPrincipal User user){
+        Long userId = user.getId();
+        jwtService.logOut(userId);
+        return CommonResponse.onSuccess("로그아웃 성공");
+    }
+
+    @Operation(summary = "01-08 User👤 토큰 재발급 Made By Austin", description = "액세스 토큰 만료시 재발급 요청 하는 API X-REFRESH-TOKEN 을 헤더에 담아서 보내주세요, accessToken 은 보내지 않습니다.")
+    @ResponseBody
+    @PostMapping("/refresh")
+    public CommonResponse<UserResponse.ReIssueToken> reIssueToken(
+            @Parameter(description = "리프레쉬 토큰", required = true, in = ParameterIn.HEADER, name = "X-REFRESH-TOKEN", schema = @Schema(type = "string")) @RequestHeader("X-REFRESH-TOKEN") String refreshToken
+    ){
+        Long userId=jwtService.getUserIdByRefreshToken(refreshToken);
+        RefreshToken redisRefreshToken= refreshTokenRepository.findById(String.valueOf(userId)).orElseThrow(()-> new BadRequestException(INVALID_REFRESH_TOKEN));
+
+        if(!redisRefreshToken.getToken().equals(refreshToken)) throw new BadRequestException(INVALID_REFRESH_TOKEN);
+
+        UserResponse.ReIssueToken tokenRes=new UserResponse.ReIssueToken(jwtService.createToken(userId));
+
+        return CommonResponse.onSuccess(tokenRes);
+
+    }
+
 }

@@ -6,6 +6,7 @@ import com.example.wineyapi.tastingNote.dto.TastingNoteResponse;
 import com.example.wineyapi.wine.dto.WineResponse;
 import com.example.wineycommon.exception.BadRequestException;
 import com.example.wineycommon.reponse.PageResponse;
+import com.example.wineydomain.image.entity.TastingNoteImage;
 import com.example.wineydomain.image.repository.TastingNoteImageRepository;
 import com.example.wineydomain.tastingNote.entity.SmellKeyword;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
@@ -63,8 +64,24 @@ public class TastingNoteServiceImpl implements TastingNoteService{
 
     @Override
     public TastingNoteResponse.NoteFilterDTO getNoteFilter(User user) {
-        List<TastingNote> tastingNotes = tastingNoteRepository.findByUser(user);
+        List<TastingNote> tastingNotes = tastingNoteRepository.findByUserAndIsDeleted(user, false);
         return tastingNoteConvertor.NoteFilter(tastingNotes);
+    }
+
+    @Override
+    public void deleteTastingNote(User user, Long noteId) {
+        TastingNote tastingNote = tastingNoteRepository.findByUserAndId(user, noteId).orElseThrow(()-> new BadRequestException(NOT_FOUND_TASTING_NOTE));
+
+        tastingNote.setIsDeleted(true);
+
+        deleteImgFile(tastingNote.getTastingNoteImages());
+    }
+
+    private void deleteImgFile(List<TastingNoteImage> tastingNoteImages) {
+        for (TastingNoteImage tastingNoteImage : tastingNoteImages){
+            s3UploadService.deleteFile(tastingNoteImage.getUrl());
+        }
+
     }
 
     @Override

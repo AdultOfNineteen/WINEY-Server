@@ -37,6 +37,7 @@ subprojects{
         // swagger dependency
         implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'
 
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
         implementation 'org.springframework.boot:spring-boot-starter-tomcat'
         annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"

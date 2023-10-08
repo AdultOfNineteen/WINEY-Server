@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties({
         KakaoProperties.class,
         JwtProperties.class,
+        RedisConfig.class
 })
 @Configuration
 public class ConfigurationPropertiesConfig {}
