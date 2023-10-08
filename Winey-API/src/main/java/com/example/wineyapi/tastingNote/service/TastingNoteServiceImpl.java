@@ -65,10 +65,12 @@ public class TastingNoteServiceImpl implements TastingNoteService{
     @Override
     public TastingNoteResponse.NoteFilterDTO getNoteFilter(User user) {
         List<TastingNote> tastingNotes = tastingNoteRepository.findByUserAndIsDeleted(user, false);
+
         return tastingNoteConvertor.NoteFilter(tastingNotes);
     }
 
-    @Override
+    
+  @Override
     public void deleteTastingNote(User user, Long noteId) {
         TastingNote tastingNote = tastingNoteRepository.findByUserAndId(user, noteId).orElseThrow(()-> new BadRequestException(NOT_FOUND_TASTING_NOTE));
 
