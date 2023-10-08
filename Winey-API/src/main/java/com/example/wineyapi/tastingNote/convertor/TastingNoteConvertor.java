@@ -359,15 +359,6 @@ public class TastingNoteConvertor {
             wineCountByType.put(wine.getType(), wineCountByType.getOrDefault(wine.getType() ,0)+1);
         }
 
-        for (WineType type : WineType.values()) {
-            wineCountByType.putIfAbsent(type, 0);
-        }
-
-        // 모든 Country Enum 값을 순회하면서 없는 경우 0으로 설정
-        for (Country country : Country.values()) {
-            wineCountByCountry.putIfAbsent(country, 0);
-        }
-
         return TastingNoteResponse.NoteFilterDTO
                 .builder()
                 .wineTypes(wineTypesFilter(wineCountByType,tastingNotes.size()))
