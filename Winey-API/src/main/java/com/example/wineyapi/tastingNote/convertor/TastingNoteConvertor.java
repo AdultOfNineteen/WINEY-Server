@@ -93,7 +93,10 @@ public class TastingNoteConvertor {
 
 
             wineCountByCountry.put(country, wineCountByCountry.getOrDefault(country, 0) + 1);
-            wineCountByVarietal.put(varietal, wineCountByVarietal.getOrDefault(varietal,0) + 1);
+            String[] varietalLists = varietal.split(", ");
+            for(int i = 0; i < varietalLists.length ; i++){
+                wineCountByVarietal.put(varietalLists[i], wineCountByVarietal.getOrDefault(varietalLists[i],0) + 1);
+            }
             wineCountByType.put(wine.getType().getValue(), wineCountByType.getOrDefault(wine.getType().getValue() ,0)+1);
             for(SmellKeywordTastingNote smellKeywordTastingNote : tastingNote.getSmellKeywordTastingNote()) {
                 wineCountBySmell.put(smellKeywordTastingNote.getSmellKeyword().getName(), wineCountBySmell.getOrDefault(smellKeywordTastingNote.getSmellKeyword().getName(), 0) + 1);
