@@ -50,6 +50,8 @@ public enum CommonResponseStatus implements BaseErrorCode {
     APPLE_BAD_REQUEST(BAD_REQUEST, "OAUTH001", "애플 토큰이 잘못되었습니다."),
     APPLE_SERVER_ERROR(FORBIDDEN, "OAUTH002", "애플 서버와 통신에 실패 하였습니다."),
     FAIL_TO_MAKE_APPLE_PUBLIC_KEY(BAD_REQUEST, "OAUTH003", "새로운 애플 공개키 생성에 실패하였습니다."),
+    APPLE_IDENTITY_TOKEN_EXPIRED(BAD_REQUEST,"OAUTH004", "Apple OAuth 로그인 중 Identity Token 유효기간이 만료됐습니다."),
+    APPLE_INVALID_CLAIMS(BAD_REQUEST, "OAUTH005", "Apple OAuth Claims 값이 올바르지 않습니다."),
 
 
 
