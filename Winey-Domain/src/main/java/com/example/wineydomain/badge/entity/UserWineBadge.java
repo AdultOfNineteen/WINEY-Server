@@ -31,7 +31,6 @@ public class UserWineBadge extends BaseEntity {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "wineBadgeId", nullable = false)
-    private WineBadge wineBadge;
+    @Enumerated(EnumType.STRING)
+    private Badge badge;
 }
