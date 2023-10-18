@@ -15,8 +15,11 @@ import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springdoc.core.SpringDocUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.method.HandlerMethod;
 import org.springdoc.core.customizers.OperationCustomizer;
 import java.util.*;
@@ -25,6 +28,10 @@ import java.util.stream.Collectors;
 @Configuration
 public class SwaggerConfig {
     //jwt 토큰 인증을 위한 버튼까지 포함
+
+    static {
+        SpringDocUtils.getConfig().addAnnotationsToIgnore(AuthenticationPrincipal.class, CookieValue.class);
+    }
 
     @Bean
     public OpenAPI openAPI() {
