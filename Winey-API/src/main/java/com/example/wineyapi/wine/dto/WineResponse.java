@@ -1,10 +1,12 @@
 package com.example.wineyapi.wine.dto;
 
 import com.example.wineydomain.wine.entity.Country;
+import com.example.wineydomain.wine.entity.WineSummary;
 import com.example.wineydomain.wine.entity.WineType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import javax.persistence.Column;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +17,20 @@ public class WineResponse {
     @AllArgsConstructor
     @Builder
     public static class WineDTO {
-        private String field;
+        private Long wineId;
+        private String type;
+        private String name;
+        private String country;
+        private String varietal;
+
+        private Integer sweetness;
+        private Integer acidity;
+        private Integer body;
+        private Integer tannins;
+
+        private WineSummary wineSummary;
     }
+
 
     @NoArgsConstructor
     @Getter
