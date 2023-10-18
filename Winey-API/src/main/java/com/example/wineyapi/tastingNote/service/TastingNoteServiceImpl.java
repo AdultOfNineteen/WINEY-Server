@@ -3,7 +3,7 @@ package com.example.wineyapi.tastingNote.service;
 import com.example.wineyapi.tastingNote.convertor.TastingNoteConvertor;
 import com.example.wineyapi.tastingNote.dto.TastingNoteRequest;
 import com.example.wineyapi.tastingNote.dto.TastingNoteResponse;
-import com.example.wineyapi.wine.dto.WineResponse;
+import com.example.wineyapi.wineBadge.service.WineBadgeService;
 import com.example.wineycommon.exception.BadRequestException;
 import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.image.entity.TastingNoteImage;
@@ -11,7 +11,6 @@ import com.example.wineydomain.image.repository.TastingNoteImageRepository;
 import com.example.wineydomain.tastingNote.entity.SmellKeyword;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.tastingNote.repository.SmellKeywordTastingNoteRepository;
-import com.example.wineydomain.tastingNote.repository.TastingNoteCustomRepository;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Country;
@@ -20,7 +19,6 @@ import com.example.wineydomain.wine.entity.WineType;
 import com.example.wineydomain.wine.repository.WineRepository;
 import com.example.wineyinfrastructure.amazonS3.service.S3UploadService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +39,7 @@ public class TastingNoteServiceImpl implements TastingNoteService{
     private final S3UploadService s3UploadService;
     private final TastingNoteImageRepository tastingNoteImageRepository;
     private final WineRepository wineRepository;
+    private final WineBadgeService wineBadgeService;
 
     @Override
     public TastingNoteResponse.TasteAnalysisDTO tasteAnalysis(User user) {
@@ -77,6 +76,8 @@ public class TastingNoteServiceImpl implements TastingNoteService{
         tastingNote.setIsDeleted(true);
 
         deleteImgFile(tastingNote.getTastingNoteImages());
+
+        tastingNoteRepository.save(tastingNote);
     }
 
     private void deleteImgFile(List<TastingNoteImage> tastingNoteImages) {
@@ -101,6 +102,8 @@ public class TastingNoteServiceImpl implements TastingNoteService{
         for(String imgUrl : imgList){
             tastingNoteImageRepository.save(tastingNoteConvertor.TastingImg(tastingNote, imgUrl));
         }
+
+        wineBadgeService.calculateBadge(user, user.getId());
 
         return new TastingNoteResponse.CreateTastingNoteDTO(tastingNote.getId());
     }

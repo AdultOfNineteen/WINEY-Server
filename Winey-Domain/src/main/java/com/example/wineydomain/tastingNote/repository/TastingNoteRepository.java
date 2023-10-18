@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,TastingNoteCustomRepository {
+    @Query("SELECT TN FROM TastingNote TN JOIN FETCH TN.wine")
     List<TastingNote> findByUser(User user);
 
 
