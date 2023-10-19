@@ -3,19 +3,23 @@ package com.example.wineydomain.tastingNote.repository;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Country;
+import com.example.wineydomain.wine.entity.WineSummary;
 import com.example.wineydomain.wine.entity.WineType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,TastingNoteCustomRepository {
     List<TastingNote> findByUser(User user);
 
-
+    @Query("SELECT new com.example.wineydomain.wine.entity.WineSummary(avg(t.price), avg(t.sweetness), avg(t.acidity), avg(t.body), avg(t.tannins)) FROM TastingNote t WHERE t.wine.id = :wineId AND t.buyAgain = true")
+    Optional<WineSummary> findWineSummaryByWineId(@Param("wineId") Long wineId);
 
     @Query(value = "SELECT W.id as 'wineId', W.name, W.country, W.type, COALESCE(AVG(CASE WHEN TN.price IS NULL OR TN.price = 0 THEN NULL ELSE TN.price END),0) as 'price', W.varietal " +
             "FROM TastingNote TN JOIN Wine W ON TN.wineId = W.id " +
