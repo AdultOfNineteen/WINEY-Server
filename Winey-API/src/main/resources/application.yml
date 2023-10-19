@@ -37,6 +37,11 @@ springdoc:
     disabled: true
   use-fqn: true
 
+oauth:
+  apple:
+    iss: ${APPLE_ISS}
+    client-id: ${APPLE_CLIENT_ID}
+
 ---
 spring:
   config:
