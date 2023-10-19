@@ -3,6 +3,7 @@ feign:
     config:
       default:
         loggerLevel: FULL
+
 ---
 spring:
   config:
