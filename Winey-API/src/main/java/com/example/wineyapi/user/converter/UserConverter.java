@@ -9,6 +9,7 @@ import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.verificationMessage.entity.VerificationMessage;
+import com.example.wineyinfrastructure.oauth.apple.dto.AppleMember;
 import com.example.wineyinfrastructure.oauth.google.dto.GoogleUserInfo;
 import com.example.wineyinfrastructure.oauth.kakao.dto.KakaoUserInfoDto;
 import com.example.wineyinfrastructure.user.client.NickNameFeignClient;
@@ -61,7 +62,6 @@ public class UserConverter {
     }
 
     public static User toUser(KakaoUserInfoDto kakaoUserInfoDto) {
-
         String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
 
         return User.builder()
@@ -86,6 +86,33 @@ public class UserConverter {
                 .nickName(nickName)
                 .username(createUserName(SocialType.GOOGLE, googleUserInfo.getSub()))
                 .socialType(SocialType.GOOGLE)
+                .level(1)
+                .status(Status.INACTIVE)
+                .build();
+    }
+
+    public static User toUser(AppleMember appleMember) {
+        String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
+
+        /*
+            NOTE
+            Apple의 Sign in with Apple 기능을 사용할 때 Apple은 사용자의 프로필 이미지를 제공하지 않습니다.
+            Apple의 OAuth2 인증을 통해 제공되는 주된 정보는 사용자의 고유한 식별자(Subject), 이메일, 그리고 이름입니다.
+
+            Apple의 정책은 사용자의 개인정보 보호에 중점을 둡니다. 이에 따라, Apple은 기본적으로 사용자의 최소한의 정보만을 제공합니다.
+            실제로, 사용자가 Apple ID로 로그인할 때마다 Apple은 새로운, 서비스마다 다른 고유 식별자를 생성하여 전달하며,
+            심지어 사용자의 이메일 주소조차도 숨길 수 있는 기능을 제공합니다. 이런 방식은 사용자의 프라이버시를 보호하지만,
+            다른 서비스들과는 달리 프로필 이미지 같은 추가 정보를 가져오기 어렵게 만듭니다.
+
+            따라서, 프로필 이미지를 제공하려면 사용자에게 직접 이미지를 업로드하도록 요청하거나 다른 소셜 로그인 서비스를 통해 이미지를 가져와야 합니다.
+         */
+        return User.builder()
+                .profileImgUrl(null)
+                .password(staticPasswordEncoder.encode(appleMember.getSocialId()))
+                .socialId(appleMember.getSocialId())
+                .nickName(nickName)
+                .username(createUserName(SocialType.GOOGLE, appleMember.getSocialId()))
+                .socialType(SocialType.APPLE)
                 .level(1)
                 .status(Status.INACTIVE)
                 .build();

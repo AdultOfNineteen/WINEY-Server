@@ -6,6 +6,7 @@ import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.wine.entity.Wine;
 import com.example.wineydomain.wine.repository.WineRepository;
+import com.example.wineydomain.wine.entity.WineSummary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -87,6 +88,21 @@ public class WineConvertor {
                 .country(result.getCountry())
                 .type(result.getType())
                 .name(result.getName())
+                .build();
+    }
+
+    public WineResponse.WineDTO toWineDTO(Wine wine, WineSummary wineSummary) {
+        return WineResponse.WineDTO.builder()
+                .wineId(wine.getId())
+                .type(wine.getType().name()) // Enum의 name() 메서드를 호출하여 문자열로 변환
+                .name(wine.getName())
+                .country(wine.getCountry().name()) // Enum의 name() 메서드를 호출하여 문자열로 변환
+                .varietal(wine.getVarietal())
+                .sweetness(wine.getSweetness())
+                .acidity(wine.getAcidity())
+                .body(wine.getBody())
+                .tannins(wine.getTannins())
+                .wineSummary(wineSummary)
                 .build();
     }
 }

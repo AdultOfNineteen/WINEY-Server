@@ -22,6 +22,8 @@ import com.example.wineydomain.verificationMessage.repository.VerificationMessag
 import com.example.wineydomain.wine.entity.RecommendWine;
 import com.example.wineydomain.wine.entity.RecommendWinePk;
 import com.example.wineydomain.wine.repository.RecommendWineRepository;
+import com.example.wineyinfrastructure.oauth.apple.dto.AppleMember;
+import com.example.wineyinfrastructure.oauth.apple.util.AppleOAuthUserProvider;
 import com.example.wineyinfrastructure.oauth.google.client.GoogleOauth2Client;
 import com.example.wineyinfrastructure.oauth.google.dto.GoogleUserInfo;
 import com.example.wineyinfrastructure.oauth.kakao.client.KakaoFeignClient;
@@ -61,6 +63,8 @@ public class UserServiceImpl implements UserService {
     private final RecommendWineRepository recommendWineRepository;
 
     private DefaultMessageService coolSmsService;
+    private final AppleOAuthUserProvider appleOAuthUserProvider;
+
 
     @PostConstruct
     public void init() {
@@ -99,30 +103,24 @@ public class UserServiceImpl implements UserService {
     }
 
     private User loginWithKakao(UserRequest.LoginUserDTO request) {
-        String accessToken = request.getAccessToken();
-        KakaoUserInfoDto kakaoUserInfoDto = kakaoFeignClient.getInfo("Bearer " + accessToken);
+        String accessTokenWithBearerPrefix = "Bearer " + request.getAccessToken();
+        KakaoUserInfoDto kakaoUserInfoDto = kakaoFeignClient.getInfo(accessTokenWithBearerPrefix);
         return userRepository.findBySocialIdAndSocialType(kakaoUserInfoDto.getId(), SocialType.KAKAO)
-                .orElseGet(() -> createUser(kakaoUserInfoDto));
+                .orElseGet(() -> UserConverter.toUser(kakaoUserInfoDto));
     }
-
-    private User createUser(KakaoUserInfoDto kakaoUserInfoDto) {
-        User user = UserConverter.toUser(kakaoUserInfoDto);
-        return userRepository.save(user);
-    }
-
 
     private User loginWithGoogle(UserRequest.LoginUserDTO request) {
-        // 구글에서 사용자 정보 조회
-        GoogleUserInfo googleUserInfo = googleOauth2Client.verifyToken(request.getAccessToken());
-
-        User user = userRepository.findBySocialIdAndSocialType(googleUserInfo.getSub(), SocialType.GOOGLE)
+        String identityToken = request.getAccessToken();
+        GoogleUserInfo googleUserInfo = googleOauth2Client.verifyToken(identityToken);
+        return userRepository.findBySocialIdAndSocialType(googleUserInfo.getSub(), SocialType.GOOGLE)
                 .orElseGet(() -> UserConverter.toUser(googleUserInfo));
-
-        return userRepository.save(user);
     }
 
     private User loginWithApple(UserRequest.LoginUserDTO request) {
-        return null;
+        String identityToken = request.getAccessToken();
+        AppleMember appleMember = appleOAuthUserProvider.getApplePlatformMember(identityToken);
+        return userRepository.findBySocialIdAndSocialType(appleMember.getSocialId(), SocialType.APPLE)
+                .orElseGet(() -> UserConverter.toUser(appleMember));
     }
 
 
@@ -191,9 +189,7 @@ public class UserServiceImpl implements UserService {
         if(optionalUser.isPresent() && optionalUser.get().getStatus() == Status.ACTIVE) {
             // 0. 1~2를 수행한 소셜로그인 계정 hard delete & 안내문구전송
             User user = optionalUser.get();
-
             String errorMessageWithSocialType = user.getSocialType().name();
-
             userRepository.deleteById(userId);
             throw new UserException(CommonResponseStatus.USER_ALREADY_EXISTS, errorMessageWithSocialType);
         }
