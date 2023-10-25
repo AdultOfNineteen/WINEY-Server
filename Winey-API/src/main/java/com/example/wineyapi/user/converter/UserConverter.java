@@ -41,12 +41,6 @@ public class UserConverter {
         staticUserService = this.userService;
     }
 
-    public static Authority createUserAuthority() {
-        return Authority.builder()
-                .authorityName("ROLE_USER")
-                .build();
-    }
-
     public static String createUserName(SocialType socialType, String socialId) {
         return socialType.name() + "-" + socialId;
     }
@@ -78,7 +72,6 @@ public class UserConverter {
                 .socialId(kakaoUserInfoDto.getId())
                 .nickName(nickName)
                 .username(createUserName(SocialType.KAKAO, kakaoUserInfoDto.getId()))
-                .authorities(Collections.singleton(createUserAuthority()))
                 .socialType(SocialType.KAKAO)
                 .level(1)
                 .status(Status.INACTIVE)
@@ -94,7 +87,6 @@ public class UserConverter {
                 .socialId(googleUserInfo.getSub())
                 .nickName(nickName)
                 .username(createUserName(SocialType.GOOGLE, googleUserInfo.getSub()))
-                .authorities(Collections.singleton(createUserAuthority()))
                 .socialType(SocialType.GOOGLE)
                 .level(1)
                 .status(Status.INACTIVE)

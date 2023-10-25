@@ -11,7 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.*;
 
 @Entity
@@ -57,24 +56,17 @@ public class User extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Status status = Status.INACTIVE;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Preference preference;
 
     @Column(name = "role")
     private String role = UserRole.ROLE_USER.getValue();
 
-    @ManyToMany
-    @JoinTable(
-            name = "UserAuthority",
-            joinColumns = {@JoinColumn(name = "id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authorityName", referencedColumnName = "authorityName")})
-    private Set<Authority> authorities;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        for(String role : role.split(","))
-            authorities.add(new SimpleGrantedAuthority(role));
+        for(String r : role.split(","))
+            authorities.add(new SimpleGrantedAuthority(r));
         return authorities;
     }
 

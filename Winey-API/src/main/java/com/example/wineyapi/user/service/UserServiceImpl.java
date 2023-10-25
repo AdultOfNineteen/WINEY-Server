@@ -110,8 +110,25 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+
+    /*
+        NOTE - User의 연관관계
+        1. 테이스팅 노트 1 : N
+            - 기획 정책상 테이스팅 노트는 남아있어야 하므로 연관관계만 해제해줍니다.
+        2. 와인 뱃지 N : N
+        3. 취향 1 : 1
+            - 이미 양방향 매핑이 세팅되어있어서 cascade = CascadeType.REMOVE 옵션으로 삭제합니다.
+        4. 추천 와인 1 : N
+            - User엔티티에서 그래프탐색으로 추천와인목록을 조회할 경우가 없을 것 같아서 양방향 매핑은 하지 않고
+              유저 삭제시 추천와인 리포지토리로 목록을 삭제하는 것으로 결정했습니다.
+     */
+    @Transactional
     @Override
     public Long delete(Long id) {
+        // 테이스팅 노트 연관관계 해제
+
+        // 추천 와인 삭제
+
         userRepository.deleteById(id);
         return id;
     }
