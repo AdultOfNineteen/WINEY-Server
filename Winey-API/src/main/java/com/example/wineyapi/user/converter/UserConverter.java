@@ -6,7 +6,6 @@ import com.example.wineyapi.user.service.UserService;
 import com.example.wineydomain.common.model.PreferenceStatus;
 import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.common.model.VerifyMessageStatus;
-import com.example.wineydomain.user.entity.Authority;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.verificationMessage.entity.VerificationMessage;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Optional;
 
 @Component
