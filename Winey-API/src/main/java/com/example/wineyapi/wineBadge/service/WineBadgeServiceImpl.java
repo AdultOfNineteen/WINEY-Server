@@ -1,6 +1,7 @@
 package com.example.wineyapi.wineBadge.service;
 
 import com.example.wineyapi.wineBadge.convertor.WineBadgeConvertor;
+import com.example.wineycommon.annotation.RedissonLock;
 import com.example.wineydomain.badge.entity.Badge;
 import com.example.wineydomain.badge.entity.UserWineBadge;
 import com.example.wineydomain.badge.repository.UserWineBadgeRepository;
@@ -26,7 +27,7 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     private final TastingNoteRepository tastingNoteRepository;
     private final WineBadgeConvertor wineBadgeConvertor;
 
-
+    @RedissonLock(LockName =  "뱃지-계산", key = "#userId")
     @Async("badge")
     public void calculateBadge(User user, Long userId) {
         List<TastingNote> tastingNotes = tastingNoteRepository.findByUser(user);

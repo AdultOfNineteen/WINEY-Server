@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,TastingNoteCustomRepository {
     @Modifying
@@ -74,6 +75,10 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
     List<TastingNote> findTop3ByUserOrderByStarRatingDescCreatedAtDesc(User user);
 
     List<TastingNote> findTop3ByUserAndBuyAgainOrderByStarRatingDescCreatedAtDesc(User user, boolean b);
+
+    Optional<TastingNote> findByUserAndId(User user, Long noteId);
+
+    List<TastingNote> findByUserAndIsDeleted(User user, boolean b);
 
     interface WineList{
         Long getWineId();

@@ -8,11 +8,13 @@ import com.example.wineycommon.annotation.ApiErrorCodeExample;
 import com.example.wineycommon.exception.errorcode.RequestErrorCode;
 import com.example.wineycommon.reponse.CommonResponse;
 import com.example.wineycommon.reponse.PageResponse;
+import com.example.wineydomain.tastingNote.exception.GetTastingNoteErrorCode;
 import com.example.wineydomain.tastingNote.exception.UploadTastingNoteErrorCode;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.user.exception.UserAuthErrorCode;
 import com.example.wineydomain.wine.entity.Country;
 import com.example.wineydomain.wine.entity.WineType;
+import com.example.wineyinfrastructure.amazonS3.exception.FileDeleteException;
 import com.example.wineyinfrastructure.amazonS3.exception.FileUploadException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -94,8 +96,10 @@ public class TastingNoteController {
     }
 
     @DeleteMapping("{noteId}")
-    public CommonResponse<TastingNoteResponse.DeleteTastingNoteDTO> deleteTastingNote(@PathVariable Long userId,
+    @ApiErrorCodeExample({UserAuthErrorCode.class, GetTastingNoteErrorCode.class})
+    public CommonResponse<String> deleteTastingNote(@Parameter(hidden = true) @AuthenticationPrincipal User user,
                                                                                       @PathVariable Long noteId) {
-        return null;
+        tastingNoteService.deleteTastingNote(user, noteId);
+        return CommonResponse.onSuccess("삭제 성공");
     }
 }
