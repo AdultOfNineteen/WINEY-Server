@@ -6,7 +6,6 @@ import com.example.wineyapi.user.service.UserService;
 import com.example.wineydomain.common.model.PreferenceStatus;
 import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.common.model.VerifyMessageStatus;
-import com.example.wineydomain.user.entity.Authority;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.verificationMessage.entity.VerificationMessage;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Optional;
 
 @Component
@@ -40,12 +38,6 @@ public class UserConverter {
         staticPasswordEncoder = this.passwordEncoder;
         staticNickNameFeignClient = this.nickNameFeignClient;
         staticUserService = this.userService;
-    }
-
-    public static Authority createUserAuthority() {
-        return Authority.builder()
-                .authorityName("ROLE_USER")
-                .build();
     }
 
     public static String createUserName(SocialType socialType, String socialId) {
@@ -78,7 +70,6 @@ public class UserConverter {
                 .socialId(kakaoUserInfoDto.getId())
                 .nickName(nickName)
                 .username(createUserName(SocialType.KAKAO, kakaoUserInfoDto.getId()))
-                .authorities(Collections.singleton(createUserAuthority()))
                 .socialType(SocialType.KAKAO)
                 .level(1)
                 .status(Status.INACTIVE)
@@ -94,7 +85,6 @@ public class UserConverter {
                 .socialId(googleUserInfo.getSub())
                 .nickName(nickName)
                 .username(createUserName(SocialType.GOOGLE, googleUserInfo.getSub()))
-                .authorities(Collections.singleton(createUserAuthority()))
                 .socialType(SocialType.GOOGLE)
                 .level(1)
                 .status(Status.INACTIVE)
@@ -122,7 +112,6 @@ public class UserConverter {
                 .socialId(appleMember.getSocialId())
                 .nickName(nickName)
                 .username(createUserName(SocialType.GOOGLE, appleMember.getSocialId()))
-                .authorities(Collections.singleton(createUserAuthority()))
                 .socialType(SocialType.APPLE)
                 .level(1)
                 .status(Status.INACTIVE)

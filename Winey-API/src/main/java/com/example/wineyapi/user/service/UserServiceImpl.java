@@ -8,13 +8,20 @@ import com.example.wineycommon.exception.UserException;
 import com.example.wineycommon.exception.errorcode.CommonResponseStatus;
 import com.example.wineycommon.properties.CoolSmsProperties;
 import com.example.wineycommon.properties.KakaoProperties;
+import com.example.wineydomain.badge.entity.UserWineBadge;
+import com.example.wineydomain.badge.repository.UserWineBadgeRepository;
 import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.common.model.VerifyMessageStatus;
+import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.user.exception.UserErrorCode;
 import com.example.wineydomain.user.repository.UserRepository;
 import com.example.wineydomain.verificationMessage.entity.VerificationMessage;
 import com.example.wineydomain.verificationMessage.repository.VerificationMessageRepository;
+import com.example.wineydomain.wine.entity.RecommendWine;
+import com.example.wineydomain.wine.entity.RecommendWinePk;
+import com.example.wineydomain.wine.repository.RecommendWineRepository;
 import com.example.wineyinfrastructure.oauth.apple.dto.AppleMember;
 import com.example.wineyinfrastructure.oauth.apple.util.AppleOAuthUserProvider;
 import com.example.wineyinfrastructure.oauth.google.client.GoogleOauth2Client;
@@ -28,13 +35,17 @@ import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +58,10 @@ public class UserServiceImpl implements UserService {
     private final KakaoProperties kakaoProperties;
     private final CoolSmsProperties coolSmsProperties;
     private final VerificationMessageRepository verificationMessageRepository;
+    private final UserWineBadgeRepository userWineBadgeRepository;
+    private final TastingNoteRepository tastingNoteRepository;
+    private final RecommendWineRepository recommendWineRepository;
+
     private DefaultMessageService coolSmsService;
     private final AppleOAuthUserProvider appleOAuthUserProvider;
 
@@ -108,8 +123,43 @@ public class UserServiceImpl implements UserService {
                 .orElseGet(() -> UserConverter.toUser(appleMember));
     }
 
+
+    /*
+        NOTE - User의 연관관계
+        1. 테이스팅 노트 1 : N
+            - 기획 정책상 테이스팅 노트는 남아있어야 하므로 연관관계만 해제해줍니다.
+        2. 와인 뱃지 1 : N
+            - 추천와인이랑 비슷한 이유로 직접 리포를 통해 삭제합니다.
+        3. 취향 1 : 1
+            - 이미 양방향 매핑이 세팅되어있어서 cascade = CascadeType.REMOVE 옵션으로 삭제합니다.
+        4. 추천 와인 1 : N
+            - User엔티티에서 그래프탐색으로 추천와인목록을 조회할 경우가 없을 것 같아서 양방향 매핑은 하지 않고
+              유저 삭제시 추천와인 리포지토리로 목록을 삭제하는 것으로 결정했습니다.
+     */
+    @Transactional
     @Override
     public Long delete(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(UserErrorCode.NOT_EXIST_USER));
+
+        // 테이스팅 노트 연관관계 해제
+        tastingNoteRepository.detachUserByUserId(id);
+
+        // 와인 뱃지 삭제
+        List<UserWineBadge> userWineBadgeList = userWineBadgeRepository.findByUser(user);
+        List<Long> userWineBadgeIds = userWineBadgeList.stream()
+                .map(UserWineBadge::getId)
+                .collect(Collectors.toList());
+        userWineBadgeRepository.deleteAllByIdInBatch(userWineBadgeIds);
+
+        // 추천 와인 삭제
+        List<RecommendWine> recommendWineList = recommendWineRepository.findByUser(user);
+        List<RecommendWinePk> recommendWineIds = recommendWineList.stream()
+                .map(RecommendWine::getId)
+                .collect(Collectors.toList());
+        recommendWineRepository.deleteAllByIdInBatch(recommendWineIds);
+
+
         userRepository.deleteById(id);
         return id;
     }
@@ -214,5 +264,15 @@ public class UserServiceImpl implements UserService {
                     .orElse(VerifyMessageStatus.NONE)
                 )
                 .orElse(VerifyMessageStatus.NONE);
+    }
+
+    public User getCurrentLoggedInUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+
+        return (User) authentication.getPrincipal();
     }
 }

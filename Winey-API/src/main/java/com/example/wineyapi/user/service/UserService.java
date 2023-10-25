@@ -19,4 +19,6 @@ public interface UserService {
     VerificationMessage verifyCode(Long userId, UserRequest.VerifyCodeDTO request);
 
     VerifyMessageStatus findVerifyMessageStatusByUser(User user);
+
+    User getCurrentLoggedInUser();
 }

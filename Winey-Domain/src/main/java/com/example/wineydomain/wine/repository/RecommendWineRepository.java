@@ -1,5 +1,6 @@
 package com.example.wineydomain.wine.repository;
 
+import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.RecommendWine;
 import com.example.wineydomain.wine.entity.RecommendWinePk;
 import com.example.wineydomain.wine.entity.Wine;
@@ -12,4 +13,5 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface RecommendWineRepository extends JpaRepository<RecommendWine, RecommendWinePk> {
+    List<RecommendWine> findByUser(User user);
 }
