@@ -8,11 +8,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,TastingNoteCustomRepository {
+    @Modifying
+    @Query("update TastingNote tn set tn.user = null where tn.user.id = :userId")
+    void detachUserByUserId(@Param("userId") Long userId);
+
     @Query("SELECT TN FROM TastingNote TN JOIN FETCH TN.wine")
     List<TastingNote> findByUser(User user);
 
