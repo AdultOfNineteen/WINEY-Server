@@ -45,7 +45,7 @@ public class TastingNoteServiceImpl implements TastingNoteService{
     public TastingNoteResponse.TasteAnalysisDTO tasteAnalysis(User user) {
         List<TastingNote> tastingNotes = tastingNoteRepository.findByUserAndBuyAgain(user, true);
 
-        if(tastingNotes!=null){
+        if(tastingNotes.isEmpty()){
             if(!user.getTasteNoteAnalysis()) wineBadgeService.provideFirstAnalysis(user);
         }
 
