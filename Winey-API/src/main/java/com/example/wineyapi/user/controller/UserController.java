@@ -116,7 +116,6 @@ public class UserController {
     }
 
     @Operation(summary = "01-08 User👤 토큰 재발급 Made By Austin", description = "액세스 토큰 만료시 재발급 요청 하는 API X-REFRESH-TOKEN 을 헤더에 담아서 보내주세요, accessToken 은 보내지 않습니다.")
-    @ResponseBody
     @PostMapping("/refresh")
     public CommonResponse<UserResponse.ReIssueToken> reIssueToken(
             @Parameter(description = "리프레쉬 토큰", required = true, in = ParameterIn.HEADER, name = "X-REFRESH-TOKEN", schema = @Schema(type = "string")) @RequestHeader("X-REFRESH-TOKEN") String refreshToken
@@ -129,7 +128,17 @@ public class UserController {
         UserResponse.ReIssueToken tokenRes=new UserResponse.ReIssueToken(jwtService.createToken(userId));
 
         return CommonResponse.onSuccess(tokenRes);
+    }
 
+
+    @Operation(summary = "01-09 User👤 유저 스플레쉬 화면 단 호출 부탁합니다.", description = "유저 뱃지 발급을 위한 접속 API 입니다. 토큰만 들고오면 됩니다.")
+    @ApiErrorCodeExample(UserAuthErrorCode.class)
+    @GetMapping("/connections")
+    public CommonResponse<String> connectionUser(
+            @AuthenticationPrincipal User user
+    ){
+        userService.connectionUser(user);
+        return CommonResponse.onSuccess("확인 되었습니다.");
     }
 
 }

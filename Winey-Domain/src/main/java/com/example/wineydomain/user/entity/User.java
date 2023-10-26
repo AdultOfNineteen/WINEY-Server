@@ -64,6 +64,9 @@ public class User extends BaseEntity implements UserDetails {
 
     private boolean tasteNoteAnalysis = false;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private UserConnection userConnection;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();

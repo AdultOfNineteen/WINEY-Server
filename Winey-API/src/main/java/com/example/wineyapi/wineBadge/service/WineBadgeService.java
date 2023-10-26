@@ -6,4 +6,6 @@ public interface WineBadgeService {
     void calculateBadge(User user, Long userId);
 
     void provideFirstAnalysis(User user);
+
+    void checkActivityBadge(User user);
 }

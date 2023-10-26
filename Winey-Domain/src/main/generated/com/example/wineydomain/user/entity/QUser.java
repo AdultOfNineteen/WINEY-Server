@@ -49,8 +49,12 @@ public class QUser extends EntityPathBase<User> {
 
     public final EnumPath<com.example.wineydomain.common.model.Status> status = createEnum("status", com.example.wineydomain.common.model.Status.class);
 
+    public final BooleanPath tasteNoteAnalysis = createBoolean("tasteNoteAnalysis");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
+
+    public final QUserConnection userConnection;
 
     public final StringPath username = createString("username");
 
@@ -73,6 +77,7 @@ public class QUser extends EntityPathBase<User> {
     public QUser(Class<? extends User> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.preference = inits.isInitialized("preference") ? new com.example.wineydomain.preference.entity.QPreference(forProperty("preference"), inits.get("preference")) : null;
+        this.userConnection = inits.isInitialized("userConnection") ? new QUserConnection(forProperty("userConnection"), inits.get("userConnection")) : null;
     }
 
 }

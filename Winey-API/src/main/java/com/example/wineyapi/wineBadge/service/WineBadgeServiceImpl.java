@@ -1,5 +1,6 @@
 package com.example.wineyapi.wineBadge.service;
 
+import com.example.wineyapi.user.converter.UserConverter;
 import com.example.wineyapi.wineBadge.convertor.WineBadgeConvertor;
 import com.example.wineycommon.annotation.RedissonLock;
 import com.example.wineydomain.badge.entity.Badge;
@@ -8,6 +9,8 @@ import com.example.wineydomain.badge.repository.UserWineBadgeRepository;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.user.entity.UserConnection;
+import com.example.wineydomain.user.repository.UserConnectionRepository;
 import com.example.wineydomain.user.repository.UserRepository;
 import com.example.wineydomain.wine.entity.Wine;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,6 +33,7 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     private final TastingNoteRepository tastingNoteRepository;
     private final WineBadgeConvertor wineBadgeConvertor;
     private final UserRepository userRepository;
+    private final UserConnectionRepository userConnectionRepository;
 
     @RedissonLock(LockName =  "뱃지-계산", key = "#userId")
     @Async("badge")
@@ -62,6 +68,66 @@ public class WineBadgeServiceImpl implements WineBadgeService {
          */
 
     }
+
+    @Override
+    @Async("connect_user")
+    @RedissonLock(LockName = "유저 연속 접속 확인", key = "#user.id")
+    public void checkActivityBadge(User user) {
+        UserConnection userConnection = user.getUserConnection();
+        if(userConnection == null){
+            userConnectionRepository.save(UserConnection.builder().user(user).cnt(1).build());
+        }else{
+            checkContinueConnection(user, userConnection);
+        }
+    }
+
+    private void checkContinueConnection(User user, UserConnection userConnection) {
+        boolean isConnectedToday = checkNowDate(userConnection.getUpdatedAt());
+        boolean isConnectedYesterday = checkOneDayBefore(userConnection.getUpdatedAt());
+
+        if(isConnectedToday){
+            return;  // 오늘 이미 접속한 기록이 있으므로 함수 종료
+        }
+        if(isConnectedYesterday){
+            userConnection.setCnt(userConnection.getCnt() + 1);
+            userConnectionRepository.save(userConnection);
+            checkUserConnectionBadge(userConnection, user);
+        } else {
+            userConnectionRepository.deleteByUser(user);
+        }
+    }
+
+
+
+    private boolean checkNowDate(LocalDateTime updatedAt) {
+        LocalDate nowDate = LocalDateTime.now().toLocalDate();
+        LocalDate targetDate = updatedAt.toLocalDate();
+
+        System.out.println("checkNowDate : " + nowDate.isEqual(targetDate));
+        return nowDate.isEqual(targetDate);
+    }
+
+    private boolean checkOneDayBefore(LocalDateTime updatedAt) {
+        LocalDate nowDate = LocalDateTime.now().toLocalDate();
+        LocalDate targetDate = updatedAt.toLocalDate();
+
+        return targetDate.isEqual(nowDate.minusDays(1));
+    }
+
+    private void checkUserConnectionBadge(UserConnection userConnection, User user) {
+        List<Badge> badges = userWineBadgeRepository.findByUser(user).stream()
+                .map(UserWineBadge::getBadge)
+                .collect(Collectors.toList());
+
+        if(userConnection.getCnt() == 7){
+            if(!badges.contains(WINE_EXCITEMENT)) userWineBadgeRepository.save(wineBadgeConvertor.WineBadge(WINE_EXCITEMENT, user));
+        }
+        if(userConnection.getCnt() == 30){
+            if(!badges.contains(WINE_ADDICT)) userWineBadgeRepository.save(wineBadgeConvertor.WineBadge(WINE_ADDICT, user));
+        }
+    }
+
+
 
     public List<UserWineBadge> checkSommelierBadge(List<Badge> badges, List<TastingNote> tastingNotes, User user) {
         List<UserWineBadge> userWineBadges = new ArrayList<>();
