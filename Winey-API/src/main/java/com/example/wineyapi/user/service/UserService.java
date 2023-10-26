@@ -21,4 +21,6 @@ public interface UserService {
     VerifyMessageStatus findVerifyMessageStatusByUser(User user);
 
     User getCurrentLoggedInUser();
+
+    void connectionUser(User user);
 }

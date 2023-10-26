@@ -40,10 +40,9 @@ jobs:
           aws.s3.base-url: ${{ secrets.AWS_BASE_URL }}
           aws.s3.access-key: ${{ secrets.AWS_S3_ACCESS_KEY }}
           aws.s3.secret-key: ${{ secrets.AWS_S3_SECRET_KEY }}
+          spring.redis.host: ${{ secrets.REDIS_HOST }}
           oauth.apple.iss: ${{ secrets.APPLE_ISS }}
           oauth.apple.client-id: ${{ secrets.APPLE_CLIENT_ID }}
-          spring.redis.host: ${{ secrets.REDIS_HOST }}
-
 
       - name: Set Environment - Domain DEV Yml
         uses: microsoft/variable-substitution@v1

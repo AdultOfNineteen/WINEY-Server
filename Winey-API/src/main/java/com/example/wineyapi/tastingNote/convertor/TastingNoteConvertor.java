@@ -238,7 +238,7 @@ public class TastingNoteConvertor {
                 .vintage(request.getVintage())
                 .tannins(request.getTannin())
                 .finish(request.getFinish())
-                .price(request.getPrice())
+                .price((request.getPrice() == null) ? 0 : request.getPrice())
                 .memo(request.getMemo())
                 .buyAgain(request.getBuyAgain())
                 .starRating(request.getRating())
@@ -371,7 +371,6 @@ public class TastingNoteConvertor {
 
     private List<TastingNoteResponse.WineTypeFilter> wineTypesFilter(Map<WineType, Integer> wineCountByType, int size) {
         List<TastingNoteResponse.WineTypeFilter> wineTypeFilters = new ArrayList<>();
-        wineTypeFilters.add(new TastingNoteResponse.WineTypeFilter("전체", checkValue(size)));
         for (Map.Entry<WineType, Integer> entry : wineCountByType.entrySet()) {
             wineTypeFilters.add(new TastingNoteResponse.WineTypeFilter(entry.getKey().getName(), checkValue(entry.getValue())));
         }
@@ -380,7 +379,6 @@ public class TastingNoteConvertor {
 
     private List<TastingNoteResponse.CountryFilter> countryFilter(Map<Country, Integer> wineCountByCountry, int size) {
         List<TastingNoteResponse.CountryFilter> countryFilters = new ArrayList<>();
-        countryFilters.add(new TastingNoteResponse.CountryFilter("전체", checkValue(size)));
         for (Map.Entry<Country, Integer> entry : wineCountByCountry.entrySet()) {
             countryFilters.add(new TastingNoteResponse.CountryFilter(entry.getKey().getValue(), checkValue(entry.getValue())));
         }

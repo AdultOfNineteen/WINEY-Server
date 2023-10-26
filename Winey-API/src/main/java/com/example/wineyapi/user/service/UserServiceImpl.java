@@ -2,6 +2,7 @@ package com.example.wineyapi.user.service;
 
 import com.example.wineyapi.user.converter.UserConverter;
 import com.example.wineyapi.user.dto.UserRequest;
+import com.example.wineyapi.wineBadge.service.WineBadgeService;
 import com.example.wineycommon.exception.MessageException;
 import com.example.wineycommon.exception.NotFoundException;
 import com.example.wineycommon.exception.UserException;
@@ -10,6 +11,7 @@ import com.example.wineycommon.properties.CoolSmsProperties;
 import com.example.wineycommon.properties.KakaoProperties;
 import com.example.wineydomain.badge.entity.UserWineBadge;
 import com.example.wineydomain.badge.repository.UserWineBadgeRepository;
+import com.example.wineydomain.badge.repository.WineBadgeRepository;
 import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
@@ -61,6 +63,7 @@ public class UserServiceImpl implements UserService {
     private final UserWineBadgeRepository userWineBadgeRepository;
     private final TastingNoteRepository tastingNoteRepository;
     private final RecommendWineRepository recommendWineRepository;
+    private final WineBadgeService wineBadgeService;
 
     private DefaultMessageService coolSmsService;
     private final AppleOAuthUserProvider appleOAuthUserProvider;
@@ -274,5 +277,10 @@ public class UserServiceImpl implements UserService {
         }
 
         return (User) authentication.getPrincipal();
+    }
+
+    @Override
+    public void connectionUser(User user) {
+        wineBadgeService.checkActivityBadge(user);
     }
 }
