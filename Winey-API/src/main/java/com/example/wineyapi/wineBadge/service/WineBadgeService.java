@@ -4,4 +4,6 @@ import com.example.wineydomain.user.entity.User;
 
 public interface WineBadgeService {
     void calculateBadge(User user, Long userId);
+
+    void provideFirstAnalysis(User user);
 }

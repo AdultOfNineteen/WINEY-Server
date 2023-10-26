@@ -8,6 +8,7 @@ import com.example.wineydomain.badge.repository.UserWineBadgeRepository;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.user.repository.UserRepository;
 import com.example.wineydomain.wine.entity.Wine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     private final UserWineBadgeRepository userWineBadgeRepository;
     private final TastingNoteRepository tastingNoteRepository;
     private final WineBadgeConvertor wineBadgeConvertor;
+    private final UserRepository userRepository;
 
     @RedissonLock(LockName =  "뱃지-계산", key = "#userId")
     @Async("badge")
@@ -46,6 +48,19 @@ public class WineBadgeServiceImpl implements WineBadgeService {
 
         userWineBadgeRepository.saveAll(userWineBadges);
         // 사용자 fcm 알림 + 알림 저장 로직 추가 구현해야함
+    }
+
+    @Override
+    @Async("badge_provide_first_analysis")
+    public void provideFirstAnalysis(User user) {
+        user.setTasteNoteAnalysis(true);
+        userWineBadgeRepository.save(wineBadgeConvertor.WineBadge(TASTE_DISCOVERY, user));
+        userRepository.save(user);
+
+        /*
+        TODO 알림 보내기
+         */
+
     }
 
     public List<UserWineBadge> checkSommelierBadge(List<Badge> badges, List<TastingNote> tastingNotes, User user) {

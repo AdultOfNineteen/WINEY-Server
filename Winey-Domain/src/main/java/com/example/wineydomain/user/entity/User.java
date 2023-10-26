@@ -62,6 +62,8 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "role")
     private String role = UserRole.ROLE_USER.getValue();
 
+    private boolean tasteNoteAnalysis = false;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
@@ -98,6 +100,10 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return false;
+    }
+
+    public boolean getTasteNoteAnalysis(){
+        return tasteNoteAnalysis;
     }
 
 }
