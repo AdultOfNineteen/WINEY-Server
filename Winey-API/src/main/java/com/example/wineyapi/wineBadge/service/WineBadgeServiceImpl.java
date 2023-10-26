@@ -1,5 +1,7 @@
 package com.example.wineyapi.wineBadge.service;
 
+import com.example.wineyapi.common.util.TimeUtils;
+import com.example.wineyapi.user.converter.UserConnectionConverter;
 import com.example.wineyapi.user.converter.UserConverter;
 import com.example.wineyapi.wineBadge.convertor.WineBadgeConvertor;
 import com.example.wineycommon.annotation.RedissonLock;
@@ -34,6 +36,8 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     private final WineBadgeConvertor wineBadgeConvertor;
     private final UserRepository userRepository;
     private final UserConnectionRepository userConnectionRepository;
+    private final UserConnectionConverter userConnectionConverter;
+    private final TimeUtils timeUtils;
 
     @RedissonLock(LockName =  "뱃지-계산", key = "#userId")
     @Async("badge")
@@ -75,15 +79,15 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     public void checkActivityBadge(User user) {
         UserConnection userConnection = user.getUserConnection();
         if(userConnection == null){
-            userConnectionRepository.save(UserConnection.builder().user(user).cnt(1).build());
+            userConnectionRepository.save(userConnectionConverter.convertToUserConnection(user));
         }else{
             checkContinueConnection(user, userConnection);
         }
     }
 
     private void checkContinueConnection(User user, UserConnection userConnection) {
-        boolean isConnectedToday = checkNowDate(userConnection.getUpdatedAt());
-        boolean isConnectedYesterday = checkOneDayBefore(userConnection.getUpdatedAt());
+        boolean isConnectedToday = timeUtils.checkNowDate(userConnection.getUpdatedAt());
+        boolean isConnectedYesterday = timeUtils.checkOneDayBefore(userConnection.getUpdatedAt());
 
         if(isConnectedToday){
             return;  // 오늘 이미 접속한 기록이 있으므로 함수 종료
@@ -95,23 +99,6 @@ public class WineBadgeServiceImpl implements WineBadgeService {
         } else {
             userConnectionRepository.deleteByUser(user);
         }
-    }
-
-
-
-    private boolean checkNowDate(LocalDateTime updatedAt) {
-        LocalDate nowDate = LocalDateTime.now().toLocalDate();
-        LocalDate targetDate = updatedAt.toLocalDate();
-
-        System.out.println("checkNowDate : " + nowDate.isEqual(targetDate));
-        return nowDate.isEqual(targetDate);
-    }
-
-    private boolean checkOneDayBefore(LocalDateTime updatedAt) {
-        LocalDate nowDate = LocalDateTime.now().toLocalDate();
-        LocalDate targetDate = updatedAt.toLocalDate();
-
-        return targetDate.isEqual(nowDate.minusDays(1));
     }
 
     private void checkUserConnectionBadge(UserConnection userConnection, User user) {

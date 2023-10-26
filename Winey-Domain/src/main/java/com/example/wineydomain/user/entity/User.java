@@ -62,7 +62,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "role")
     private String role = UserRole.ROLE_USER.getValue();
 
-    private boolean tasteNoteAnalysis = false;
+    private boolean isTastingNoteAnalyzed = false;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserConnection userConnection;
@@ -105,8 +105,8 @@ public class User extends BaseEntity implements UserDetails {
         return false;
     }
 
-    public boolean getTasteNoteAnalysis(){
-        return tasteNoteAnalysis;
+    public boolean getIsTasteNoteAnalysed(){
+        return isTastingNoteAnalyzed;
     }
 
 }
