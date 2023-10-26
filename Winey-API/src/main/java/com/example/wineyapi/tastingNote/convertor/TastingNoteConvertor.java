@@ -238,7 +238,7 @@ public class TastingNoteConvertor {
                 .vintage(request.getVintage())
                 .tannins(request.getTannin())
                 .finish(request.getFinish())
-                .price(request.getPrice())
+                .price((request.getPrice() == null) ? 0 : request.getPrice())
                 .memo(request.getMemo())
                 .buyAgain(request.getBuyAgain())
                 .starRating(request.getRating())
