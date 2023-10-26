@@ -17,7 +17,7 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-web'
     api 'org.springframework.boot:spring-boot-starter-security'
 
-
+    api 'org.redisson:redisson-spring-boot-starter:3.18.0'
 
     //jwt
     api group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'

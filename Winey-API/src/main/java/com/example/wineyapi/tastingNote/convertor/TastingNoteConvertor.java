@@ -93,7 +93,10 @@ public class TastingNoteConvertor {
 
 
             wineCountByCountry.put(country, wineCountByCountry.getOrDefault(country, 0) + 1);
-            wineCountByVarietal.put(varietal, wineCountByVarietal.getOrDefault(varietal,0) + 1);
+            String[] varietalLists = varietal.split(", ");
+            for(int i = 0; i < varietalLists.length ; i++){
+                wineCountByVarietal.put(varietalLists[i], wineCountByVarietal.getOrDefault(varietalLists[i],0) + 1);
+            }
             wineCountByType.put(wine.getType().getValue(), wineCountByType.getOrDefault(wine.getType().getValue() ,0)+1);
             for(SmellKeywordTastingNote smellKeywordTastingNote : tastingNote.getSmellKeywordTastingNote()) {
                 wineCountBySmell.put(smellKeywordTastingNote.getSmellKeyword().getName(), wineCountBySmell.getOrDefault(smellKeywordTastingNote.getSmellKeyword().getName(), 0) + 1);
@@ -357,15 +360,6 @@ public class TastingNoteConvertor {
             Country country  = wine.getCountry();
             wineCountByCountry.put(country, wineCountByCountry.getOrDefault(country, 0) + 1);
             wineCountByType.put(wine.getType(), wineCountByType.getOrDefault(wine.getType() ,0)+1);
-        }
-
-        for (WineType type : WineType.values()) {
-            wineCountByType.putIfAbsent(type, 0);
-        }
-
-        // 모든 Country Enum 값을 순회하면서 없는 경우 0으로 설정
-        for (Country country : Country.values()) {
-            wineCountByCountry.putIfAbsent(country, 0);
         }
 
         return TastingNoteResponse.NoteFilterDTO

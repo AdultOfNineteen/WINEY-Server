@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -16,6 +17,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,TastingNoteCustomRepository {
+    @Modifying
+    @Query("update TastingNote tn set tn.user = null where tn.user.id = :userId")
+    void detachUserByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT TN FROM TastingNote TN JOIN FETCH TN.wine")
     List<TastingNote> findByUser(User user);
 
     @Query("SELECT new com.example.wineydomain.wine.entity.WineSummary(avg(t.price), avg(t.sweetness), avg(t.acidity), avg(t.body), avg(t.tannins)) FROM TastingNote t WHERE t.wine.id = :wineId AND t.buyAgain = true")
@@ -71,6 +77,10 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
     List<TastingNote> findTop3ByUserOrderByStarRatingDescCreatedAtDesc(User user);
 
     List<TastingNote> findTop3ByUserAndBuyAgainOrderByStarRatingDescCreatedAtDesc(User user, boolean b);
+
+    Optional<TastingNote> findByUserAndId(User user, Long noteId);
+
+    List<TastingNote> findByUserAndIsDeleted(User user, boolean b);
 
     interface WineList{
         Long getWineId();

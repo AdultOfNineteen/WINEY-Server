@@ -57,4 +57,12 @@ public class UserResponse {
         private VerifyMessageStatus status;
         private Integer mismatchAttempts;
     }
+
+    @NoArgsConstructor
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class ReIssueToken {
+        private String accessToken;
+    }
 }

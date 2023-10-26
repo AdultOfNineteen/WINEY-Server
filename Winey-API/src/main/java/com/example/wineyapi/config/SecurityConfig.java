@@ -6,6 +6,7 @@ import com.example.wineyapi.security.JwtSecurityConfig;
 import com.example.wineyapi.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -41,7 +42,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         ,"/swagger-resources/**"
                         ,"/api-docs/**"
                         ,"/v3/api-docs/**"
-                        ,"/users/**" // TODO : 인가처리시 제외하기
                         ,"/health/**"
                 )
                 ;
@@ -73,12 +73,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/image/**").permitAll()
+                .antMatchers("/users/**").permitAll()
                 .antMatchers("/users/refresh").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/users/{userId}").authenticated()
                 .antMatchers("/profile").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/test/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
+                .antMatchers("/test/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
