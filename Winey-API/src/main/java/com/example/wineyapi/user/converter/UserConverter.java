@@ -73,7 +73,7 @@ public class UserConverter {
                 .socialType(SocialType.KAKAO)
                 .level(1)
                 .status(Status.INACTIVE)
-                .tasteNoteAnalysis(false)
+                .isTastingNoteAnalyzed(false)
                 .build();
     }
 
@@ -89,7 +89,7 @@ public class UserConverter {
                 .socialType(SocialType.GOOGLE)
                 .level(1)
                 .status(Status.INACTIVE)
-                .tasteNoteAnalysis(false)
+                .isTastingNoteAnalyzed(false)
                 .build();
     }
 
@@ -117,7 +117,7 @@ public class UserConverter {
                 .socialType(SocialType.APPLE)
                 .level(1)
                 .status(Status.INACTIVE)
-                .tasteNoteAnalysis(false)
+                .isTastingNoteAnalyzed(false)
                 .build();
     }
 
