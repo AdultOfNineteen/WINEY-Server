@@ -109,21 +109,21 @@ public class UserServiceImpl implements UserService {
         String accessTokenWithBearerPrefix = "Bearer " + request.getAccessToken();
         KakaoUserInfoDto kakaoUserInfoDto = kakaoFeignClient.getInfo(accessTokenWithBearerPrefix);
         return userRepository.findBySocialIdAndSocialType(kakaoUserInfoDto.getId(), SocialType.KAKAO)
-                .orElseGet(() -> UserConverter.toUser(kakaoUserInfoDto));
+                .orElseGet(() -> userRepository.save(UserConverter.toUser(kakaoUserInfoDto)));
     }
 
     private User loginWithGoogle(UserRequest.LoginUserDTO request) {
         String identityToken = request.getAccessToken();
         GoogleUserInfo googleUserInfo = googleOauth2Client.verifyToken(identityToken);
         return userRepository.findBySocialIdAndSocialType(googleUserInfo.getSub(), SocialType.GOOGLE)
-                .orElseGet(() -> UserConverter.toUser(googleUserInfo));
+                .orElseGet(() -> userRepository.save(UserConverter.toUser(googleUserInfo)));
     }
 
     private User loginWithApple(UserRequest.LoginUserDTO request) {
         String identityToken = request.getAccessToken();
         AppleMember appleMember = appleOAuthUserProvider.getApplePlatformMember(identityToken);
         return userRepository.findBySocialIdAndSocialType(appleMember.getSocialId(), SocialType.APPLE)
-                .orElseGet(() -> UserConverter.toUser(appleMember));
+                .orElseGet(() -> userRepository.save(UserConverter.toUser(appleMember)));
     }
 
 
