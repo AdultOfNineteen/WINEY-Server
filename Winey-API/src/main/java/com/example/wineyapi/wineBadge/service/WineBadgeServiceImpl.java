@@ -63,7 +63,7 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     @Override
     @Async("badge_provide_first_analysis")
     public void provideFirstAnalysis(User user) {
-        user.setTasteNoteAnalysis(true);
+        user.setTastingNoteAnalyzed(true);
         userWineBadgeRepository.save(wineBadgeConvertor.WineBadge(TASTE_DISCOVERY, user));
         userRepository.save(user);
 
