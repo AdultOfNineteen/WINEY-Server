@@ -8,6 +8,7 @@ import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.user.entity.UserFcmToken;
 import com.example.wineydomain.verificationMessage.entity.VerificationMessage;
 import com.example.wineyinfrastructure.oauth.apple.dto.AppleMember;
 import com.example.wineyinfrastructure.oauth.google.dto.GoogleUserInfo;
@@ -152,6 +153,14 @@ public class UserConverter {
                 .expireAt(LocalDateTime.now().plusMinutes(5))
                 .phoneNumber(request.getPhoneNumber())
                 .mismatchAttempts(0)
+                .build();
+    }
+
+    public static UserFcmToken toUserFcmToken(UserRequest.UserFcmTokenDto userFcmTokenDto, User user) {
+        return UserFcmToken.builder()
+                .fcmToken(userFcmTokenDto.getFcmToken())
+                .deviceId(userFcmTokenDto.getDeviceId())
+                .user(user)
                 .build();
     }
 }

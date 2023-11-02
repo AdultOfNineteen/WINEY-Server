@@ -12,6 +12,6 @@ public class PageResponse<T> {
     private final Boolean isLast;
     @Schema(description = "총 요소 갯수", required = true, example = "10")
     private final long totalCnt;
-    @Schema(description = "요소", required = true, example = "true")
+    @Schema(description = "요소", required = true)
     private final T contents;
 }

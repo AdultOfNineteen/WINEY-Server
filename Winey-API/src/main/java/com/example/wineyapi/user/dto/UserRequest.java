@@ -21,4 +21,11 @@ public class UserRequest {
         private String phoneNumber;
         private String verificationCode;
     }
+
+    @Getter
+    public static class UserFcmTokenDto {
+        private String fcmToken;
+
+        private String deviceId;
+    }
 }
