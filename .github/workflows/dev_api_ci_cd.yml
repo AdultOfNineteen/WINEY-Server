@@ -57,7 +57,7 @@ jobs:
         id: create-fcm-json
         uses: jsdaniell/create-json@1.1.2
         with:
-          name: "serviceAccountKey.json"
+          name: "serviceAccountAccessKey.json"
           json: ${{ secrets.FCM_JSON }}
           dir: "Winey-Common/src/main/resources/"
 
