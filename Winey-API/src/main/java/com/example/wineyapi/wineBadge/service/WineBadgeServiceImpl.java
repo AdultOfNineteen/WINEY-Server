@@ -1,8 +1,10 @@
 package com.example.wineyapi.wineBadge.service;
 
+import com.example.wineyapi.common.message.MessageConverter;
 import com.example.wineyapi.common.util.TimeUtils;
+import com.example.wineyapi.notification.service.NotificationService;
+import com.example.wineyapi.notification.service.NotificationServiceImpl;
 import com.example.wineyapi.user.converter.UserConnectionConverter;
-import com.example.wineyapi.user.converter.UserConverter;
 import com.example.wineyapi.wineBadge.convertor.WineBadgeConvertor;
 import com.example.wineycommon.annotation.RedissonLock;
 import com.example.wineydomain.badge.entity.Badge;
@@ -12,16 +14,17 @@ import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.user.entity.UserConnection;
+import com.example.wineydomain.user.entity.UserFcmToken;
 import com.example.wineydomain.user.repository.UserConnectionRepository;
 import com.example.wineydomain.user.repository.UserRepository;
 import com.example.wineydomain.wine.entity.Wine;
+import com.example.wineyinfrastructure.firebase.dto.NotificationRequestDto;
+import com.example.wineyinfrastructure.firebase.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,8 +41,12 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     private final UserConnectionRepository userConnectionRepository;
     private final UserConnectionConverter userConnectionConverter;
     private final TimeUtils timeUtils;
+    private final MessageService messageService;
+    private final MessageConverter messageConverter;
+    private final NotificationService notificationService;
 
-    @RedissonLock(LockName =  "뱃지-계산", key = "#userId")
+
+    @RedissonLock(LockName =  "뱃지-계산", key = "#user.id")
     @Async("badge")
     public void calculateBadge(User user, Long userId) {
         List<TastingNote> tastingNotes = tastingNoteRepository.findByUser(user);
@@ -57,20 +64,36 @@ public class WineBadgeServiceImpl implements WineBadgeService {
         userWineBadges.addAll(calculateWineBadgeAboutTastingNote(badges, tastingNotes, user));
 
         userWineBadgeRepository.saveAll(userWineBadges);
-        // 사용자 fcm 알림 + 알림 저장 로직 추가 구현해야함
+
+        sendMessageGetWineBadges(userWineBadges, user);
+    }
+
+    public void sendMessageGetWineBadges(List<UserWineBadge> userWineBadges, User user) {
+        for(UserWineBadge wineBadge : userWineBadges) {
+            sendMessageGetWineBadge(wineBadge, user);
+        }
+    }
+
+    public void sendMessageGetWineBadge(UserWineBadge wineBadge, User user) {
+        List<NotificationRequestDto> notificationRequestDtos = new ArrayList<>();
+        for(UserFcmToken fcmToken : user.getUserFcmTokens()) {
+            notificationRequestDtos.add(messageConverter.toNotificationRequestDto(wineBadge.getBadge(), fcmToken, user));
+        }
+        if(!notificationRequestDtos.isEmpty()) {
+            messageService.sendNotifications(notificationRequestDtos);
+            notificationService.saveNotification(notificationRequestDtos, user);
+        }
     }
 
     @Override
     @Async("badge_provide_first_analysis")
     public void provideFirstAnalysis(User user) {
         user.setTastingNoteAnalyzed(true);
-        userWineBadgeRepository.save(wineBadgeConvertor.WineBadge(TASTE_DISCOVERY, user));
         userRepository.save(user);
 
-        /*
-        TODO 알림 보내기
-         */
+        UserWineBadge userWineBadge = userWineBadgeRepository.save(wineBadgeConvertor.WineBadge(TASTE_DISCOVERY, user));
 
+        sendMessageGetWineBadge(userWineBadge, user);
     }
 
     @Override

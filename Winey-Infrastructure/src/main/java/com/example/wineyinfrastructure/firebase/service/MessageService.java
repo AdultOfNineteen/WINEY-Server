@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -32,6 +34,28 @@ public class MessageService {
             FirebaseMessaging.getInstance().send(message);
         } catch (FirebaseMessagingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Async("push_fcm_messaging")
+    public void sendNotifications(List<NotificationRequestDto> notificationRequestDtos){
+        for(NotificationRequestDto notificationRequestDto : notificationRequestDtos) {
+            Notification notification = Notification
+                    .builder()
+                    .setTitle(notificationRequestDto.getTitle())
+                    .setBody(notificationRequestDto.getBody())
+                    .build();
+
+            Message message = Message
+                    .builder()
+                    .setToken(notificationRequestDto.getToken())
+                    .setNotification(notification)
+                    .build();
+            try {
+                FirebaseMessaging.getInstance().send(message);
+            } catch (FirebaseMessagingException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }
