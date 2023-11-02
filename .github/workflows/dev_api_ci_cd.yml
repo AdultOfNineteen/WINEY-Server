@@ -59,7 +59,7 @@ jobs:
         with:
           name: "serviceAccountKey.json"
           json: ${{ secrets.FCM_JSON }}
-          dir: "Winey-Infrastructure/src/main/resources/"
+          dir: "Winey-Common/src/main/resources/"
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
