@@ -10,6 +10,7 @@ import com.example.wineycommon.annotation.ApiErrorCodeExample;
 import com.example.wineycommon.exception.BadRequestException;
 import com.example.wineycommon.exception.errorcode.OtherServerErrorCode;
 import com.example.wineyapi.user.service.UserService;
+import com.example.wineycommon.exception.errorcode.RequestErrorCode;
 import com.example.wineycommon.reponse.CommonResponse;
 import com.example.wineydomain.redis.entity.RefreshToken;
 import com.example.wineydomain.redis.repository.RefreshTokenRepository;
@@ -109,9 +110,12 @@ public class UserController {
     @Operation(summary = "01-07 User👤 유저 로그아웃 Made By Austin", description = "로그아웃 API 입니다.")
     @GetMapping("/users/logout")
     @ApiErrorCodeExample(UserAuthErrorCode.class)
-    public CommonResponse<String> logOut(@Parameter(hidden = true) @AuthenticationPrincipal User user){
+    public CommonResponse<String> logOut(
+            @Parameter(hidden = true) @AuthenticationPrincipal User user,
+            @RequestParam String deviceId){
         Long userId = user.getId();
         jwtService.logOut(userId);
+        userService.deleteFcmToken(user, deviceId);
         return CommonResponse.onSuccess("로그아웃 성공");
     }
 
@@ -139,6 +143,18 @@ public class UserController {
     ){
         userService.connectionUser(user);
         return CommonResponse.onSuccess("확인 되었습니다.");
+    }
+
+    @Operation(summary = "01-10 User 👤 유저 FCM 토큰 저장", description = "유저 FCM 토큰 전송용 API 입니다.")
+    @ApiErrorCodeExample({UserAuthErrorCode.class, RequestErrorCode.class})
+    @PostMapping("/fcm")
+    public CommonResponse<String> postUserFcmToken(
+            @RequestBody UserRequest.UserFcmTokenDto userFcmTokenDto,
+            @AuthenticationPrincipal User user
+    ){
+        userService.postUserFcmToken(userFcmTokenDto, user);
+
+        return CommonResponse.onSuccess("유저 FCM 토큰 저장 완료");
     }
 
 }

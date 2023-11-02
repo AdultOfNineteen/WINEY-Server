@@ -17,7 +17,9 @@ import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.user.entity.UserFcmToken;
 import com.example.wineydomain.user.exception.UserErrorCode;
+import com.example.wineydomain.user.repository.UserFcmTokenRepository;
 import com.example.wineydomain.user.repository.UserRepository;
 import com.example.wineydomain.verificationMessage.entity.VerificationMessage;
 import com.example.wineydomain.verificationMessage.repository.VerificationMessageRepository;
@@ -64,6 +66,7 @@ public class UserServiceImpl implements UserService {
     private final TastingNoteRepository tastingNoteRepository;
     private final RecommendWineRepository recommendWineRepository;
     private final WineBadgeService wineBadgeService;
+    private final UserFcmTokenRepository userFcmTokenRepository;
 
     private DefaultMessageService coolSmsService;
     private final AppleOAuthUserProvider appleOAuthUserProvider;
@@ -282,5 +285,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void connectionUser(User user) {
         wineBadgeService.checkActivityBadge(user);
+    }
+
+    @Override
+    public void postUserFcmToken(UserRequest.UserFcmTokenDto userFcmTokenDto, User user) {
+        userFcmTokenRepository.save(UserConverter.toUserFcmToken(userFcmTokenDto, user));
+    }
+
+    @Override
+    public void deleteFcmToken(User user, String deviceId) {
+        userFcmTokenRepository.deleteByUserAndDeviceId(user, deviceId);
     }
 }
