@@ -4,6 +4,7 @@ import com.example.wineydomain.common.model.BaseEntity;
 import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.preference.entity.Preference;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
@@ -66,6 +67,11 @@ public class User extends BaseEntity implements UserDetails {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserConnection userConnection;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    @BatchSize(size = 5)
+    private List<UserFcmToken> userFcmTokens = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

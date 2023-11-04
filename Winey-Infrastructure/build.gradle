@@ -16,6 +16,9 @@ dependencies {
     api 'io.github.openfeign:feign-jackson:12.1'
     api 'com.amazonaws:aws-java-sdk-s3control:1.12.372'
 
+    api group: 'com.google.firebase', name: 'firebase-admin', version: '8.1.0'
+
+
     implementation project(':Winey-Common')
 }
 
