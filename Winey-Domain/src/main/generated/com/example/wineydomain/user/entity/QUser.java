@@ -56,6 +56,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final QUserConnection userConnection;
 
+    public final ListPath<UserFcmToken, QUserFcmToken> userFcmTokens = this.<UserFcmToken, QUserFcmToken>createList("userFcmTokens", UserFcmToken.class, QUserFcmToken.class, PathInits.DIRECT2);
+
     public final StringPath username = createString("username");
 
     public QUser(String variable) {
