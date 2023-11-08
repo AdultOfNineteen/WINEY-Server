@@ -35,3 +35,5 @@ out/
 
 ### VS Code ###
 .vscode/
+
+Winey-Common/src/main/resources/serviceAccountAccessKey.json

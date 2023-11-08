@@ -23,4 +23,8 @@ public interface UserService {
     User getCurrentLoggedInUser();
 
     void connectionUser(User user);
+
+    void postUserFcmToken(UserRequest.UserFcmTokenDto userFcmTokenDto, User user);
+
+    void deleteFcmToken(User user, String deviceId);
 }

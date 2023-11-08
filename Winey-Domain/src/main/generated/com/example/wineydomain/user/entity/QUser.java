@@ -29,6 +29,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final BooleanPath isTastingNoteAnalyzed = createBoolean("isTastingNoteAnalyzed");
+
     public final NumberPath<Integer> level = createNumber("level", Integer.class);
 
     public final StringPath nickName = createString("nickName");
@@ -49,12 +51,12 @@ public class QUser extends EntityPathBase<User> {
 
     public final EnumPath<com.example.wineydomain.common.model.Status> status = createEnum("status", com.example.wineydomain.common.model.Status.class);
 
-    public final BooleanPath tasteNoteAnalysis = createBoolean("tasteNoteAnalysis");
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public final QUserConnection userConnection;
+
+    public final ListPath<UserFcmToken, QUserFcmToken> userFcmTokens = this.<UserFcmToken, QUserFcmToken>createList("userFcmTokens", UserFcmToken.class, QUserFcmToken.class, PathInits.DIRECT2);
 
     public final StringPath username = createString("username");
 
