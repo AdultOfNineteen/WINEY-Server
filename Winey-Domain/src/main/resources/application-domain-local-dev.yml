@@ -11,7 +11,9 @@ spring:
     password: ${AWS_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform:
+      - org.hibernate.dialect.MySQL5InnoDBDialect
+      - org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect
     # create, update, create-drop, none 등의 옵션이 있습니다.
     # create: 기존테이블 삭제 후 다시 생성
     # update: 변경된 부분만 반영
