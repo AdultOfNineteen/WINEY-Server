@@ -1,5 +1,6 @@
 package com.example.wineyapi.wineBadge.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +21,8 @@ public class WineBadgeResponse {
         private Long badgeId;
         private String badgeType;
         private String name;
+        private String description;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime acquiredAt;
     }
 
