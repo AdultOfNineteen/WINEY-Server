@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -234,5 +235,11 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     private int calculateMaxWine(Map<Long, Integer> sameWineMap) {
         if (sameWineMap.isEmpty()) return 0;
         else return Collections.max(sameWineMap.values());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<UserWineBadge> getWineBadgeListByUser(Long userId) {
+        return null;
     }
 }

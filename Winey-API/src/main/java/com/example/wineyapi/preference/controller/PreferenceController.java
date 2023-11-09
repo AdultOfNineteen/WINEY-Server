@@ -24,7 +24,7 @@ public class PreferenceController {
         return null;
     }
 
-    @Operation(summary = "03-01 Preference\uD83C\uDF6B 취향 설정 #000_03_취향 입력", description = "취향 설정 API입니다.")
+    @Operation(summary = "03-01 Preference\uD83C\uDF6B 취향 설정 #000_03_취향 입력 Made By Peter", description = "취향 설정 API입니다.")
     @PatchMapping("/users/{userId}/preferences")
     public CommonResponse<PreferenceResponse.UpdatePreferenceDTO> updatePreference(@PathVariable Long userId,
                                                                                    @RequestBody PreferenceRequest.UpdatePreferenceDTO request) {
