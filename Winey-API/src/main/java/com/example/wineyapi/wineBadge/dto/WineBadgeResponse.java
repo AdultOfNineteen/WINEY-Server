@@ -5,16 +5,22 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class WineBadgeResponse {
+
+    private WineBadgeResponse() {}
 
     @NoArgsConstructor
     @Getter
     @AllArgsConstructor
     @Builder
-    public static class WineBadgeDTO {
-        private String field;
+    public static class BadgeDTO {
+        private Long badgeId;
+        private String badgeType;
+        private String name;
+        private LocalDateTime acquiredAt;
     }
 
     @NoArgsConstructor
@@ -22,7 +28,7 @@ public class WineBadgeResponse {
     @AllArgsConstructor
     @Builder
     public static class WineBadgeListDTO {
-       private List<WineBadgeDTO> wineBadgeList;
-       private Integer size;
+       private List<BadgeDTO> sommelierBadgeList;
+       private List<BadgeDTO> activitybadgeDTOList;
     }
 }
