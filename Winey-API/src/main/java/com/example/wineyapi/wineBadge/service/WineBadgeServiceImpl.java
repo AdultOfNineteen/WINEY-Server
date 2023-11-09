@@ -240,6 +240,6 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     @Transactional(readOnly = true)
     @Override
     public List<UserWineBadge> getWineBadgeListByUser(Long userId) {
-        return null;
+        return userWineBadgeRepository.findByUser_Id(userId);
     }
 }
