@@ -23,9 +23,9 @@ public class AdminShopService {
 
 
     @Transactional
-    public void uploadShops(List<ShopReq.ShopUploadReq> shopUploadReqs) {
+    public void uploadShops(List<ShopReq.ShopUploadDTO> shopUploadReqs) {
         List<Shop> shops = new ArrayList<>();
-        for (ShopReq.ShopUploadReq req : shopUploadReqs){
+        for (ShopReq.ShopUploadDTO req : shopUploadReqs){
             Shop shop  = shopRepository.save(adminShopConverter.convertToShop(req));
             shopRepository.updateShopPoint(String.valueOf(adminShopConverter.convertToShopPoint(req, shop)), shop.getId());
             if (req.getMoods()!=null) {

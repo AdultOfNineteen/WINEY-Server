@@ -17,8 +17,8 @@ import java.util.List;
 public class AdminShopController {
     private final AdminShopService adminShopService;
     @PostMapping("")
-    public CommonResponse<String> uploadShops(@RequestBody List<ShopReq.ShopUploadReq> shopUploadReq){
-        adminShopService.uploadShops(shopUploadReq);
+    public CommonResponse<String> uploadShops(@RequestBody List<ShopReq.ShopUploadDTO> shopUploadDTO){
+        adminShopService.uploadShops(shopUploadDTO);
         return CommonResponse.onSuccess("성공");
     }
 

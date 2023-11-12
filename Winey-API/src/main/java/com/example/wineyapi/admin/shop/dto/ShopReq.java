@@ -17,7 +17,7 @@ public class ShopReq {
     @Setter
     @AllArgsConstructor
     @Builder
-    public static class ShopUploadReq{
+    public static class ShopUploadDTO{
         private String name;
 
         private ShopType shopType;
@@ -36,4 +36,5 @@ public class ShopReq {
 
         private List<Mood> moods;
     }
+
 }

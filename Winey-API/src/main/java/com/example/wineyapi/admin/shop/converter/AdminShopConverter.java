@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AdminShopConverter {
-    public Shop convertToShop(ShopReq.ShopUploadReq req) {
+    public Shop convertToShop(ShopReq.ShopUploadDTO req) {
             return Shop
                     .builder()
                     .name(req.getName())
@@ -39,7 +39,7 @@ public class AdminShopConverter {
         return geometryFactory.createPoint(new Coordinate(latitude, longitude));
     }
 
-    public Point convertToShopPoint(ShopReq.ShopUploadReq req, Shop shop) {
+    public Point convertToShopPoint(ShopReq.ShopUploadDTO req, Shop shop) {
         return createPoint(req.getLatitude(), req.getLongitude());
     }
 }
