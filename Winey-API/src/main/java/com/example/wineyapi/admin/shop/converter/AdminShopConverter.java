@@ -1,6 +1,7 @@
 package com.example.wineyapi.admin.shop.converter;
 
 import com.example.wineyapi.admin.shop.dto.ShopReq;
+import com.example.wineyapi.common.util.GeoUtils;
 import com.example.wineydomain.shop.entity.Mood;
 import com.example.wineydomain.shop.entity.Shop;
 import com.example.wineydomain.shop.entity.ShopMood;
@@ -34,12 +35,8 @@ public class AdminShopConverter {
                 .build();
     }
 
-    public Point createPoint(double latitude, double longitude) {
-        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
-        return geometryFactory.createPoint(new Coordinate(latitude, longitude));
-    }
 
-    public Point convertToShopPoint(ShopReq.ShopUploadDTO req, Shop shop) {
-        return createPoint(req.getLatitude(), req.getLongitude());
+    public Point convertToShopPoint(ShopReq.ShopUploadDTO req) {
+        return GeoUtils.createPoint(req.getLatitude(), req.getLongitude());
     }
 }
