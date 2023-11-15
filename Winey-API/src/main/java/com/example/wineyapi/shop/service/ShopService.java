@@ -1,9 +1,10 @@
 package com.example.wineyapi.shop.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.example.wineyapi.shop.dto.ShopCommand;
+import com.example.wineyapi.shop.dto.ShopRes;
 
-@Service
-@RequiredArgsConstructor
-public class ShopService {
+import java.util.List;
+
+public interface ShopService {
+    List<ShopRes.ShopMapDto> getShopMapDtoList(ShopCommand.getMapCommandDTO getMapCommandDTO);
 }
