@@ -1,5 +1,6 @@
 package com.example.wineydomain.user.entity;
 
+import com.example.wineydomain.common.WineGrade;
 import com.example.wineydomain.common.model.BaseEntity;
 import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.preference.entity.Preference;
@@ -72,6 +73,9 @@ public class User extends BaseEntity implements UserDetails {
     @JoinColumn(name = "userId")
     @BatchSize(size = 5)
     private List<UserFcmToken> userFcmTokens = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private WineGrade wineGrade;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
