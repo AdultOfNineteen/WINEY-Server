@@ -9,7 +9,7 @@ public enum WineGrade {
     GLASS(0, 2),
     BOTTLE(3, 6),
     OAK(7, 11),
-    WINERY(12, 6);
+    WINERY(12, Integer.MAX_VALUE);
 
     private final Integer minCount;
     private final Integer maxCount;

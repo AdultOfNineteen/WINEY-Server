@@ -27,5 +27,6 @@ public class UserConnection extends BaseEntity {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
+    @Builder.Default
     private int cnt = 1;
 }

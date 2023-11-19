@@ -47,6 +47,7 @@ public class User extends BaseEntity implements UserDetails {
     private String socialId;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private SocialType socialType = SocialType.normal;
 
     @Column(name = "phoneNumber")
@@ -56,14 +57,17 @@ public class User extends BaseEntity implements UserDetails {
     private Integer level;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private Status status = Status.INACTIVE;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Preference preference;
 
     @Column(name = "role")
+    @Builder.Default
     private String role = UserRole.ROLE_USER.getValue();
 
+    @Builder.Default
     private boolean isTastingNoteAnalyzed = false;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -72,10 +76,12 @@ public class User extends BaseEntity implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     @BatchSize(size = 5)
+    @Builder.Default
     private List<UserFcmToken> userFcmTokens = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    private WineGrade wineGrade;
+    @Builder.Default
+    private WineGrade wineGrade = WineGrade.GLASS;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
