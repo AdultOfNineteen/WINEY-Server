@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class WineGradeController {
     private final WineGradeService wineGradeService;
 
-    @Operation(summary = "07-01 WineGrade⭐ 마이페이지 와인 등급 조회 #FRAME Made By Peter", description = "본인의 현재 와인등급과 다음 예상 등급을 조회하는 API입니다.")
+    @Operation(summary = "07-01 WineGrade⭐ 마이페이지 와인 등급 조회 #FRAME Made By Peter", description = "본인의 현재 와인등급과 다음 달 예상 등급을 조회하는 API입니다.")
     @GetMapping("/users/{userId}/wine-grade")
     @CheckIdExistence @CheckOwnAccount
     public CommonResponse<WineGradeResponse.GetWineGradeDTO> getWineGrade(@PathVariable Long userId,

@@ -10,7 +10,7 @@ public class WineGradeConverter {
     public static WineGradeResponse.GetWineGradeDTO toGetWineGradeDTO(WineGrade currentGrade, WineGrade nextGrade, Integer threeMonthsNoteCount) {
         return WineGradeResponse.GetWineGradeDTO.builder()
                 .currentGrade(currentGrade)
-                .nextGrade(nextGrade)
+                .expectedNextMonthGrade(nextGrade)
                 .threeMonthsNoteCount(threeMonthsNoteCount)
                 .build();
     }
