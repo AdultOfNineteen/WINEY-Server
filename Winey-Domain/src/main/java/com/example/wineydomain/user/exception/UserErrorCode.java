@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Getter
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public enum UserErrorCode implements BaseErrorCode {
     /**
      * WXXX : Wine 관련 에러
      */
-    NOT_EXIST_USER(BAD_REQUEST,"U001" , "해당 유저가 존재하지 않습니다.");
+    NOT_EXIST_USER(NOT_FOUND,"U001" , "해당 유저가 존재하지 않습니다.");
 
 
     private final HttpStatus httpStatus;

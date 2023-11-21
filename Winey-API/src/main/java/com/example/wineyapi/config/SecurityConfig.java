@@ -73,6 +73,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/image/**").permitAll()
+                // NOTE - 아래 예시처럼 구체적인 경로부터 명시해주어야 합니다.
+                .antMatchers("/users/{userId}/wine-grade").authenticated()
                 .antMatchers("/users/{userId}/wine-badges").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/users/{userId}").authenticated()
                 .antMatchers("/users/**").permitAll()
