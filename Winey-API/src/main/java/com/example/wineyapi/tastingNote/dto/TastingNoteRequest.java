@@ -82,8 +82,7 @@ public class TastingNoteRequest {
         @Schema(name ="rating", description = "평점", required = true)
         private Integer rating;
 
-        @NotNull(message = "파일을 입력해주세요")
-        @Schema(name = "multipartFiles")
+        @Schema(name = "multipartFiles", required = false)
         private List<MultipartFile> multipartFiles;
 
         @Schema(name = "smellKeywordList",description = "향 키워드 리스트", required = false)

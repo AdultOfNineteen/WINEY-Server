@@ -120,17 +120,17 @@ public class TastingNoteServiceImpl implements TastingNoteService{
         Page<TastingNote> tastingNotes = null;
 
         if(order.equals(0)){
-            if(countries.isEmpty()  && wineTypes.isEmpty()) {
+            if(countries == null  && wineTypes == null) {
                 if(buyAgain == null) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedOrderByCreatedAtDesc(user, false, pageable);
                 else if(buyAgain == 1) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainOrderByCreatedAtDesc(user, false, true, pageable);
                 else tastingNotes= tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainOrderByCreatedAtDesc(user,false,true, pageable);
             }
-            else if(!countries.isEmpty() && wineTypes.isEmpty()){
+            else if(countries!=null && wineTypes == null){
                 if(buyAgain == null) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndWine_CountryInOrderByCreatedAtDesc(user, false, countries, pageable);
                 else if(buyAgain.equals(1)) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_CountryInOrderByCreatedAtDesc(user, false, true, countries, pageable);
                 else tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_CountryInOrderByCreatedAtDesc(user,false, false, countries, pageable);
             }
-            else if(countries.isEmpty()){
+            else if(countries==null){
                 if(buyAgain == null) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndWine_TypeInOrderByCreatedAtDesc(user, false, wineTypes, pageable);
                 else if(buyAgain.equals(1)) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_TypeInOrderByCreatedAtDesc(user, false, true, wineTypes, pageable);
                 else tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_TypeInOrderByCreatedAtDesc(user,false, false, wineTypes, pageable);
@@ -141,17 +141,17 @@ public class TastingNoteServiceImpl implements TastingNoteService{
                 else tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_CountryInAndWine_TypeInOrderByCreatedAtDesc(user, false, false,countries ,wineTypes, pageable);
             }
         }else{
-            if(countries.isEmpty() && wineTypes.isEmpty()) {
+            if(countries==null && wineTypes==null) {
                 if(buyAgain == null) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedOrderByStarRatingAsc(user, false, pageable);
                 else if(buyAgain == 1) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainOrderByStarRatingAsc(user, false, true, pageable);
                 else tastingNotes= tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainOrderByStarRatingAsc(user,false,true, pageable);
             }
-            else if(!countries.isEmpty() && wineTypes.isEmpty()){
+            else if(countries!=null && wineTypes==null){
                 if(buyAgain == null) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndWine_CountryInOrderByStarRatingAsc(user, false, countries, pageable);
                 else if(buyAgain.equals(1)) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_CountryInOrderByStarRatingAsc(user, false, true, countries, pageable);
                 else tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_CountryInOrderByStarRatingAsc(user,false, false, countries, pageable);
             }
-            else if(countries.isEmpty()){
+            else if(countries==null){
                 if(buyAgain == null) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndWine_TypeInOrderByStarRatingAsc(user, false, wineTypes, pageable);
                 else if(buyAgain.equals(1)) tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_TypeInOrderByStarRatingAsc(user, false, true, wineTypes, pageable);
                 else tastingNotes = tastingNoteRepository.findByUserAndIsDeletedAndBuyAgainAndWine_TypeInOrderByStarRatingAsc(user,false, false, wineTypes, pageable);
