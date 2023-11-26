@@ -27,7 +27,9 @@ public class AdminShopService {
         List<Shop> shops = new ArrayList<>();
         for (ShopReq.ShopUploadDTO req : shopUploadReqs){
             Shop shop  = shopRepository.save(adminShopConverter.convertToShop(req));
-            shopRepository.updateShopPoint(String.valueOf(adminShopConverter.convertToShopPoint(req)), shop.getId());
+            System.out.println(req.getLongitude());
+            System.out.println(req.getLatitude());
+            shopRepository.updateShopPoint(String.format("POINT(%f %f)", req.getLatitude(), req.getLongitude()), shop.getId());
             if (req.getMoods()!=null) {
                 List<ShopMood> shopMoods = new ArrayList<>();
                 for (Mood mood : req.getMoods()){

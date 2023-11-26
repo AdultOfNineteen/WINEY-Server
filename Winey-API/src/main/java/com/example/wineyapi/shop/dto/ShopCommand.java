@@ -13,9 +13,7 @@ public class ShopCommand {
     @AllArgsConstructor
     @Builder
     public static class getMapCommandDTO{
-         private double latitude;
-
-         private double longitude;
+         private ShopReq.MapFilterDto mapFilterDto;
 
          private ShopFilter shopFilter;
 
