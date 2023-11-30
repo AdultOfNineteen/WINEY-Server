@@ -3,10 +3,7 @@ package com.example.wineyapi.tastingNote.dto;
 import com.example.wineydomain.common.model.BaseEntity;
 import com.example.wineydomain.tastingNote.entity.SmellKeyword;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Max;
@@ -21,6 +18,7 @@ public class TastingNoteRequest {
     @Setter
     @AllArgsConstructor
     @Builder
+    @NoArgsConstructor
     public static class CreateTastingNoteDTO {
         @NotNull(message = "와인 id 를 입력해주세요")
         @Schema(name = "wineId", required = true)
@@ -81,9 +79,6 @@ public class TastingNoteRequest {
         @Max(value = 5 ,message = "5이하를 입력해주세요")
         @Schema(name ="rating", description = "평점", required = true)
         private Integer rating;
-
-        @Schema(name = "multipartFiles", required = false)
-        private List<MultipartFile> multipartFiles;
 
         @Schema(name = "smellKeywordList",description = "향 키워드 리스트", required = false)
         private List<SmellKeyword> smellKeywordList;

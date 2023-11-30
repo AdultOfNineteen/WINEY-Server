@@ -24,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -95,7 +96,7 @@ public class TastingNoteServiceImpl implements TastingNoteService{
 
     @Override
     @Transactional
-    public TastingNoteResponse.CreateTastingNoteDTO createTastingNote(User user, TastingNoteRequest.CreateTastingNoteDTO request) {
+    public TastingNoteResponse.CreateTastingNoteDTO createTastingNote(User user, TastingNoteRequest.CreateTastingNoteDTO request, List<MultipartFile> multipartFiles) {
         Wine wine  = wineRepository.findById(request.getWineId()).orElseThrow(() ->  new BadRequestException(NOT_FOUNT_WINE));
         TastingNote tastingNote = tastingNoteRepository.save(tastingNoteConvertor.CreateTastingNote(request, user, wine));
 
@@ -103,10 +104,12 @@ public class TastingNoteServiceImpl implements TastingNoteService{
             smellKeywordTastingNoteRepository.save(tastingNoteConvertor.SmellKeyword(smellKeyword, tastingNote));
         }
 
-        List<String> imgList = s3UploadService.listUploadTastingNote(tastingNote.getId(),request.getMultipartFiles());
+        List<String> imgList = s3UploadService.listUploadTastingNote(tastingNote.getId(), multipartFiles);
 
-        for(String imgUrl : imgList){
-            tastingNoteImageRepository.save(tastingNoteConvertor.TastingImg(tastingNote, imgUrl));
+        if(imgList!=null) {
+            for (String imgUrl : imgList) {
+                tastingNoteImageRepository.save(tastingNoteConvertor.TastingImg(tastingNote, imgUrl));
+            }
         }
 
         wineBadgeService.calculateBadge(user, user.getId());
