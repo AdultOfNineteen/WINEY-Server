@@ -100,8 +100,10 @@ public class TastingNoteServiceImpl implements TastingNoteService{
         Wine wine  = wineRepository.findById(request.getWineId()).orElseThrow(() ->  new BadRequestException(NOT_FOUNT_WINE));
         TastingNote tastingNote = tastingNoteRepository.save(tastingNoteConvertor.CreateTastingNote(request, user, wine));
 
-        for(SmellKeyword smellKeyword : request.getSmellKeywordList()){
-            smellKeywordTastingNoteRepository.save(tastingNoteConvertor.SmellKeyword(smellKeyword, tastingNote));
+        if(request.getSmellKeywordList() != null) {
+            for (SmellKeyword smellKeyword : request.getSmellKeywordList()) {
+                smellKeywordTastingNoteRepository.save(tastingNoteConvertor.SmellKeyword(smellKeyword, tastingNote));
+            }
         }
 
         List<String> imgList = s3UploadService.listUploadTastingNote(tastingNote.getId(), multipartFiles);
