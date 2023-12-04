@@ -22,7 +22,7 @@ public class TastingNoteResponse {
         @Schema(description = "와인 생산지")
         private Country country;
         @Schema(description = "평점")
-        private int starRating;
+        private Integer starRating;
         @Schema(description = "재구매 유무")
         private boolean buyAgain;
         @Schema(description = "와인 타입 RED,WHITE 등등")
@@ -74,7 +74,7 @@ public class TastingNoteResponse {
         private String region;
 
         @Schema(description = "별점")
-        private int star;
+        private Integer star;
 
         @Schema(description = "사용자가 지정한 색")
         private String color;
@@ -89,7 +89,7 @@ public class TastingNoteResponse {
         private Double officialAlcohol;
 
         @Schema(description = "사용자가 입력한 가격")
-        private int price;
+        private Integer price;
 
         private List<String> smellKeywordList;
 
