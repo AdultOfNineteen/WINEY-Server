@@ -47,7 +47,7 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     private final NotificationService notificationService;
 
 
-    @RedissonLock(LockName =  "뱃지-계산", key = "#user.id")
+    @RedissonLock(LockName =  "뱃지-계산", key = "#userId")
     @Async("badge")
     public void calculateBadge(User user, Long userId) {
         List<TastingNote> tastingNotes = tastingNoteRepository.findByUser(user);
