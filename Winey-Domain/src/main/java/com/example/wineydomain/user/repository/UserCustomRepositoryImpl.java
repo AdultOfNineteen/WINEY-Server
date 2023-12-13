@@ -3,11 +3,7 @@ package com.example.wineydomain.user.repository;
 import com.example.wineydomain.common.WineGrade;
 import com.example.wineydomain.tastingNote.entity.QTastingNote;
 import com.example.wineydomain.user.entity.QUser;
-\
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
