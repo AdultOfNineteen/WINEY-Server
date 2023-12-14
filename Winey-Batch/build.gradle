@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-batch'
+    api 'org.springframework.boot:spring-boot-starter-batch'
     implementation project(':Winey-Domain')
 
     testImplementation 'org.springframework.batch:spring-batch-test'

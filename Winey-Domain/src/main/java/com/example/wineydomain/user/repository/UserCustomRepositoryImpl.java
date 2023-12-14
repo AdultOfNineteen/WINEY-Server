@@ -4,6 +4,7 @@ import com.example.wineydomain.common.WineGrade;
 import com.example.wineydomain.tastingNote.entity.QTastingNote;
 import com.example.wineydomain.user.entity.QUser;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -25,25 +26,60 @@ public class UserCustomRepositoryImpl implements UserCustomRepository{
 
         LocalDate threeMonthsAgo = LocalDate.now().minusMonths(3);
 
-        // 사용자별 테이스팅 노트 개수를 계산하는 서브쿼리
-        JPQLQuery<Long> noteCountSubQuery = JPAExpressions.select(tastingNote.count())
-                .from(tastingNote)
-                .where(tastingNote.user.eq(user)
-                        .and(tastingNote.createdAt.after(threeMonthsAgo.atStartOfDay())));
+        // WINERY 등급으로 업데이트
+        queryFactory
+                .update(user)
+                .set(user.wineGrade, WineGrade.WINERY)
+                .where(user.id.in(
+                        JPAExpressions.select(tastingNote.user.id)
+                                .from(tastingNote)
+                                .where(tastingNote.createdAt.after(threeMonthsAgo.atStartOfDay()))
+                                .groupBy(tastingNote.user)
+                                .having(tastingNote.count().goe(WineGrade.WINERY.getMinCount()))
+                ))
+                .execute();
 
-        // 사용자 등급 업데이트
-        queryFactory.update(user)
-                .set(user.wineGrade, new CaseBuilder()
-                        .when(noteCountSubQuery.goe(Long.valueOf(WineGrade.WINERY.getMinCount())))
-                        .then(WineGrade.WINERY)
-                        .when(noteCountSubQuery.goe(Long.valueOf(WineGrade.OAK.getMinCount()))
-                                .and(noteCountSubQuery.lt(Long.valueOf(WineGrade.WINERY.getMinCount()))))
-                        .then(WineGrade.OAK)
-                        .when(noteCountSubQuery.goe(Long.valueOf(WineGrade.BOTTLE.getMinCount()))
-                                .and(noteCountSubQuery.lt(Long.valueOf(WineGrade.OAK.getMinCount()))))
-                        .then(WineGrade.BOTTLE)
-                        .otherwise(WineGrade.GLASS))
+        // OAK 등급으로 업데이트
+        queryFactory
+                .update(user)
+                .set(user.wineGrade, WineGrade.OAK)
+                .where(user.id.in(
+                        JPAExpressions.select(tastingNote.user.id)
+                                .from(tastingNote)
+                                .where(tastingNote.createdAt.after(threeMonthsAgo.atStartOfDay()))
+                                .groupBy(tastingNote.user)
+                                .having(tastingNote.count().goe(WineGrade.OAK.getMinCount()),
+                                        tastingNote.count().lt(WineGrade.WINERY.getMinCount()))
+                ))
+                .execute();
+
+        // BOTTLE 등급으로 업데이트
+        queryFactory
+                .update(user)
+                .set(user.wineGrade, WineGrade.BOTTLE)
+                .where(user.id.in(
+                        JPAExpressions.select(tastingNote.user.id)
+                                .from(tastingNote)
+                                .where(tastingNote.createdAt.after(threeMonthsAgo.atStartOfDay()))
+                                .groupBy(tastingNote.user)
+                                .having(tastingNote.count().goe(WineGrade.BOTTLE.getMinCount()),
+                                        tastingNote.count().lt(WineGrade.OAK.getMinCount()))
+                ))
+                .execute();
+
+        // GLASS 등급으로 업데이트 (나머지 모든 사용자)
+        queryFactory
+                .update(user)
+                .set(user.wineGrade, WineGrade.GLASS)
+                .where(user.id.in(
+                        JPAExpressions.select(tastingNote.user.id)
+                                .from(tastingNote)
+                                .where(tastingNote.createdAt.after(threeMonthsAgo.atStartOfDay()))
+                                .groupBy(tastingNote.user)
+                                .having(tastingNote.count().lt(WineGrade.BOTTLE.getMinCount()))
+                ))
                 .execute();
     }
+
 
 }
