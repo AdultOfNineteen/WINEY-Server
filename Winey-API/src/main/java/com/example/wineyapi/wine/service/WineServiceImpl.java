@@ -19,6 +19,9 @@ import com.example.wineydomain.wine.exception.ReadWineErrorCode;
 import com.example.wineydomain.wine.repository.RecommendWineRepository;
 import com.example.wineydomain.wine.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +40,7 @@ public class WineServiceImpl implements WineService {
     private final WineRepository wineRepository;
     private final RecommendWineRepository recommendWineRepository;
     @Override
+    @Cacheable(value = "recommendWine", key = "#user.id", cacheManager = "redisCacheManager")
     public List<WineResponse.RecommendWineDTO> recommendWine(User user) {
         Preference preferences = user.getPreference();
         List<TastingNote> tastingNotes = tastingNoteRepository.findTop3ByUserAndBuyAgainOrderByStarRatingDescCreatedAtDesc(user, true);
