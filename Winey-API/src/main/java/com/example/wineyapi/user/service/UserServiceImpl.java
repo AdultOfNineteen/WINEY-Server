@@ -2,6 +2,8 @@ package com.example.wineyapi.user.service;
 
 import com.example.wineyapi.user.converter.UserConverter;
 import com.example.wineyapi.user.dto.UserRequest;
+import com.example.wineyapi.user.service.context.SocialLoginContext;
+import com.example.wineyapi.user.service.context.SocialLoginContextFactory;
 import com.example.wineyapi.wineBadge.service.WineBadgeService;
 import com.example.wineycommon.exception.MessageException;
 import com.example.wineycommon.exception.NotFoundException;
@@ -57,9 +59,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final KakaoFeignClient kakaoFeignClient;
     private final KakaoLoginFeignClient kakaoLoginFeignClient;
-    private final GoogleOauth2Client googleOauth2Client;
     private final UserRepository userRepository;
     private final KakaoProperties kakaoProperties;
     private final CoolSmsProperties coolSmsProperties;
@@ -72,8 +72,6 @@ public class UserServiceImpl implements UserService {
     private final UserExitHistoryRepository userExitHistoryRepository;
 
     private DefaultMessageService coolSmsService;
-    private final AppleOAuthUserProvider appleOAuthUserProvider;
-
 
     @PostConstruct
     public void init() {
@@ -86,25 +84,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User login(SocialType socialType, UserRequest.LoginUserDTO request) {
-        User user = loginUserBySocialType(socialType, request);
+        SocialLoginContext socialLoginContext = SocialLoginContextFactory.getContextBySocialType(socialType);
+        User user = socialLoginContext.login(request);
         LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
         boolean hasRecentExit = userExitHistoryRepository.existsBySocialIdAndSocialTypeAndCreatedAtGreaterThanEqual(user.getSocialId(), socialType, sevenDaysAgo);
         if(hasRecentExit) throw new UserException(CommonResponseStatus.RECENTLY_EXIT_USER);
         return userRepository.save(user);
     }
 
-    private User loginUserBySocialType(SocialType socialType, UserRequest.LoginUserDTO request) {
-        switch (socialType) {
-            case KAKAO:
-                return loginWithKakao(request);
-            case GOOGLE:
-                return loginWithGoogle(request);
-            case APPLE:
-                return loginWithApple(request);
-            default:
-                throw new IllegalArgumentException("Invalid social type");
-        }
-    }
 
     @Override
     public String getKakaoAccessToken(String code) {
@@ -115,28 +102,6 @@ public class UserServiceImpl implements UserService {
                 code)
                 .getAccess_token();
     }
-
-    private User loginWithKakao(UserRequest.LoginUserDTO request) {
-        String accessTokenWithBearerPrefix = "Bearer " + request.getAccessToken();
-        KakaoUserInfoDto kakaoUserInfoDto = kakaoFeignClient.getInfo(accessTokenWithBearerPrefix);
-        return userRepository.findBySocialIdAndSocialType(kakaoUserInfoDto.getId(), SocialType.KAKAO)
-                .orElseGet(() -> UserConverter.toUser(kakaoUserInfoDto));
-    }
-
-    private User loginWithGoogle(UserRequest.LoginUserDTO request) {
-        String identityToken = request.getAccessToken();
-        GoogleUserInfo googleUserInfo = googleOauth2Client.verifyToken(identityToken);
-        return userRepository.findBySocialIdAndSocialType(googleUserInfo.getSub(), SocialType.GOOGLE)
-                .orElseGet(() -> UserConverter.toUser(googleUserInfo));
-    }
-
-    private User loginWithApple(UserRequest.LoginUserDTO request) {
-        String identityToken = request.getAccessToken();
-        AppleMember appleMember = appleOAuthUserProvider.getApplePlatformMember(identityToken);
-        return userRepository.findBySocialIdAndSocialType(appleMember.getSocialId(), SocialType.APPLE)
-                .orElseGet(() -> UserConverter.toUser(appleMember));
-    }
-
 
     /*
         NOTE - User의 연관관계
