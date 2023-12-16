@@ -17,8 +17,10 @@ import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.user.entity.UserExitHistory;
 import com.example.wineydomain.user.entity.UserFcmToken;
 import com.example.wineydomain.user.exception.UserErrorCode;
+import com.example.wineydomain.user.repository.UserExitHistoryRepository;
 import com.example.wineydomain.user.repository.UserFcmTokenRepository;
 import com.example.wineydomain.user.repository.UserRepository;
 import com.example.wineydomain.verificationMessage.entity.VerificationMessage;
@@ -67,6 +69,7 @@ public class UserServiceImpl implements UserService {
     private final RecommendWineRepository recommendWineRepository;
     private final WineBadgeService wineBadgeService;
     private final UserFcmTokenRepository userFcmTokenRepository;
+    private final UserExitHistoryRepository userExitHistoryRepository;
 
     private DefaultMessageService coolSmsService;
     private final AppleOAuthUserProvider appleOAuthUserProvider;
@@ -166,7 +169,7 @@ public class UserServiceImpl implements UserService {
         recommendWineRepository.deleteAllByIdInBatch(recommendWineIds);
 
         // 탈퇴 히스토리 테이블에 탈퇴 정보 기록
-
+        userExitHistoryRepository.save(UserExitHistory.from(user));
 
         userRepository.deleteById(id);
         return id;

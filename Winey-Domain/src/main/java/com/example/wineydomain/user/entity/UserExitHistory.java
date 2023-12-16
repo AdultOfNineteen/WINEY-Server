@@ -34,4 +34,13 @@ public class UserExitHistory extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private SocialType socialType = SocialType.normal;
+
+    public static UserExitHistory from(User user) {
+        return UserExitHistory.builder()
+                .nickName(user.getNickName())
+                .phoneNumber(user.getPhoneNumber())
+                .socialId(user.getSocialId())
+                .socialType(user.getSocialType())
+                .build();
+    }
 }
