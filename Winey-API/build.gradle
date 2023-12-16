@@ -22,6 +22,7 @@ dependencies {
     implementation project(':Winey-Common')
     implementation project(':Winey-Domain')
     implementation project(':Winey-Infrastructure')
+    implementation project(':Winey-Batch')
 }
 test {
     useJUnitPlatform()
