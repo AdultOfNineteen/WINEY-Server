@@ -86,19 +86,24 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User login(SocialType socialType, UserRequest.LoginUserDTO request) {
-        User user = null;
+        User user = loginUserBySocialType(socialType, request);
+        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
+        boolean hasRecentExit = userExitHistoryRepository.existsBySocialIdAndSocialTypeAndCreatedAtGreaterThanEqual(user.getSocialId(), socialType, sevenDaysAgo);
+        if(hasRecentExit) throw new UserException(CommonResponseStatus.RECENTLY_EXIT_USER);
+        return userRepository.save(user);
+    }
+
+    private User loginUserBySocialType(SocialType socialType, UserRequest.LoginUserDTO request) {
         switch (socialType) {
-            case KAKAO :
-                user = loginWithKakao(request);
-                break;
-            case GOOGLE :
-                user = loginWithGoogle(request);
-                break;
-            case APPLE :
-                user = loginWithApple(request);
-                break;
+            case KAKAO:
+                return loginWithKakao(request);
+            case GOOGLE:
+                return loginWithGoogle(request);
+            case APPLE:
+                return loginWithApple(request);
+            default:
+                throw new IllegalArgumentException("Invalid social type");
         }
-        return user;
     }
 
     @Override
@@ -115,21 +120,21 @@ public class UserServiceImpl implements UserService {
         String accessTokenWithBearerPrefix = "Bearer " + request.getAccessToken();
         KakaoUserInfoDto kakaoUserInfoDto = kakaoFeignClient.getInfo(accessTokenWithBearerPrefix);
         return userRepository.findBySocialIdAndSocialType(kakaoUserInfoDto.getId(), SocialType.KAKAO)
-                .orElseGet(() -> userRepository.save(UserConverter.toUser(kakaoUserInfoDto)));
+                .orElseGet(() -> UserConverter.toUser(kakaoUserInfoDto));
     }
 
     private User loginWithGoogle(UserRequest.LoginUserDTO request) {
         String identityToken = request.getAccessToken();
         GoogleUserInfo googleUserInfo = googleOauth2Client.verifyToken(identityToken);
         return userRepository.findBySocialIdAndSocialType(googleUserInfo.getSub(), SocialType.GOOGLE)
-                .orElseGet(() -> userRepository.save(UserConverter.toUser(googleUserInfo)));
+                .orElseGet(() -> UserConverter.toUser(googleUserInfo));
     }
 
     private User loginWithApple(UserRequest.LoginUserDTO request) {
         String identityToken = request.getAccessToken();
         AppleMember appleMember = appleOAuthUserProvider.getApplePlatformMember(identityToken);
         return userRepository.findBySocialIdAndSocialType(appleMember.getSocialId(), SocialType.APPLE)
-                .orElseGet(() -> userRepository.save(UserConverter.toUser(appleMember)));
+                .orElseGet(() -> UserConverter.toUser(appleMember));
     }
 
 
