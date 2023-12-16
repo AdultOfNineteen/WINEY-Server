@@ -165,6 +165,8 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
         recommendWineRepository.deleteAllByIdInBatch(recommendWineIds);
 
+        // 탈퇴 히스토리 테이블에 탈퇴 정보 기록
+
 
         userRepository.deleteById(id);
         return id;
