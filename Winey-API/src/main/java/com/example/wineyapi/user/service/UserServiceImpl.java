@@ -2,6 +2,8 @@ package com.example.wineyapi.user.service;
 
 import com.example.wineyapi.user.converter.UserConverter;
 import com.example.wineyapi.user.dto.UserRequest;
+import com.example.wineyapi.user.service.context.SocialLoginContext;
+import com.example.wineyapi.user.service.context.SocialLoginContextFactory;
 import com.example.wineyapi.wineBadge.service.WineBadgeService;
 import com.example.wineycommon.exception.MessageException;
 import com.example.wineycommon.exception.NotFoundException;
@@ -17,8 +19,10 @@ import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.user.entity.UserExitHistory;
 import com.example.wineydomain.user.entity.UserFcmToken;
 import com.example.wineydomain.user.exception.UserErrorCode;
+import com.example.wineydomain.user.repository.UserExitHistoryRepository;
 import com.example.wineydomain.user.repository.UserFcmTokenRepository;
 import com.example.wineydomain.user.repository.UserRepository;
 import com.example.wineydomain.verificationMessage.entity.VerificationMessage;
@@ -55,9 +59,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final KakaoFeignClient kakaoFeignClient;
     private final KakaoLoginFeignClient kakaoLoginFeignClient;
-    private final GoogleOauth2Client googleOauth2Client;
     private final UserRepository userRepository;
     private final KakaoProperties kakaoProperties;
     private final CoolSmsProperties coolSmsProperties;
@@ -67,10 +69,9 @@ public class UserServiceImpl implements UserService {
     private final RecommendWineRepository recommendWineRepository;
     private final WineBadgeService wineBadgeService;
     private final UserFcmTokenRepository userFcmTokenRepository;
+    private final UserExitHistoryRepository userExitHistoryRepository;
 
     private DefaultMessageService coolSmsService;
-    private final AppleOAuthUserProvider appleOAuthUserProvider;
-
 
     @PostConstruct
     public void init() {
@@ -83,20 +84,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User login(SocialType socialType, UserRequest.LoginUserDTO request) {
-        User user = null;
-        switch (socialType) {
-            case KAKAO :
-                user = loginWithKakao(request);
-                break;
-            case GOOGLE :
-                user = loginWithGoogle(request);
-                break;
-            case APPLE :
-                user = loginWithApple(request);
-                break;
-        }
-        return user;
+        SocialLoginContext socialLoginContext = SocialLoginContextFactory.getContextBySocialType(socialType);
+        User user = socialLoginContext.login(request);
+        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
+        boolean hasRecentExit = userExitHistoryRepository.existsBySocialIdAndSocialTypeAndCreatedAtGreaterThanEqual(user.getSocialId(), socialType, sevenDaysAgo);
+        if(hasRecentExit) throw new UserException(CommonResponseStatus.RECENTLY_EXIT_USER);
+        return userRepository.save(user);
     }
+
 
     @Override
     public String getKakaoAccessToken(String code) {
@@ -107,28 +102,6 @@ public class UserServiceImpl implements UserService {
                 code)
                 .getAccess_token();
     }
-
-    private User loginWithKakao(UserRequest.LoginUserDTO request) {
-        String accessTokenWithBearerPrefix = "Bearer " + request.getAccessToken();
-        KakaoUserInfoDto kakaoUserInfoDto = kakaoFeignClient.getInfo(accessTokenWithBearerPrefix);
-        return userRepository.findBySocialIdAndSocialType(kakaoUserInfoDto.getId(), SocialType.KAKAO)
-                .orElseGet(() -> userRepository.save(UserConverter.toUser(kakaoUserInfoDto)));
-    }
-
-    private User loginWithGoogle(UserRequest.LoginUserDTO request) {
-        String identityToken = request.getAccessToken();
-        GoogleUserInfo googleUserInfo = googleOauth2Client.verifyToken(identityToken);
-        return userRepository.findBySocialIdAndSocialType(googleUserInfo.getSub(), SocialType.GOOGLE)
-                .orElseGet(() -> userRepository.save(UserConverter.toUser(googleUserInfo)));
-    }
-
-    private User loginWithApple(UserRequest.LoginUserDTO request) {
-        String identityToken = request.getAccessToken();
-        AppleMember appleMember = appleOAuthUserProvider.getApplePlatformMember(identityToken);
-        return userRepository.findBySocialIdAndSocialType(appleMember.getSocialId(), SocialType.APPLE)
-                .orElseGet(() -> userRepository.save(UserConverter.toUser(appleMember)));
-    }
-
 
     /*
         NOTE - User의 연관관계
@@ -165,6 +138,8 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
         recommendWineRepository.deleteAllByIdInBatch(recommendWineIds);
 
+        // 탈퇴 히스토리 테이블에 탈퇴 정보 기록
+        userExitHistoryRepository.save(UserExitHistory.from(user));
 
         userRepository.deleteById(id);
         return id;
