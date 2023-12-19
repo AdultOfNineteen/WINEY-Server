@@ -57,7 +57,7 @@ public class UserController {
      * 인가 코드를 바탕으로 카카오 서버에 요청하여 AccessToken을 받는 테스트용 API
      */
     @Deprecated
-    @GetMapping("/login/kakao Made By Peter")
+    @GetMapping("/login/kakao")
     public CommonResponse<String> getAccessTokenKakao(@RequestParam String code) {
         String accessToken = userService.getKakaoAccessToken(code);
         return CommonResponse.onSuccess(accessToken);
@@ -67,7 +67,7 @@ public class UserController {
      * KAKAO 서버로부터 인가 코드를 받는 테스트용 API
      */
     @Deprecated
-    @GetMapping("/auth/kakao Made By Peter")
+    @GetMapping("/auth/kakao")
     public CommonResponse<String> getAuthorizationCodeKakao(@RequestParam String code) {
         String message = "Go to " + "/login/kakao?code=" + code;
         return CommonResponse.onSuccess(message);

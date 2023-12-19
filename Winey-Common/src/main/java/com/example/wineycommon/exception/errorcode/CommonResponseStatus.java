@@ -80,6 +80,7 @@ public enum CommonResponseStatus implements BaseErrorCode {
     FAILED_TO_LOGIN(BAD_REQUEST, "U008", "로그인에 실패하였습니다."),
     NOT_EXIST_USER(BAD_REQUEST,"U009" , "해당 유저가 존재하지 않습니다."),
     USER_ALREADY_EXISTS(CONFLICT, "U010", "이미 가입된 유저입니다."),
+    RECENTLY_EXIT_USER(FORBIDDEN, "U011", "탈퇴 후 7일 동안 재가입이 불가능합니다."),
 
 
     /**
