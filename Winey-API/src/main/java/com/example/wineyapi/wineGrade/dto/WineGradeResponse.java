@@ -7,6 +7,15 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class WineGradeResponse {
 
+    @NoArgsConstructor
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class WineGradeDTO {
+        private String name;
+        private Integer minCount;
+        private Integer maxCount;
+    }
 
     @NoArgsConstructor
     @Getter
