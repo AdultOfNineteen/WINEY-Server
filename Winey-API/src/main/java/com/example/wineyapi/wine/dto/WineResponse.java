@@ -84,5 +84,8 @@ public class WineResponse {
 
         @Schema(name = "와인 이름")
         private String name;
+
+        @Schema(description = "품종")
+        private String varietal;
     }
 }

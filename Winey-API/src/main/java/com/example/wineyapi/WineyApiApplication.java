@@ -8,17 +8,21 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.Arrays;
 
 
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
-@ComponentScan(basePackages = {"com.example.wineyapi","com.example.wineydomain","com.example.wineyinfrastructure", "com.example.wineycommon"})
+@ComponentScan(basePackages = {"com.example.wineyapi","com.example.wineydomain","com.example.wineyinfrastructure", "com.example.wineycommon", "com.example.wineybatch"})
 @OpenAPIDefinition(servers = {@Server(url = "${server.servlet.context-path}", description = "Default Server URL")})
 @RequiredArgsConstructor
+@EnableScheduling
+@EnableCaching
 @Slf4j
 public class WineyApiApplication implements ApplicationListener<ApplicationReadyEvent> {
     private final Environment environment;

@@ -6,11 +6,12 @@ import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Country;
 import com.example.wineydomain.wine.entity.WineType;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface TastingNoteService {
-    TastingNoteResponse.CreateTastingNoteDTO createTastingNote(User user, TastingNoteRequest.CreateTastingNoteDTO request);
+    TastingNoteResponse.CreateTastingNoteDTO createTastingNote(User user, TastingNoteRequest.CreateTastingNoteDTO request, List<MultipartFile> multipartFiles);
 
     PageResponse<List<TastingNoteResponse.TastingNoteListDTO>> getTastingNoteList(User user, Integer page, Integer size, Integer order, List<Country> countries, List<WineType> wineTypes, Integer isBuyAgain);
 

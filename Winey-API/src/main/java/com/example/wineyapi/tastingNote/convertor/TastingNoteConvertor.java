@@ -267,14 +267,15 @@ public class TastingNoteConvertor {
         tastingNotes.getContent().forEach(
                 result -> {
                     tastingNoteListDTOS.add(
-                    new TastingNoteResponse.TastingNoteListDTO(
-                            result.getId(),
-                            result.getWine().getName(),
-                            result.getWine().getCountry(),
-                            result.getStarRating(),
-                            result.getBuyAgain(),
-                            result.getWine().getType()
-                    ));
+                     TastingNoteResponse.TastingNoteListDTO.builder()
+                             .noteId(result.getId())
+                             .wineName(result.getWine().getName())
+                             .country(result.getWine().getCountry())
+                             .starRating(result.getStarRating())
+                             .buyAgain(result.getBuyAgain())
+                             .wineType(result.getWine().getType())
+                             .build()
+                    );
                 }
         );
 
@@ -294,7 +295,7 @@ public class TastingNoteConvertor {
                 .wineType(wine.getType())
                 .wineName(wine.getName())
                 .region(wine.getRegion())
-                .star(tastingNote.getStarRating())
+                .star(tastingNote.getStarRating() != null ? tastingNote.getStarRating() : null)
                 .color(tastingNote.getColor())
                 .buyAgain(tastingNote.getBuyAgain())
                 .varietal(wine.getVarietal())

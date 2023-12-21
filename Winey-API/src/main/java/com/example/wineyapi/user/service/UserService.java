@@ -11,7 +11,7 @@ public interface UserService {
 
     String getKakaoAccessToken(String code);
 
-    Long delete(Long id);
+    Long delete(Long id, String reason);
 
 
     VerificationMessage sendCode(Long userId, UserRequest.SendCodeDTO request);

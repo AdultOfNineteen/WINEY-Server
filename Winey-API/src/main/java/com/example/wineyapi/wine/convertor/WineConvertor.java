@@ -75,19 +75,20 @@ public class WineConvertor {
 
         wines.getContent().forEach(
                 result -> wineDtoList.add(
-                        WineInfo(result)
+                        convertWineInfo(result)
                 )
         );
         return new PageResponse<>(wines.isLast(), wines.getTotalElements(), wineDtoList);
     }
 
-    private WineResponse.SearchWineDto WineInfo(Wine result) {
+    private WineResponse.SearchWineDto convertWineInfo(Wine result) {
         return WineResponse.SearchWineDto
                 .builder()
                 .wineId(result.getId())
                 .country(result.getCountry())
                 .type(result.getType())
                 .name(result.getName())
+                .varietal(result.getVarietal())
                 .build();
     }
 

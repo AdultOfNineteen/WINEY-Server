@@ -28,13 +28,7 @@ public class AppleOAuthUserProvider {
         PublicKey publicKey = publicKeyGenerator.generatePublicKey(headers, applePublicKeys);
 
         Claims claims = appleJwtParser.parsePublicKeyAndGetClaims(identityToken, publicKey);
-        validateClaims(claims);
         return new AppleMember(claims.getSubject(), claims.get("email", String.class));
     }
 
-    private void validateClaims(Claims claims) {
-        if (!appleClaimsValidator.isValid(claims)) {
-            throw new UserException(CommonResponseStatus.APPLE_INVALID_CLAIMS);
-        }
-    }
 }

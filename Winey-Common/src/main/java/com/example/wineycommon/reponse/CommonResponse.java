@@ -6,12 +6,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"})
 @Schema(description = "기본 응답")
+@ToString
 public class CommonResponse<T> {
 
     @Schema(description = "성공 유무", required = true, example = "true")

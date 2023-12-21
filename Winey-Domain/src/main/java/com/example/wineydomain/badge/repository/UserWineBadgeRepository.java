@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface UserWineBadgeRepository extends JpaRepository<UserWineBadge, Long> {
     List<UserWineBadge> findByUser(User user);
+    List<UserWineBadge> findByUser_Id(Long userId);
 }

@@ -85,22 +85,25 @@ public class S3UploadServiceImpl implements S3UploadService{
     public List<String> listUploadTastingNote(Long tastingNoteId, List<MultipartFile> multipartFiles){
         List<String> imgUrlList = new ArrayList<>();
 
-        for (MultipartFile file : multipartFiles) {
-            String fileName = getTastingNoteFileName(tastingNoteId, getFileExtension(file.getOriginalFilename()));
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(file.getSize());
-            objectMetadata.setContentType(file.getContentType());
+        if(multipartFiles != null) {
+            for (MultipartFile file : multipartFiles) {
+                String fileName = getTastingNoteFileName(tastingNoteId, getFileExtension(file.getOriginalFilename()));
+                ObjectMetadata objectMetadata = new ObjectMetadata();
+                objectMetadata.setContentLength(file.getSize());
+                objectMetadata.setContentType(file.getContentType());
 
-            try (InputStream inputStream = file.getInputStream()) {
-                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
-                imgUrlList.add(amazonS3.getUrl(bucket, fileName).toString());
-            } catch (IOException e) {
-                log.info("파일 업로드 실패 : " + tastingNoteId);
-                throw new ForbiddenException(IMAGE_UPLOAD_ERROR);
+                try (InputStream inputStream = file.getInputStream()) {
+                    amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+                    imgUrlList.add(amazonS3.getUrl(bucket, fileName).toString());
+                } catch (IOException e) {
+                    log.info("파일 업로드 실패 : " + tastingNoteId);
+                    throw new ForbiddenException(IMAGE_UPLOAD_ERROR);
+                }
             }
-        }
 
-        return imgUrlList;
+            return imgUrlList;
+        }
+        return null;
     }
 
 
