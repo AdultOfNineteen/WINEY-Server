@@ -35,12 +35,16 @@ public class UserExitHistory extends BaseEntity {
     @Builder.Default
     private SocialType socialType = SocialType.normal;
 
-    public static UserExitHistory from(User user) {
+    @Column(name = "reason", length = 300)
+    private String reason;
+
+    public static UserExitHistory from(User user, String reason) {
         return UserExitHistory.builder()
                 .nickName(user.getNickName())
                 .phoneNumber(user.getPhoneNumber())
                 .socialId(user.getSocialId())
                 .socialType(user.getSocialType())
+                .reason(reason)
                 .build();
     }
 }
