@@ -30,6 +30,8 @@ public class QUserExitHistory extends EntityPathBase<UserExitHistory> {
 
     public final StringPath phoneNumber = createString("phoneNumber");
 
+    public final StringPath reason = createString("reason");
+
     public final StringPath socialId = createString("socialId");
 
     public final EnumPath<SocialType> socialType = createEnum("socialType", SocialType.class);

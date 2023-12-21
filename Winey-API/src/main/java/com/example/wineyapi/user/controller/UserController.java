@@ -78,8 +78,10 @@ public class UserController {
     @DeleteMapping("/users/{userId}")
     @CheckIdExistence @CheckOwnAccount
     public CommonResponse<UserResponse.DeleteUserDTO> deleteUser(@PathVariable Long userId,
-                                                                 @Parameter(hidden = true) @AuthenticationPrincipal User user) {
-        Long deletedUserId = userService.delete(userId);
+                                                                 @Parameter(hidden = true) @AuthenticationPrincipal User user,
+                                                                 @RequestParam String reason
+    ) {
+        Long deletedUserId = userService.delete(userId, reason);
         return CommonResponse.onSuccess(UserConverter.toDeleteUserDTO(deletedUserId));
     }
 
