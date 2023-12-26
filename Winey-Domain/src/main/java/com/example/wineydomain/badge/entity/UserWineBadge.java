@@ -33,4 +33,7 @@ public class UserWineBadge extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Badge badge;
+
+    @Builder.Default
+    private Boolean isRead = Boolean.FALSE;
 }

@@ -7,6 +7,8 @@ import com.example.wineyapi.notification.service.NotificationServiceImpl;
 import com.example.wineyapi.user.converter.UserConnectionConverter;
 import com.example.wineyapi.wineBadge.convertor.WineBadgeConvertor;
 import com.example.wineycommon.annotation.RedissonLock;
+import com.example.wineycommon.exception.NotFoundException;
+import com.example.wineycommon.exception.errorcode.CommonResponseStatus;
 import com.example.wineydomain.badge.entity.Badge;
 import com.example.wineydomain.badge.entity.UserWineBadge;
 import com.example.wineydomain.badge.repository.UserWineBadgeRepository;
@@ -241,5 +243,15 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     @Override
     public List<UserWineBadge> getWineBadgeListByUser(Long userId) {
         return userWineBadgeRepository.findByUser_Id(userId);
+    }
+
+    @Transactional
+    @Override
+    public UserWineBadge getWineBadgeById(Long wineBadgeId) {
+        UserWineBadge wineBadge = userWineBadgeRepository.findById(wineBadgeId)
+                .orElseThrow(() -> new NotFoundException(CommonResponseStatus.BADGE_NOT_FOUND));
+
+        wineBadge.setIsRead(Boolean.TRUE);
+        return wineBadge;
     }
 }
