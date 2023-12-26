@@ -37,10 +37,12 @@ public class WineBadgeController {
 
     @Operation(summary = "06-02 WineBadge🪙 마이페이지 WINEY 배지 상세 조회 Made By Peter", description = "와이니 뱃지를 상세 조회하는 API입니다.")
     @GetMapping("/users/{userId}/wine-badges/{wineBadgeId}")
+    @CheckIdExistence @CheckOwnAccount
     public CommonResponse<WineBadgeResponse.BadgeDTO> getWineBadge(@PathVariable Long userId,
                                                                    @PathVariable Long wineBadgeId,
                                                                    @Parameter(hidden = true) @AuthenticationPrincipal User user) {
-        return null;
+        UserWineBadge userWineBadge = wineBadgeService.getWineBadgeById(wineBadgeId);
+        return CommonResponse.onSuccess(WineBadgeConvertor.toBadgeDTO(userWineBadge));
     }
 
 }
