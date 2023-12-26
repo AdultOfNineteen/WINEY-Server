@@ -24,6 +24,7 @@ public class WineBadgeResponse {
         private String description;
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime acquiredAt;
+        // TODO : 읽음 여부 추가
     }
 
     @NoArgsConstructor
