@@ -19,6 +19,7 @@ public class WineBadgeConvertor {
                 .name(userWineBadge.getBadge().getBadgeName())
                 .description(userWineBadge.getBadge().getBadgeDescription())
                 .acquiredAt(userWineBadge.getCreatedAt())
+                .isRead(userWineBadge.getIsRead())
                 .build();
     }
 

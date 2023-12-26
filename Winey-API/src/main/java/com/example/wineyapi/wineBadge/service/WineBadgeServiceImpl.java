@@ -245,9 +245,13 @@ public class WineBadgeServiceImpl implements WineBadgeService {
         return userWineBadgeRepository.findByUser_Id(userId);
     }
 
+    @Transactional
     @Override
     public UserWineBadge getWineBadgeById(Long wineBadgeId) {
-        return userWineBadgeRepository.findById(wineBadgeId)
+        UserWineBadge wineBadge = userWineBadgeRepository.findById(wineBadgeId)
                 .orElseThrow(() -> new NotFoundException(CommonResponseStatus.BADGE_NOT_FOUND));
+
+        wineBadge.setIsRead(Boolean.TRUE);
+        return wineBadge;
     }
 }
