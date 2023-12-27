@@ -11,6 +11,7 @@ import com.example.wineycommon.exception.NotFoundException;
 import com.example.wineycommon.exception.errorcode.CommonResponseStatus;
 import com.example.wineydomain.badge.entity.Badge;
 import com.example.wineydomain.badge.entity.UserWineBadge;
+import com.example.wineydomain.badge.exception.WineBadgeErrorCode;
 import com.example.wineydomain.badge.repository.UserWineBadgeRepository;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
@@ -249,7 +250,7 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     @Override
     public UserWineBadge getWineBadgeById(Long wineBadgeId) {
         UserWineBadge wineBadge = userWineBadgeRepository.findById(wineBadgeId)
-                .orElseThrow(() -> new NotFoundException(CommonResponseStatus.BADGE_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(WineBadgeErrorCode.BADGE_NOT_FOUND));
 
         wineBadge.setIsRead(Boolean.TRUE);
         return wineBadge;
