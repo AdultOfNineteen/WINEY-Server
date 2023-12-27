@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional
     @Override
-    public Long delete(Long id) {
+    public Long delete(Long id, String reason) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(UserErrorCode.NOT_EXIST_USER));
 
@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
         recommendWineRepository.deleteAllByIdInBatch(recommendWineIds);
 
         // 탈퇴 히스토리 테이블에 탈퇴 정보 기록
-        userExitHistoryRepository.save(UserExitHistory.from(user));
+        userExitHistoryRepository.save(UserExitHistory.from(user, reason));
 
         userRepository.deleteById(id);
         return id;
