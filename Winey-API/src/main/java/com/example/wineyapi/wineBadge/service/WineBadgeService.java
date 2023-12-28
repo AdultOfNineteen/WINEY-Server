@@ -13,4 +13,6 @@ public interface WineBadgeService {
     void checkActivityBadge(User user);
 
     List<UserWineBadge> getWineBadgeListByUser(Long userId);
+
+    UserWineBadge getWineBadgeById(Long wineBadgeId);
 }

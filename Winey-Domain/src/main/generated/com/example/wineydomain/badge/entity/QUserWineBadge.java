@@ -31,6 +31,8 @@ public class QUserWineBadge extends EntityPathBase<UserWineBadge> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final BooleanPath isRead = createBoolean("isRead");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
