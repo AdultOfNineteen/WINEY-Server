@@ -31,6 +31,8 @@ public class UserWineBadge extends BaseEntity {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
+
+    // TODO : 테이블 관리로 변경할 때 이 필드를 ManyToOne WineBadge로 바꿔주어야 합니다.
     @Enumerated(EnumType.STRING)
     private Badge badge;
 

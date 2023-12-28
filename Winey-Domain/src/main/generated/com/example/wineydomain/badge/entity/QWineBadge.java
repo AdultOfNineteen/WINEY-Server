@@ -21,6 +21,8 @@ public class QWineBadge extends EntityPathBase<WineBadge> {
 
     public final com.example.wineydomain.common.model.QBaseEntity _super = new com.example.wineydomain.common.model.QBaseEntity(this);
 
+    public final StringPath badge = createString("badge");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
@@ -29,6 +31,10 @@ public class QWineBadge extends EntityPathBase<WineBadge> {
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath name = createString("name");
+
+    public final NumberPath<Integer> requiredActivity = createNumber("requiredActivity", Integer.class);
+
+    public final EnumPath<BadgeType> type = createEnum("type", BadgeType.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
