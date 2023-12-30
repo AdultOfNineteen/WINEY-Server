@@ -23,9 +23,21 @@ public class WineBadge extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "badge")
+    private String badge;
+
+    @Enumerated(EnumType.STRING)
+    private BadgeType type;
+
     @Column(name = "name")
     private String name;
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "requiredActivity")
+    private Integer requiredActivity;
+
+    @Column(name = "acquisitionMethod")
+    private String acquisitionMethod;
 }
