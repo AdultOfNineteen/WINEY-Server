@@ -37,4 +37,7 @@ public class WineBadge extends BaseEntity {
 
     @Column(name = "requiredActivity")
     private Integer requiredActivity;
+
+    @Column(name = "acquisitionMethod")
+    private String acquisitionMethod;
 }

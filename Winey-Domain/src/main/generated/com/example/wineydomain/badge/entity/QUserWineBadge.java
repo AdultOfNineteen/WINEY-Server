@@ -38,6 +38,8 @@ public class QUserWineBadge extends EntityPathBase<UserWineBadge> {
 
     public final com.example.wineydomain.user.entity.QUser user;
 
+    public final QWineBadge wineBadge;
+
     public QUserWineBadge(String variable) {
         this(UserWineBadge.class, forVariable(variable), INITS);
     }
@@ -57,6 +59,7 @@ public class QUserWineBadge extends EntityPathBase<UserWineBadge> {
     public QUserWineBadge(Class<? extends UserWineBadge> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.user = inits.isInitialized("user") ? new com.example.wineydomain.user.entity.QUser(forProperty("user"), inits.get("user")) : null;
+        this.wineBadge = inits.isInitialized("wineBadge") ? new QWineBadge(forProperty("wineBadge")) : null;
     }
 
 }

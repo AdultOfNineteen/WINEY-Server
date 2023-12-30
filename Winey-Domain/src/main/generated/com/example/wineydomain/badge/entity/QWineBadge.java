@@ -21,6 +21,8 @@ public class QWineBadge extends EntityPathBase<WineBadge> {
 
     public final com.example.wineydomain.common.model.QBaseEntity _super = new com.example.wineydomain.common.model.QBaseEntity(this);
 
+    public final StringPath acquisitionMethod = createString("acquisitionMethod");
+
     public final StringPath badge = createString("badge");
 
     //inherited

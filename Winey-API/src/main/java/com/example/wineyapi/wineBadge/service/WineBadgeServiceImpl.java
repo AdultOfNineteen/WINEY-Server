@@ -9,10 +9,13 @@ import com.example.wineyapi.wineBadge.convertor.WineBadgeConvertor;
 import com.example.wineycommon.annotation.RedissonLock;
 import com.example.wineycommon.exception.NotFoundException;
 import com.example.wineycommon.exception.errorcode.CommonResponseStatus;
+import com.example.wineydomain.badge.dto.WineBadgeUserDTO;
 import com.example.wineydomain.badge.entity.Badge;
 import com.example.wineydomain.badge.entity.UserWineBadge;
+import com.example.wineydomain.badge.entity.WineBadge;
 import com.example.wineydomain.badge.exception.WineBadgeErrorCode;
 import com.example.wineydomain.badge.repository.UserWineBadgeRepository;
+import com.example.wineydomain.badge.repository.WineBadgeRepository;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.User;
@@ -39,6 +42,7 @@ import static com.example.wineydomain.badge.entity.Badge.*;
 @Slf4j
 public class WineBadgeServiceImpl implements WineBadgeService {
     private final UserWineBadgeRepository userWineBadgeRepository;
+    private final WineBadgeRepository wineBadgeRepository;
     private final TastingNoteRepository tastingNoteRepository;
     private final WineBadgeConvertor wineBadgeConvertor;
     private final UserRepository userRepository;
@@ -242,17 +246,20 @@ public class WineBadgeServiceImpl implements WineBadgeService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<UserWineBadge> getWineBadgeListByUser(Long userId) {
-        return userWineBadgeRepository.findByUser_Id(userId);
+    public List<WineBadgeUserDTO> getWineBadgeListByUser(Long userId) {
+        return wineBadgeRepository.findWineBadgesWithUser(userId);
     }
 
     @Transactional
     @Override
-    public UserWineBadge getWineBadgeById(Long wineBadgeId) {
-        UserWineBadge wineBadge = userWineBadgeRepository.findById(wineBadgeId)
+    public WineBadgeUserDTO getWineBadgeById(Long userId, Long wineBadgeId) {
+        Optional<UserWineBadge> optionalUserWineBadge = userWineBadgeRepository.findByUser_IdAndWineBadge_Id(userId, wineBadgeId);
+        if(optionalUserWineBadge.isPresent()) {
+            optionalUserWineBadge.get().setIsRead(Boolean.TRUE);
+            return WineBadgeUserDTO.from(optionalUserWineBadge.get());
+        }
+        WineBadge wineBadge = wineBadgeRepository.findById(wineBadgeId)
                 .orElseThrow(() -> new NotFoundException(WineBadgeErrorCode.BADGE_NOT_FOUND));
-
-        wineBadge.setIsRead(Boolean.TRUE);
-        return wineBadge;
+        return WineBadgeUserDTO.from(wineBadge);
     }
 }
