@@ -12,13 +12,14 @@ import java.util.stream.Collectors;
 @Component
 public class WineBadgeConvertor {
 
-    private static WineBadgeResponse.BadgeDTO toBadgeDTO(UserWineBadge userWineBadge) {
+    public static WineBadgeResponse.BadgeDTO toBadgeDTO(UserWineBadge userWineBadge) {
         return WineBadgeResponse.BadgeDTO.builder()
                 .badgeId(userWineBadge.getId())
                 .badgeType(userWineBadge.getBadge().getType())
                 .name(userWineBadge.getBadge().getBadgeName())
                 .description(userWineBadge.getBadge().getBadgeDescription())
                 .acquiredAt(userWineBadge.getCreatedAt())
+                .isRead(userWineBadge.getIsRead())
                 .build();
     }
 
@@ -38,7 +39,6 @@ public class WineBadgeConvertor {
                 .activitybadgeDTOList(activityBadgeList)
                 .build();
     }
-
 
     public UserWineBadge WineBadge(Badge badge, User user) {
         return UserWineBadge

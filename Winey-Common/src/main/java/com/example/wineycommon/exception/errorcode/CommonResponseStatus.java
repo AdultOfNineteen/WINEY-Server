@@ -91,8 +91,6 @@ public enum CommonResponseStatus implements BaseErrorCode {
     MESSAGE_VERIFICATION_TIMEOUT(BAD_REQUEST, "M003","인증 번호가 만료되었습니다."),
     VERIFICATION_DID_NOT_MATCH(BAD_REQUEST, "M004", "인증 번호가 일치하지 않습니다.");
 
-
-
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;
