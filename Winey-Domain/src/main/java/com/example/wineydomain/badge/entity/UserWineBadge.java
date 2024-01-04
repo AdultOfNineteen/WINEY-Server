@@ -31,6 +31,11 @@ public class UserWineBadge extends BaseEntity {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wineBadgeId", nullable = false)
+    private WineBadge wineBadge;
+
+    // TODO : 이 필드를 지워줘야합니다.
     @Enumerated(EnumType.STRING)
     private Badge badge;
 

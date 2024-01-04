@@ -6,6 +6,7 @@ import com.example.wineyapi.wineBadge.convertor.WineBadgeConvertor;
 import com.example.wineyapi.wineBadge.dto.WineBadgeResponse;
 import com.example.wineyapi.wineBadge.service.WineBadgeService;
 import com.example.wineycommon.reponse.CommonResponse;
+import com.example.wineydomain.badge.dto.WineBadgeUserDTO;
 import com.example.wineydomain.badge.entity.UserWineBadge;
 import com.example.wineydomain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +32,7 @@ public class WineBadgeController {
     @CheckIdExistence @CheckOwnAccount
     public CommonResponse<WineBadgeResponse.WineBadgeListDTO> getWineBadgeList(@PathVariable Long userId,
                                                                            @Parameter(hidden = true) @AuthenticationPrincipal User user) {
-        List<UserWineBadge> userWineBadgeList = wineBadgeService.getWineBadgeListByUser(userId);
+        List<WineBadgeUserDTO> userWineBadgeList = wineBadgeService.getWineBadgeListByUser(userId);
         return CommonResponse.onSuccess(WineBadgeConvertor.toWineBadgeListDTO(userWineBadgeList));
     }
 
@@ -41,7 +42,7 @@ public class WineBadgeController {
     public CommonResponse<WineBadgeResponse.BadgeDTO> getWineBadge(@PathVariable Long userId,
                                                                    @PathVariable Long wineBadgeId,
                                                                    @Parameter(hidden = true) @AuthenticationPrincipal User user) {
-        UserWineBadge userWineBadge = wineBadgeService.getWineBadgeById(wineBadgeId);
+        WineBadgeUserDTO userWineBadge = wineBadgeService.getWineBadgeById(userId, wineBadgeId);
         return CommonResponse.onSuccess(WineBadgeConvertor.toBadgeDTO(userWineBadge));
     }
 

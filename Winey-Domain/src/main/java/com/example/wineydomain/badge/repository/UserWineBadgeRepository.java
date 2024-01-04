@@ -5,8 +5,9 @@ import com.example.wineydomain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserWineBadgeRepository extends JpaRepository<UserWineBadge, Long> {
     List<UserWineBadge> findByUser(User user);
-    List<UserWineBadge> findByUser_Id(Long userId);
+    Optional<UserWineBadge> findByUser_IdAndWineBadge_Id(Long userId, Long wineBadgeId);
 }
