@@ -1,5 +1,7 @@
 package com.example.wineyapi.shop.service;
 
+import com.example.wineyapi.common.dto.Location;
+import com.example.wineyapi.common.util.GeoUtils;
 import com.example.wineyapi.shop.controller.ShopFilter;
 import com.example.wineyapi.shop.converter.ShopConverter;
 import com.example.wineyapi.shop.dto.ShopCommand;
@@ -33,6 +35,10 @@ public class ShopServiceImpl implements ShopService {
         ShopReq.MapFilterDto mapFilterDto = commandDTO.getMapFilterDto();
 
         System.out.println(mapFilterDto.toString());
+
+        Location northEast = GeoUtils.calculate(mapFilterDto.getLatitude(), mapFilterDto.getLongitude(), 2.0, Direction.NORTHEAST.getBearing());
+        Location southWest = GeometryUtil.calculate(x, y, 2.0, Direction.SOUTHWEST.getBearing());
+
 
 
         if(commandDTO.getShopFilter().equals(ShopFilter.ALL)){
