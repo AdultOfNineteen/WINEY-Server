@@ -2,28 +2,18 @@ package com.example.wineyapi.wineBadge.convertor;
 
 import com.example.wineyapi.wineBadge.dto.WineBadgeResponse;
 import com.example.wineydomain.badge.dto.WineBadgeUserDTO;
-import com.example.wineydomain.badge.entity.Badge;
 import com.example.wineydomain.badge.entity.BadgeType;
 import com.example.wineydomain.badge.entity.UserWineBadge;
+import com.example.wineydomain.badge.entity.WineBadge;
 import com.example.wineydomain.user.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
 public class WineBadgeConvertor {
-
-    public static WineBadgeResponse.BadgeDTO toBadgeDTO(UserWineBadge userWineBadge) {
-        return WineBadgeResponse.BadgeDTO.builder()
-                .badgeId(userWineBadge.getId())
-                .badgeType(userWineBadge.getBadge().getType())
-                .name(userWineBadge.getBadge().getBadgeName())
-                .description(userWineBadge.getBadge().getBadgeDescription())
-                .acquiredAt(userWineBadge.getCreatedAt())
-                .isRead(userWineBadge.getIsRead())
-                .build();
-    }
 
     public static WineBadgeResponse.BadgeDTO toBadgeDTO(WineBadgeUserDTO userWineBadge) {
         return WineBadgeResponse.BadgeDTO.builder()
@@ -54,11 +44,11 @@ public class WineBadgeConvertor {
                 .build();
     }
 
-    public UserWineBadge WineBadge(Badge badge, User user) {
+	public UserWineBadge convertWineBadge(WineBadge wineBadge, User user) {
         return UserWineBadge
                 .builder()
-                .badge(badge)
+                .wineBadge(wineBadge)
                 .user(user)
                 .build();
-    }
+	}
 }
