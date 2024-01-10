@@ -8,7 +8,6 @@ import com.example.wineyapi.wineBadge.convertor.WineBadgeConvertor;
 import com.example.wineycommon.annotation.RedissonLock;
 import com.example.wineycommon.exception.NotFoundException;
 import com.example.wineydomain.badge.dto.WineBadgeUserDTO;
-import com.example.wineydomain.badge.entity.Badge;
 import com.example.wineydomain.badge.entity.UserWineBadge;
 import com.example.wineydomain.badge.entity.WineBadge;
 import com.example.wineydomain.badge.exception.WineBadgeErrorCode;
@@ -35,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.example.wineydomain.badge.entity.Badge.*;
+import static com.example.wineycommon.constants.WineyStatic.*;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +57,6 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     @Async("badge")
     public void calculateBadge(User user, Long userId) {
         List<WineBadge> wineBadges = getWineBadgeAll();
-
         List<TastingNote> tastingNotes = tastingNoteRepository.findByUser(user);
 
         List<WineBadge> userWineBadgeLists = userWineBadgeRepository.findByUser(user).stream()
@@ -87,6 +85,10 @@ public class WineBadgeServiceImpl implements WineBadgeService {
         }
     }
 
+    private WineBadge getWineBadge(int index, List<WineBadge> wineBadges){
+        return wineBadges.get(index);
+    }
+
     public void sendMessageGetWineBadge(UserWineBadge wineBadge, User user) {
         List<NotificationRequestDto> notificationRequestDtos = new ArrayList<>();
         for(UserFcmToken fcmToken : user.getUserFcmTokens()) {
@@ -104,7 +106,7 @@ public class WineBadgeServiceImpl implements WineBadgeService {
         user.setTastingNoteAnalyzed(true);
         userRepository.save(user);
 
-        UserWineBadge userWineBadge = userWineBadgeRepository.save(wineBadgeConvertor.convertWineBadge(wineBadgeRepository.findById(1L).get(), user));
+        UserWineBadge userWineBadge = userWineBadgeRepository.save(wineBadgeConvertor.convertWineBadge(wineBadgeRepository.findById(TASTE_DISCOVERY_INDEX).get(), user));
 
         sendMessageGetWineBadge(userWineBadge, user);
     }
@@ -142,11 +144,11 @@ public class WineBadgeServiceImpl implements WineBadgeService {
             .map(UserWineBadge::getWineBadge)
             .collect(Collectors.toList());
 
-        WineBadge wineExcitementBadge = userWineBadgeLists.get(8);
+        WineBadge wineExcitementBadge = getWineBadge(WINE_EXCITEMENT_INDEX, userWineBadgeLists);
         if(userConnection.getCnt() == wineExcitementBadge.getRequiredActivity()){
             if(!userWineBadgeLists.contains(wineExcitementBadge)) userWineBadgeRepository.save(wineBadgeConvertor.convertWineBadge(wineExcitementBadge, user));
         }
-        WineBadge wineAddictBadge = userWineBadgeLists.get(9);
+        WineBadge wineAddictBadge = getWineBadge(WINE_ADDICT_INDEX, userWineBadgeLists);
         if(userConnection.getCnt() == wineExcitementBadge.getRequiredActivity()){
             if(!userWineBadgeLists.contains(wineAddictBadge)) userWineBadgeRepository.save(wineBadgeConvertor.convertWineBadge(wineAddictBadge, user));
         }
@@ -154,28 +156,29 @@ public class WineBadgeServiceImpl implements WineBadgeService {
 
 
 
-    public List<UserWineBadge> checkSommelierBadge(List<TastingNote> tastingNotes, User user, List<WineBadge> userWineBadgeLists, List<WineBadge> wineBadges) {
+    public List<UserWineBadge> checkSommelierBadge(List<TastingNote> tastingNotes, User user, List<WineBadge> userWineBadgeLists,
+        List<WineBadge> wineBadges) {
         List<UserWineBadge> userWineBadges = new ArrayList<>();
         int cnt = tastingNotes.size();
 
-        WineBadge youngSomelierBadge = wineBadges.get(0);
+        WineBadge youngSomelierBadge = getWineBadge(YOUNG_SOMMELIER_INDEX, wineBadges);
         if (cnt >= youngSomelierBadge.getRequiredActivity()) {
             if (!userWineBadgeLists.contains(youngSomelierBadge))
                 userWineBadges.add(wineBadgeConvertor.convertWineBadge(youngSomelierBadge, user));
         }
-        WineBadge enjoymentBadge = wineBadges.get(7);
+        WineBadge enjoymentBadge = getWineBadge(ENJOYMENT_INDEX, wineBadges);
         if (cnt >= enjoymentBadge.getRequiredActivity()) {
             if (!userWineBadgeLists.contains(enjoymentBadge)) userWineBadges.add(wineBadgeConvertor.convertWineBadge(enjoymentBadge, user));
         }
-        WineBadge intermediateSomelierBadge = wineBadges.get(1);
+        WineBadge intermediateSomelierBadge = getWineBadge(INTERMEDIATE_SOMMELIER_INDEX, wineBadges);
         if (cnt >= intermediateSomelierBadge.getRequiredActivity()) {
             if (!userWineBadgeLists.contains(intermediateSomelierBadge)) userWineBadges.add(wineBadgeConvertor.convertWineBadge(intermediateSomelierBadge, user));
         }
-        WineBadge advancedSomelierBadge = wineBadges.get(2);
+        WineBadge advancedSomelierBadge = getWineBadge(ADVANCED_SOMMELIER_INDEX, wineBadges);
         if (cnt >= advancedSomelierBadge.getRequiredActivity()) {
             if (!userWineBadgeLists.contains(advancedSomelierBadge)) userWineBadges.add(wineBadgeConvertor.convertWineBadge(advancedSomelierBadge, user));
         }
-        WineBadge masterSomelierBadge = wineBadges.get(3);
+        WineBadge masterSomelierBadge = getWineBadge(MASTER_SOMMELIER_INDEX, wineBadges);
         if (cnt >= masterSomelierBadge.getRequiredActivity()) {
             if (!userWineBadgeLists.contains(masterSomelierBadge)) userWineBadges.add(wineBadgeConvertor.convertWineBadge(masterSomelierBadge, user));
         }
@@ -224,25 +227,26 @@ public class WineBadgeServiceImpl implements WineBadgeService {
         int maxWineCount = calculateMaxWine(sameWineMap);
         int maxVarietalCount = calculateMaxVarietalCount(sameVarietalMap);
 
-        return checkWineBadgeAboutTastingNote(user, totalSmellKeywordCnt, roesTastingNotes, portTastingNotes, otherWineTastingNotes, maxWineCount, maxVarietalCount, userWineBadgeLists, wineBadges);
+        return checkWineBadgeAboutTastingNote(user, totalSmellKeywordCnt, roesTastingNotes, portTastingNotes,
+            otherWineTastingNotes, maxWineCount, maxVarietalCount, userWineBadgeLists, wineBadges);
     }
 
     private List<UserWineBadge> checkWineBadgeAboutTastingNote(User user, int totalSmellKeywordCnt, int roesTastingNotes, int portTastingNotes, int otherWineTastingNotes, int maxWineCount, int maxVarietalCount,
         List<WineBadge> userWineBadgeLists, List<WineBadge> wineBadges) {
         List<UserWineBadge> userWineBadges = new ArrayList<>();
-        WineBadge smellEnthusiastBadge = wineBadges.get(4);
+        WineBadge smellEnthusiastBadge = getWineBadge(SMELL_ENTHUSIAST_INDEX, wineBadges);
         if (totalSmellKeywordCnt >= smellEnthusiastBadge.getRequiredActivity()) {
             if (!userWineBadgeLists.contains(smellEnthusiastBadge)) userWineBadges.add(wineBadgeConvertor.convertWineBadge(smellEnthusiastBadge, user));
         }
-        WineBadge favoriteWineBadge = wineBadges.get(5);
+        WineBadge favoriteWineBadge = getWineBadge(FAVORITE_WINE_INDEX, wineBadges);
         if (maxWineCount >= favoriteWineBadge.getRequiredActivity()) {
             if (!userWineBadgeLists.contains(favoriteWineBadge)) userWineBadges.add(wineBadgeConvertor.convertWineBadge(favoriteWineBadge, user));
         }
-        WineBadge grapeLoverBadge = wineBadges.get(6);
+        WineBadge grapeLoverBadge = getWineBadge(GRAPE_LOVER_INDEX, wineBadges);
         if (maxVarietalCount >= grapeLoverBadge.getRequiredActivity()) {
             if (!userWineBadgeLists.contains(grapeLoverBadge)) userWineBadges.add(wineBadgeConvertor.convertWineBadge(grapeLoverBadge, user));
         }
-        WineBadge nonAlcoholicBadge = wineBadges.get(11);
+        WineBadge nonAlcoholicBadge = getWineBadge(NON_ALCOHOLIC_INDEX, wineBadges);
         if (roesTastingNotes >= 1 && portTastingNotes >= 1 && otherWineTastingNotes >= 1) {
             if (!userWineBadgeLists.contains(nonAlcoholicBadge)) userWineBadges.add(wineBadgeConvertor.convertWineBadge(nonAlcoholicBadge, user));
         }
