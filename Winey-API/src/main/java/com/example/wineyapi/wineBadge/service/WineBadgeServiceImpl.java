@@ -106,7 +106,7 @@ public class WineBadgeServiceImpl implements WineBadgeService {
         user.setTastingNoteAnalyzed(true);
         userRepository.save(user);
 
-        UserWineBadge userWineBadge = userWineBadgeRepository.save(wineBadgeConvertor.convertWineBadge(wineBadgeRepository.findById(TASTE_DISCOVERY_INDEX).get(), user));
+        UserWineBadge userWineBadge = userWineBadgeRepository.save(wineBadgeConvertor.convertWineBadge(wineBadgeRepository.findByBadge(TASTE_DISCOVERY), user));
 
         sendMessageGetWineBadge(userWineBadge, user);
     }

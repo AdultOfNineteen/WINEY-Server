@@ -29,7 +29,7 @@ public class WineyStatic {
 
     public static final Integer WINE_ADDICT_INDEX = 9;
 
-    public static final Long TASTE_DISCOVERY_INDEX = 11L;
+    public static final String TASTE_DISCOVERY = "TASTE_DISCOVERY";
 
     public static final Integer NON_ALCOHOLIC_INDEX = 11;
 }

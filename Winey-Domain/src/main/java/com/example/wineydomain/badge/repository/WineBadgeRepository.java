@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface WineBadgeRepository extends JpaRepository<WineBadge, Long>, WineBadgeCustomRepository {
 	List<WineBadge> findByOrderByIdAsc();
+
+	WineBadge findByBadge(String tasteDiscovery);
 }
