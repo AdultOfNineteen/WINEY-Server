@@ -93,7 +93,7 @@ public class RedisConfig {
 
         Map<String, RedisCacheConfiguration> cacheConfiguration = new HashMap<>();
         cacheConfiguration.put("recommendWine", redisCacheConfiguration.entryTtl(Duration.ofMinutes(5L)));
-        cacheConfiguration.put("wineBadgeAll", redisCacheConfiguration.entryTtl(Duration.ofMinutes(10L)));
+        cacheConfiguration.put("wineBadgeAll", redisCacheConfiguration.entryTtl(Duration.ofMinutes(60L)));
 
         return RedisCacheManager.RedisCacheManagerBuilder
             .fromConnectionFactory(redisConnectionFactory)
