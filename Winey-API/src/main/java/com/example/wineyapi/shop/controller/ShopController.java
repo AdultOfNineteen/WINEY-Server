@@ -31,7 +31,7 @@ public class ShopController {
      */
     private final ShopService shopService;
     private final ShopMapper shopMapper = ShopMapper.INSTANCE;
-    @Operation(summary = "05-01 와인 판매지 지도 API Made By Austin",description = "와인 판매지 지도 검색 + 필터링 API")
+    @Operation(summary = "05-01 와인 판매지 지도 API Made By Austin",description = "와인 판매지 지도 검색 + 필터링 + 상세조회 까지 이 API 로 사용하시면 됩니다.")
     @PostMapping("")
     @ApiErrorCodeExample({UserAuthErrorCode.class, RequestErrorCode.class})
     public CommonResponse<List<ShopRes.ShopMapDto>> getShopMapDtoList(
