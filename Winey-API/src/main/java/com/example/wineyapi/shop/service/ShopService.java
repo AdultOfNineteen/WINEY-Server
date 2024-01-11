@@ -10,6 +10,4 @@ import java.util.List;
 
 public interface ShopService {
     List<ShopRes.ShopMapDto> getShopMapDtoList(ShopCommand.getMapCommandDTO getMapCommandDTO);
-
-    List<ShopRes.ShopMapDto> getShopMapDtoLists(ShopReq.MapFilterDto mapFilterDto, User user, ShopFilter shopFilter);
 }

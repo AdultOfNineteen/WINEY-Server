@@ -3,6 +3,7 @@ package com.example.wineyapi.shop.dto;
 import com.example.wineydomain.shop.entity.ShopType;
 import lombok.*;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public class ShopRes {
@@ -17,10 +18,24 @@ public class ShopRes {
 
         private boolean isLike;
 
+        private double latitude;
+
+        private double longitude;
+
+        private String businessHour;
+
+        private String imgUrl;
+
+        private String address;
+
+        private String phone;
+
         private String name;
 
         private double meter;
 
-        private List<ShopType> shopTypes;
+        private String shopType;
+
+        private List<String> shopMoods;
     }
 }
