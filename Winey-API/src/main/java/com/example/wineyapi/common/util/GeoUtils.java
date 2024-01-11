@@ -1,5 +1,7 @@
 package com.example.wineyapi.common.util;
 
+import static com.example.wineycommon.constants.WineyStatic.*;
+
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -9,7 +11,7 @@ import com.example.wineyapi.common.dto.Location;
 
 public class GeoUtils {
     public static Point createPoint(double latitude, double longitude) {
-        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), SRID);
         return geometryFactory.createPoint(new Coordinate(longitude, latitude));
     }
 
@@ -18,7 +20,7 @@ public class GeoUtils {
         Double radianLatitude = toRadian(baseLatitude);
         Double radianLongitude = toRadian(baseLongitude);
         Double radianAngle = toRadian(bearing);
-        Double distanceRadius = distance / 6371.01;
+        Double distanceRadius = distance / EARTH_RADIUS;
 
         Double latitude = Math.asin(sin(radianLatitude) * cos(distanceRadius) +
             cos(radianLatitude) * sin(distanceRadius) * cos(radianAngle));
@@ -30,11 +32,11 @@ public class GeoUtils {
     }
 
     private static Double toRadian(Double coordinate) {
-        return coordinate * Math.PI / 180.0;
+        return coordinate * Math.PI / ONE_EIGHTY;
     }
 
     private static Double toDegree(Double coordinate) {
-        return coordinate * 180.0 / Math.PI;
+        return coordinate * ONE_EIGHTY / Math.PI;
     }
 
     private static Double sin(Double coordinate) {
@@ -46,6 +48,6 @@ public class GeoUtils {
     }
 
     private static Double normalizeLongitude(Double longitude) {
-        return (longitude + 540) % 360 - 180;
+        return (longitude + FIVE_FORTY) % THREE_SIXTY - ONE_EIGHTY;
     }
 }
