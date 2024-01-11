@@ -43,6 +43,7 @@ import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -137,6 +138,13 @@ public class UserServiceImpl implements UserService {
                 .map(RecommendWine::getId)
                 .collect(Collectors.toList());
         recommendWineRepository.deleteAllByIdInBatch(recommendWineIds);
+
+        // FCM 토큰 삭제
+        List<UserFcmToken> userFcmTokenList = userFcmTokenRepository.findByUser(user);
+        List<Long> userFcmTokenIds = userFcmTokenList.stream()
+                .map(UserFcmToken::getId)
+                .collect(Collectors.toList());
+        userFcmTokenRepository.deleteAllByIdInBatch(userFcmTokenIds);
 
         // 탈퇴 히스토리 테이블에 탈퇴 정보 기록
         userExitHistoryRepository.save(UserExitHistory.from(user, reason));
@@ -250,7 +258,7 @@ public class UserServiceImpl implements UserService {
     public User getCurrentLoggedInUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || !authentication.isAuthenticated()) {
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
             return null;
         }
 

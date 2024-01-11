@@ -1,5 +1,6 @@
 package com.example.wineyapi.wineBadge.service;
 
+import com.example.wineydomain.badge.dto.WineBadgeUserDTO;
 import com.example.wineydomain.badge.entity.UserWineBadge;
 import com.example.wineydomain.user.entity.User;
 
@@ -12,5 +13,7 @@ public interface WineBadgeService {
 
     void checkActivityBadge(User user);
 
-    List<UserWineBadge> getWineBadgeListByUser(Long userId);
+    List<WineBadgeUserDTO> getWineBadgeListByUser(Long userId);
+
+    WineBadgeUserDTO getWineBadgeById(Long userId, Long wineBadgeId);
 }

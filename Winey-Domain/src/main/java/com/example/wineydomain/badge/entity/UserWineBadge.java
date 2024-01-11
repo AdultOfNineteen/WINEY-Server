@@ -21,7 +21,6 @@ import javax.persistence.*;
 @DynamicUpdate
 @DynamicInsert
 public class UserWineBadge extends BaseEntity {
-
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +30,10 @@ public class UserWineBadge extends BaseEntity {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    @Enumerated(EnumType.STRING)
-    private Badge badge;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wineBadgeId", nullable = false)
+    private WineBadge wineBadge;
+
+    @Builder.Default
+    private Boolean isRead = Boolean.FALSE;
 }

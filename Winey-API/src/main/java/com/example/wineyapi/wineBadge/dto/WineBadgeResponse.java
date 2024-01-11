@@ -21,9 +21,13 @@ public class WineBadgeResponse {
         private Long badgeId;
         private String badgeType;
         private String name;
+        private String acquisitionMethod;
         private String description;
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime acquiredAt;
+        private Boolean isRead;
+        @Builder.Default
+        private String badgeImage = "";
     }
 
     @NoArgsConstructor
@@ -32,6 +36,6 @@ public class WineBadgeResponse {
     @Builder
     public static class WineBadgeListDTO {
        private List<BadgeDTO> sommelierBadgeList;
-       private List<BadgeDTO> activitybadgeDTOList;
+       private List<BadgeDTO> activityBadgeList;
     }
 }
