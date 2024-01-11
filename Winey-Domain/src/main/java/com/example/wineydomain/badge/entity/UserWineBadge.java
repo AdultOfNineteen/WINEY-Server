@@ -21,7 +21,6 @@ import javax.persistence.*;
 @DynamicUpdate
 @DynamicInsert
 public class UserWineBadge extends BaseEntity {
-
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +33,6 @@ public class UserWineBadge extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wineBadgeId", nullable = false)
     private WineBadge wineBadge;
-
-    // TODO : 이 필드를 지워줘야합니다.
-    @Enumerated(EnumType.STRING)
-    private Badge badge;
 
     @Builder.Default
     private Boolean isRead = Boolean.FALSE;

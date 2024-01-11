@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageConverter {
 
-    public NotificationRequestDto toNotificationRequestDto(Badge badge, UserFcmToken fcmToken, User user) {
+    public NotificationRequestDto toNotificationRequestDto(String badge, UserFcmToken fcmToken, User user) {
         return NotificationRequestDto.builder()
                 .title("새로운 뱃지를 얻었어요~~~")
-                .body(toMessageBodyWineBadge(user.getNickName(), badge.getBadgeName()))
+                .body(toMessageBodyWineBadge(user.getNickName(), badge))
                 .token(fcmToken.getFcmToken())
                 .build();
     }

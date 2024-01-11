@@ -24,8 +24,6 @@ public class QUserWineBadge extends EntityPathBase<UserWineBadge> {
 
     public final com.example.wineydomain.common.model.QBaseEntity _super = new com.example.wineydomain.common.model.QBaseEntity(this);
 
-    public final EnumPath<Badge> badge = createEnum("badge", Badge.class);
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
