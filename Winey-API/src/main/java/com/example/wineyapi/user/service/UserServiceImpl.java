@@ -139,6 +139,13 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
         recommendWineRepository.deleteAllByIdInBatch(recommendWineIds);
 
+        // FCM 토큰 삭제
+        List<UserFcmToken> userFcmTokenList = userFcmTokenRepository.findByUser(user);
+        List<Long> userFcmTokenIds = userFcmTokenList.stream()
+                .map(UserFcmToken::getId)
+                .collect(Collectors.toList());
+        userFcmTokenRepository.deleteAllByIdInBatch(userFcmTokenIds);
+
         // 탈퇴 히스토리 테이블에 탈퇴 정보 기록
         userExitHistoryRepository.save(UserExitHistory.from(user, reason));
 
