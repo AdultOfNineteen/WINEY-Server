@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserConnectionRepository extends JpaRepository<UserConnection, Long> {
     void deleteByUser(User user);
+
+    UserConnection findByUser(User user);
 }
