@@ -115,7 +115,7 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     @Async("connect_user")
     @RedissonLock(LockName = "유저 연속 접속 확인", key = "#user.id")
     public void checkActivityBadge(User user) {
-        UserConnection userConnection = user.getUserConnection();
+        UserConnection userConnection = userConnectionRepository.findByUser(user);
         if(userConnection == null){
             userConnectionRepository.save(userConnectionConverter.convertToUserConnection(user));
         }else{

@@ -54,8 +54,6 @@ public class QUser extends EntityPathBase<User> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
-    public final QUserConnection userConnection;
-
     public final ListPath<UserFcmToken, QUserFcmToken> userFcmTokens = this.<UserFcmToken, QUserFcmToken>createList("userFcmTokens", UserFcmToken.class, QUserFcmToken.class, PathInits.DIRECT2);
 
     public final StringPath username = createString("username");
@@ -81,7 +79,6 @@ public class QUser extends EntityPathBase<User> {
     public QUser(Class<? extends User> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.preference = inits.isInitialized("preference") ? new com.example.wineydomain.preference.entity.QPreference(forProperty("preference"), inits.get("preference")) : null;
-        this.userConnection = inits.isInitialized("userConnection") ? new QUserConnection(forProperty("userConnection"), inits.get("userConnection")) : null;
     }
 
 }
