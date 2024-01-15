@@ -1,9 +1,11 @@
 package com.example.wineycommon.exception;
 
 import com.example.wineycommon.reponse.CommonResponse;
+import com.example.wineycommon.service.SlackService;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionFailedException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
@@ -29,11 +30,10 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestControllerAdvice
 public class ExceptionAdvice{
-
-
-
+    private final SlackService slackService;
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -107,6 +107,7 @@ public class ExceptionAdvice{
             pw.append("uid: " + user.getUsername() + "\n");
         }
         pw.append(e.getMessage());
+        pw.append(e.toString());
         pw.append("\n=====================================================================");
         log.error(sw.toString());
     }
@@ -152,24 +153,16 @@ public class ExceptionAdvice{
                 null, userException.getErrorReasonHttpStatus().getHttpStatus());
     }
 
-
-
-//    @ExceptionHandler(value = Exception.class)
-//    public ResponseEntity onException(Exception exception, @AuthenticationPrincipal User user,
-//                                      HttpServletRequest request) {
-//        getExceptionStackTrace(exception, user, request);
-//        return new ResponseEntity<>(CommonResponse.onFailure("500", exception.getMessage(), null), null,
-//                HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-
-
-
-// TODO : 최상위 예외라서 다른 핸들러들이 작동하지 않음.
-//    @ExceptionHandler(value = Exception.class)
-//    public ResponseEntity onException(Exception exception, @AuthenticationPrincipal User user,
-//                                      HttpServletRequest request) {
-//        getExceptionStackTrace(exception, user, request);
-//        return new ResponseEntity<>(CommonResponse.onFailure("500", exception.getMessage(), null), null,
-//                HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity onException(Exception exception, @AuthenticationPrincipal User user,
+                                      HttpServletRequest request) {
+        getExceptionStackTrace(exception, user, request);
+        if(user==null){
+            slackService.sendMessage("로그인 되지 않은 유저", exception, request);
+        }
+        else{
+            slackService.sendMessage(user.getUsername(), exception, request);
+        }
+        return new ResponseEntity<>(CommonResponse.onFailure("500", exception.getMessage(), null), null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

@@ -70,9 +70,6 @@ public class User extends BaseEntity implements UserDetails {
     @Builder.Default
     private boolean isTastingNoteAnalyzed = false;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private UserConnection userConnection;
-
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     @BatchSize(size = 5)
