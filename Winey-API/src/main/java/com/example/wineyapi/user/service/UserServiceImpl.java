@@ -19,9 +19,11 @@ import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
+import com.example.wineydomain.user.entity.UserConnection;
 import com.example.wineydomain.user.entity.UserExitHistory;
 import com.example.wineydomain.user.entity.UserFcmToken;
 import com.example.wineydomain.user.exception.UserErrorCode;
+import com.example.wineydomain.user.repository.UserConnectionRepository;
 import com.example.wineydomain.user.repository.UserExitHistoryRepository;
 import com.example.wineydomain.user.repository.UserFcmTokenRepository;
 import com.example.wineydomain.user.repository.UserRepository;
@@ -30,18 +32,11 @@ import com.example.wineydomain.verificationMessage.repository.VerificationMessag
 import com.example.wineydomain.wine.entity.RecommendWine;
 import com.example.wineydomain.wine.entity.RecommendWinePk;
 import com.example.wineydomain.wine.repository.RecommendWineRepository;
-import com.example.wineyinfrastructure.oauth.apple.dto.AppleMember;
-import com.example.wineyinfrastructure.oauth.apple.util.AppleOAuthUserProvider;
-import com.example.wineyinfrastructure.oauth.google.client.GoogleOauth2Client;
-import com.example.wineyinfrastructure.oauth.google.dto.GoogleUserInfo;
-import com.example.wineyinfrastructure.oauth.kakao.client.KakaoFeignClient;
 import com.example.wineyinfrastructure.oauth.kakao.client.KakaoLoginFeignClient;
-import com.example.wineyinfrastructure.oauth.kakao.dto.KakaoUserInfoDto;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
-import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -71,6 +66,7 @@ public class UserServiceImpl implements UserService {
     private final WineBadgeService wineBadgeService;
     private final UserFcmTokenRepository userFcmTokenRepository;
     private final UserExitHistoryRepository userExitHistoryRepository;
+    private final UserConnectionRepository userConnectionRepository;
 
     private DefaultMessageService coolSmsService;
 
@@ -138,6 +134,9 @@ public class UserServiceImpl implements UserService {
                 .map(RecommendWine::getId)
                 .collect(Collectors.toList());
         recommendWineRepository.deleteAllByIdInBatch(recommendWineIds);
+
+        // 유저 접속 정보 삭제
+        userConnectionRepository.deleteByUser(user);
 
         // FCM 토큰 삭제
         List<UserFcmToken> userFcmTokenList = userFcmTokenRepository.findByUser(user);
