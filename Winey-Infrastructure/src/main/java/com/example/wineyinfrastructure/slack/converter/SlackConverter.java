@@ -1,6 +1,7 @@
-package com.example.wineycommon.service;
+package com.example.wineyinfrastructure.slack.converter;
 
-import static com.example.wineycommon.constants.SlackStatic.*;
+
+import static com.example.wineyinfrastructure.slack.constants.SlackStatic.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -8,22 +9,19 @@ import com.slack.api.webhook.Payload;
 
 public class SlackConverter {
 
-	public static String errorToSlackMessage(String user, HttpServletRequest request, Exception exception, String profile) {
+	public static String errorToSlackMessage(String user, HttpServletRequest request, Exception exception, String profile,
+		String url, String method, String errorMessage, String errorStack, String errorUserIP) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(CODE_BLOCK_START);
 		appendLabelAndValue(sb, USER_LABEL, user);
 		appendLabelAndValue(sb, PROFILE_LABEL, profile);
-		appendLabelAndValue(sb, SERVER_LABEL, request.getServerName());
-		appendLabelAndValue(sb, URI_LABEL, request.getRequestURI());
-		appendLabelAndValue(sb, METHOD_LABEL, request.getMethod());
+		appendLabelAndValue(sb, SERVER_LABEL, url);
+		appendLabelAndValue(sb, METHOD_LABEL, method);
 		appendLabelAndValue(sb, QUERY_STRING_LABEL, request.getQueryString());
 		appendLabelAndValue(sb, EXCEPTION_CLASS_LABEL, getErrorOccurredClassName(exception));
-		appendLabelAndValue(sb, REMOTE_ADDR_LABEL, request.getRemoteAddr());
-		appendLabelAndValue(sb, REMOTE_HOST_LABEL, request.getRemoteHost());
-		appendLabelAndValue(sb, REMOTE_PORT_LABEL, Integer.toString(request.getRemotePort()));
-		appendLabelAndValue(sb, SERVER_PORT_LABEL, Integer.toString(request.getServerPort()));
-		appendLabelAndValue(sb, SERVLET_PATH_LABEL, request.getServletPath());
-		appendLabelAndValue(sb, EXCEPTION_LABEL, exception.getMessage());
+		appendLabelAndValue(sb, EXCEPTION_LABEL, errorMessage);
+		appendLabelAndValue(sb, EXCEPTION_MESSAGE_LABEL, errorStack);
+		appendLabelAndValue(sb, IP_LABEL, errorUserIP);
 		sb.append(CODE_BLOCK_END);
 		return sb.toString();
 	}
