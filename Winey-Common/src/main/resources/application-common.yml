@@ -33,3 +33,6 @@ spring:
     host: ${REDIS_HOST}
     port: 6379
 
+slack:
+  webhook-url: ${SLACK_WEBHOOK_URL}
+  token: ${SLACK_TOKEN}

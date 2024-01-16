@@ -43,6 +43,8 @@ jobs:
           spring.redis.host: ${{ secrets.REDIS_HOST }}
           oauth.apple.iss: ${{ secrets.APPLE_ISS }}
           oauth.apple.client-id: ${{ secrets.APPLE_CLIENT_ID }}
+          slack.webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          slack.token: ${{ secrets.SLACK_TOKEN }}
 
       - name: Set Environment - Domain DEV Yml
         uses: microsoft/variable-substitution@v1
