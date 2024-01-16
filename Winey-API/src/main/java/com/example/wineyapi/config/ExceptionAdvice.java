@@ -1,10 +1,19 @@
-package com.example.wineycommon.exception;
+package com.example.wineyapi.config;
 
-import com.example.wineycommon.reponse.CommonResponse;
-import com.example.wineycommon.service.SlackService;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,23 +25,24 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.ResourceUrlEncodingFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import com.example.wineyapi.security.JwtFilter;
+import com.example.wineycommon.exception.BaseDynamicException;
+import com.example.wineycommon.exception.BaseException;
+import com.example.wineycommon.exception.UserException;
+import com.example.wineycommon.exception.errorcode.CommonResponseStatus;
+import com.example.wineycommon.reponse.CommonResponse;
+import com.example.wineyinfrastructure.slack.service.SlackService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestControllerAdvice
-public class ExceptionAdvice{
+public class ExceptionAdvice {
     private final SlackService slackService;
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -155,14 +165,34 @@ public class ExceptionAdvice{
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity onException(Exception exception, @AuthenticationPrincipal User user,
-                                      HttpServletRequest request) {
-        getExceptionStackTrace(exception, user, request);
-        if(user==null){
-            slackService.sendMessage("로그인 되지 않은 유저", exception, request);
+        HttpServletRequest request) throws IOException {
+        HttpServletRequest httpServletRequest = unwrapHttpServletRequest(request);
+
+        final Long userId = user != null ? Long.valueOf(user.getUsername()) : null;
+
+        getExceptionStackTrace(exception, user, httpServletRequest);
+        log.error("INTERNAL_SERVER_ERROR", exception);
+
+        CommonResponseStatus internalServerError = CommonResponseStatus._INTERNAL_SERVER_ERROR;
+        if (userId == null) {
+            slackService.sendMessage("로그인 되지 않은 유저", exception, httpServletRequest);
+        } else {
+            slackService.sendMessage(String.valueOf(userId), exception, httpServletRequest);
         }
-        else{
-            slackService.sendMessage(user.getUsername(), exception, request);
+
+        return new ResponseEntity<>(CommonResponse.onFailure(internalServerError.getCode(), internalServerError.getMessage(), null), null, internalServerError.getHttpStatus());
+    }
+
+    private HttpServletRequest unwrapHttpServletRequest(HttpServletRequest request) {
+        if (request instanceof ContentCachingRequestWrapper) {
+            return request;
+        } else if (request instanceof ResourceUrlEncodingFilter) {
+            return new ContentCachingRequestWrapper(request);
+        } else if (request instanceof HttpServletRequest){
+            return new ContentCachingRequestWrapper(request);
         }
-        return new ResponseEntity<>(CommonResponse.onFailure("500", exception.getMessage(), null), null, HttpStatus.INTERNAL_SERVER_ERROR);
+        else {
+            return request;
+        }
     }
 }

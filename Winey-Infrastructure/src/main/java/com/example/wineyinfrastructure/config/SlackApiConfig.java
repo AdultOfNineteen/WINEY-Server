@@ -1,4 +1,4 @@
-package com.example.wineycommon.config;
+package com.example.wineyinfrastructure.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
