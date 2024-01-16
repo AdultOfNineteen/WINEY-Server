@@ -1,5 +1,7 @@
 package com.example.wineyapi.common.aop;
 
+import static com.example.wineycommon.constants.WineyStatic.*;
+
 import java.lang.reflect.Method;
 
 import org.aspectj.lang.JoinPoint;
@@ -33,6 +35,9 @@ public class LogAspect {
 		Method method = methodSignature.getMethod();
 		String methodName = getMethodName(method);
 
+		if(IGNORE_METHODS.contains(methodName)) {
+			return;
+		}
 		log.info("==========================LOG_START==========================");
 
 		log.info("logging start method = {}", methodName);
@@ -60,8 +65,10 @@ public class LogAspect {
 	@After("controller()")
 	public void afterLogic(JoinPoint joinPoint) throws Throwable {
 		Method method = getMethod(joinPoint);
-
 		String methodName = getMethodName(method);
+		if(IGNORE_METHODS.contains(methodName)) {
+			return;
+		}
 
 		log.info("logging finish method = {}", methodName);
 
@@ -71,9 +78,10 @@ public class LogAspect {
 	@AfterReturning(value = "controller()", returning = "returnObj")
 	public void afterReturnLog(JoinPoint joinPoint, Object returnObj) {
 		Method method = getMethod(joinPoint);
-
 		String methodName = getMethodName(method);
-
+		if(IGNORE_METHODS.contains(methodName)) {
+			return;
+		}
 		if (returnObj != null) {
 			log.info("========================RETURN_LOG============================");
 			log.info("method name = {}", methodName);

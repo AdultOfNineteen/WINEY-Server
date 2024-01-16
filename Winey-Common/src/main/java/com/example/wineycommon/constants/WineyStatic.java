@@ -1,5 +1,7 @@
 package com.example.wineycommon.constants;
 
+import java.util.List;
+
 import org.springframework.data.redis.connection.RedisServer;
 
 public class WineyStatic {
@@ -43,4 +45,6 @@ public class WineyStatic {
     public static final String TASTE_DISCOVERY = "TASTE_DISCOVERY";
 
     public static final Integer NON_ALCOHOLIC_INDEX = 11;
+
+    public static final List<String> IGNORE_METHODS = List.of(new String[]{"healthCheck", ""});
 }
