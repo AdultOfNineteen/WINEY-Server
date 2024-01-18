@@ -1,8 +1,13 @@
 package com.example.wineyapi.shop.converter;
 
 import com.example.wineyapi.shop.dto.ShopRes;
+import com.example.wineydomain.shop.entity.BookMarkPk;
 import com.example.wineydomain.shop.entity.Mood;
+import com.example.wineydomain.shop.entity.Shop;
+import com.example.wineydomain.shop.entity.ShopBookMark;
 import com.example.wineydomain.shop.repository.ShopRepository;
+import com.example.wineydomain.user.entity.User;
+
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -45,4 +50,16 @@ public class ShopConverter {
             .shopMoods(shopMoodsList)
             .build();
     }
+
+	public BookMarkPk toBookMarkPk(Shop shop, User user) {
+		return BookMarkPk.builder().shop(shop).user(user).build();
+	}
+
+	public ShopBookMark toBookMark(BookMarkPk bookMarkPk) {
+		return ShopBookMark.builder().id(bookMarkPk).build();
+	}
+
+	public ShopRes.BookmarkDto toBookMarkDto(boolean isLike, String bookMarkMessage) {
+		return ShopRes.BookmarkDto.builder().isLike(isLike).message(bookMarkMessage).build();
+	}
 }

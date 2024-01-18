@@ -38,4 +38,15 @@ public class ShopRes {
 
         private List<String> shopMoods;
     }
+
+    @Getter
+    @NoArgsConstructor
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class BookmarkDto{
+        private boolean isLike;
+
+        private String message;
+    }
 }
