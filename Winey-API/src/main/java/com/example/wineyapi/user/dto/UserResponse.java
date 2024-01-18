@@ -65,4 +65,14 @@ public class UserResponse {
     public static class ReIssueToken {
         private String accessToken;
     }
+
+    @NoArgsConstructor
+    @Getter
+    @AllArgsConstructor
+    @Builder
+	public static class UserInfoDTO {
+        private Long userId;
+
+        private Status status;
+	}
 }

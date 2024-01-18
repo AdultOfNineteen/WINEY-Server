@@ -2,6 +2,7 @@ package com.example.wineyapi.user.service;
 
 import com.example.wineyapi.user.converter.UserConverter;
 import com.example.wineyapi.user.dto.UserRequest;
+import com.example.wineyapi.user.dto.UserResponse;
 import com.example.wineyapi.user.service.context.SocialLoginContext;
 import com.example.wineyapi.user.service.context.SocialLoginContextFactory;
 import com.example.wineyapi.wineBadge.service.WineBadgeService;
@@ -54,7 +55,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
     private final KakaoLoginFeignClient kakaoLoginFeignClient;
     private final UserRepository userRepository;
     private final KakaoProperties kakaoProperties;
@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
     private final UserFcmTokenRepository userFcmTokenRepository;
     private final UserExitHistoryRepository userExitHistoryRepository;
     private final UserConnectionRepository userConnectionRepository;
+    private final UserConverter userConverter;
 
     private DefaultMessageService coolSmsService;
 
@@ -277,5 +278,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteFcmToken(User user, String deviceId) {
         userFcmTokenRepository.deleteByUserAndDeviceId(user, deviceId);
+    }
+
+    @Override
+    public UserResponse.UserInfoDTO getUserInfo(User user) {
+        return userConverter.toUserInfoDTO(user);
     }
 }

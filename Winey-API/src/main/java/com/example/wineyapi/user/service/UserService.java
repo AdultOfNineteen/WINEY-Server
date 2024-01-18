@@ -1,6 +1,7 @@
 package com.example.wineyapi.user.service;
 
 import com.example.wineyapi.user.dto.UserRequest;
+import com.example.wineyapi.user.dto.UserResponse;
 import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
@@ -27,4 +28,6 @@ public interface UserService {
     void postUserFcmToken(UserRequest.UserFcmTokenDto userFcmTokenDto, User user);
 
     void deleteFcmToken(User user, String deviceId);
+
+    UserResponse.UserInfoDTO getUserInfo(User user);
 }
