@@ -9,6 +9,7 @@ import com.example.wineycommon.annotation.ApiErrorCodeExample;
 import com.example.wineycommon.exception.errorcode.RequestErrorCode;
 import com.example.wineycommon.reponse.CommonResponse;
 import com.example.wineydomain.shop.entity.ShopType;
+import com.example.wineydomain.shop.exception.GetShopErrorCode;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.user.exception.UserAuthErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,16 +43,13 @@ public class ShopController {
         return CommonResponse.onSuccess(shopService.getShopMapDtoList(shopMapper.toGetShopCommandDTO(mapFilterDto, user, shopFilter)));
     }
 
-
-    /*
-        와인 판매지 하단 스와이프 조회 + 필터링
-     */
-
-    /*
-        와인 판매지 북마크 + 북마크 취소
-     */
-
-    /*
-         와인 판매지 하단 스와이프 클릭 시 상세 조회
-     */
+    @Operation(summary = "05-02 와인 상점 북마크 취소, 북마크 기능 API Made By Austin",description = "와인 상점 북마크 취소, 북마크 기능 API")
+    @PostMapping("/bookmark/{shopId}")
+    @ApiErrorCodeExample({UserAuthErrorCode.class, GetShopErrorCode.class})
+    public CommonResponse<ShopRes.BookmarkDto> bookmarkShop(
+            @PathVariable Long shopId,
+            @AuthenticationPrincipal User user
+    ){
+        return CommonResponse.onSuccess(shopService.bookmarkShop(shopId, user));
+    }
 }

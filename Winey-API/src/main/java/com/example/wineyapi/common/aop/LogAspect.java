@@ -5,8 +5,10 @@ import static com.example.wineycommon.constants.WineyStatic.*;
 import java.lang.reflect.Method;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -57,11 +59,6 @@ public class LogAspect {
 			index += 1;
 		}
 	}
-
-	private String getMethodName(Method method) {
-		return method.getName();
-	}
-
 	@After("controller()")
 	public void afterLogic(JoinPoint joinPoint) throws Throwable {
 		Method method = getMethod(joinPoint);
@@ -91,8 +88,26 @@ public class LogAspect {
 		}
 	}
 
+	@Around("controller()")
+	public Object calculateApiMs(ProceedingJoinPoint joinPoint) throws Throwable{
+		String method =  getMethodName(getMethod(joinPoint));
+		long start = System.currentTimeMillis();
+		try{
+			return joinPoint.proceed();
+		} finally {
+			long finish = System.currentTimeMillis();
+			long timeMs = finish - start;
+			log.info("END: {} {}ms", method, timeMs);
+		}
+	}
+
 	private Method getMethod(JoinPoint joinPoint) {
 		MethodSignature signature = (MethodSignature)joinPoint.getSignature();
 		return signature.getMethod();
 	}
+
+	private String getMethodName(Method method) {
+		return method.getName();
+	}
+
 }

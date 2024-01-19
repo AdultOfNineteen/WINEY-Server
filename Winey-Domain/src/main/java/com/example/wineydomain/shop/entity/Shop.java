@@ -1,18 +1,35 @@
 package com.example.wineydomain.shop.entity;
 
 import com.example.wineydomain.common.model.BaseEntity;
-import com.example.wineydomain.tastingNote.entity.SmellKeywordTastingNote;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Index;
 
-import org.locationtech.jts.geom.Point;
-import javax.persistence.*;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "`Shop`")
+@org.hibernate.annotations.Table(
+    appliesTo = "`Shop`",
+    indexes = {
+        @Index(name = "idx_shop_coordinates", columnNames = {"latitude", "longitude"}),
+        @Index(name = "idx_shop_type", columnNames = {"shopType"}),
+    }
+)
 @Getter
 @Setter
 @Builder
@@ -39,11 +56,13 @@ public class Shop extends BaseEntity {
 
     private String imgUrl;
 
-    @Column(columnDefinition = "POINT SRID 4326")
-    private Point point;
+    private double latitude;
+
+    private double longitude;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "shopId")
     @BatchSize(size = 20)
     private List<ShopMood> shopMoods;
+
 }

@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface ShopService {
     List<ShopRes.ShopMapDto> getShopMapDtoList(ShopCommand.getMapCommandDTO getMapCommandDTO);
+
+	ShopRes.BookmarkDto bookmarkShop(Long shopId, User user);
 }

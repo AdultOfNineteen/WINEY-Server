@@ -163,4 +163,9 @@ public class UserConverter {
                 .user(user)
                 .build();
     }
+
+	public UserResponse.UserInfoDTO toUserInfoDTO(User user) {
+	    return UserResponse.UserInfoDTO.builder().userId(user.getId()).status(user.getStatus()).build();
+
+    }
 }

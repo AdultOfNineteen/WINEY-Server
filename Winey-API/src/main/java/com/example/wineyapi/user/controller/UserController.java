@@ -159,4 +159,13 @@ public class UserController {
         return CommonResponse.onSuccess("유저 FCM 토큰 저장 완료");
     }
 
+    @Operation(summary = "01-11 User 👤 유저 상태 정보 조회 Mage By Austin", description = "유저 상태 정보 조회.")
+    @ApiErrorCodeExample(UserAuthErrorCode.class)
+    @GetMapping("/info")
+    public CommonResponse<UserResponse.UserInfoDTO> getUserInfo(
+        @AuthenticationPrincipal User user
+    ){
+        return CommonResponse.onSuccess(userService.getUserInfo(user));
+    }
+
 }
