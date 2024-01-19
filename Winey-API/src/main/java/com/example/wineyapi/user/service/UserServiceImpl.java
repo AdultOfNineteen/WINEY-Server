@@ -276,6 +276,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteFcmToken(User user, String deviceId) {
-        userFcmTokenRepository.deleteByUserAndDeviceId(user, deviceId);
+        userFcmTokenRepository.deleteAllByUserAndDeviceId(user, deviceId);
     }
 }
