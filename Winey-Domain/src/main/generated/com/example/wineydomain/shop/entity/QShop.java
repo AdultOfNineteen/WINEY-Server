@@ -33,11 +33,13 @@ public class QShop extends EntityPathBase<Shop> {
 
     public final StringPath imgUrl = createString("imgUrl");
 
+    public final NumberPath<Double> latitude = createNumber("latitude", Double.class);
+
+    public final NumberPath<Double> longitude = createNumber("longitude", Double.class);
+
     public final StringPath name = createString("name");
 
     public final StringPath phone = createString("phone");
-
-    public final ComparablePath<org.locationtech.jts.geom.Point> point = createComparable("point", org.locationtech.jts.geom.Point.class);
 
     public final ListPath<ShopMood, QShopMood> shopMoods = this.<ShopMood, QShopMood>createList("shopMoods", ShopMood.class, QShopMood.class, PathInits.DIRECT2);
 

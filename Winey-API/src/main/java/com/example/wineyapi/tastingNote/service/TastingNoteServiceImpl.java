@@ -31,6 +31,7 @@ import java.util.List;
 
 import static com.example.wineydomain.tastingNote.exception.GetTastingNoteErrorCode.NOT_FOUND_TASTING_NOTE;
 import static com.example.wineydomain.tastingNote.exception.UploadTastingNoteErrorCode.NOT_FOUNT_WINE;
+import static com.example.wineyinfrastructure.amazonS3.enums.Folder.*;
 
 @Service
 @Slf4j
@@ -106,7 +107,7 @@ public class TastingNoteServiceImpl implements TastingNoteService{
             }
         }
 
-        List<String> imgList = s3UploadService.listUploadTastingNote(tastingNote.getId(), multipartFiles);
+        List<String> imgList = s3UploadService.imageListUpload(tastingNote.getId(), TASTING_NOTE, multipartFiles);
 
         if(imgList!=null) {
             for (String imgUrl : imgList) {

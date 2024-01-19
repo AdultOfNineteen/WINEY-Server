@@ -67,7 +67,6 @@ public class UserServiceImpl implements UserService {
     private final UserFcmTokenRepository userFcmTokenRepository;
     private final UserExitHistoryRepository userExitHistoryRepository;
     private final UserConnectionRepository userConnectionRepository;
-    private final UserConverter userConverter;
 
     private DefaultMessageService coolSmsService;
 
@@ -282,6 +281,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse.UserInfoDTO getUserInfo(User user) {
-        return userConverter.toUserInfoDTO(user);
+        return UserResponse.UserInfoDTO.builder().userId(user.getId()).status(user.getStatus()).build();
     }
 }

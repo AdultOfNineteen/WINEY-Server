@@ -23,6 +23,8 @@ public class AdminShopConverter {
                     .phone(req.getPhone())
                     .businessHour(req.getBusinessHour())
                     .imgUrl(req.getImgUrl())
+                    .latitude(req.getLatitude())
+                    .longitude(req.getLongitude())
                     .build();
 
     }

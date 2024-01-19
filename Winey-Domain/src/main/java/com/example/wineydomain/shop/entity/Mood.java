@@ -33,6 +33,7 @@ public enum Mood {
     PIZZA("피자"),
     FINGER_FOOD("핑거푸드"),
     KOREAN("한식"),
+    SALAD("샐러드"),
     DRINK_ALONE("혼술");
     private final String value;
 }

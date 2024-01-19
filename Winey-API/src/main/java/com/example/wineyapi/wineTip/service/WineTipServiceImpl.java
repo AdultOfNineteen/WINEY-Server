@@ -1,11 +1,14 @@
 package com.example.wineyapi.wineTip.service;
 
+import static com.example.wineyinfrastructure.amazonS3.enums.Folder.*;
+
 import com.example.wineyapi.admin.wineTip.dto.WineTipReq;
 import com.example.wineyapi.wineTip.convertor.WineTipConvertor;
 import com.example.wineyapi.wineTip.dto.WineTipResponse;
 import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.wineTip.entity.WineTip;
 import com.example.wineydomain.wineTip.repository.WineTipRepository;
+import com.example.wineyinfrastructure.amazonS3.enums.Folder;
 import com.example.wineyinfrastructure.amazonS3.service.S3UploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -44,7 +47,7 @@ public class WineTipServiceImpl implements WineTipService{
     @Transactional
     public void uploadWineTip(WineTipReq.WineTipDto wineTipDto) {
         WineTip wineTip = wineTipRepository.save(wineTipConvertor.WineTip(wineTipDto));
-        String imgUrl = s3UploadService.uploadWineTipFile(wineTip.getId(), wineTipDto.getMultipartFile());
+        String imgUrl = s3UploadService.uploadImage(wineTip.getId(), WINE_TIP, wineTipDto.getMultipartFile());
         wineTip.setThumbnail(imgUrl);
         wineTipRepository.save(wineTip);
     }
