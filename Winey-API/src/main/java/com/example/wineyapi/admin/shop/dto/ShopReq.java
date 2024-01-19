@@ -6,7 +6,6 @@ import com.example.wineydomain.shop.entity.ShopMood;
 import com.example.wineydomain.shop.entity.ShopType;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
-import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
 import java.util.List;
