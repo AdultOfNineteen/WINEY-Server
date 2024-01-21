@@ -77,15 +77,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // NOTE - 아래 예시처럼 구체적인 경로부터 명시해주어야 합니다.
                 .antMatchers("/users/{userId}/wine-grade").authenticated()
                 .antMatchers("/users/{userId}/wine-badges").authenticated()
+                .antMatchers("/users/logout").authenticated()
+                .antMatchers("/refresh").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/users/{userId}").authenticated()
                 .antMatchers("/users/**").permitAll()
-                .antMatchers("/users/refresh").permitAll()
                 .antMatchers("/profile").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/test/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
-                .antMatchers("/refresh").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

@@ -275,6 +275,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteFcmToken(User user, String deviceId) {
         userFcmTokenRepository.deleteAllByUserAndDeviceId(user, deviceId);
     }

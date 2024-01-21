@@ -110,14 +110,13 @@ public class JwtService {
 
             Optional<AccessToken> accessToken = accessTokenRepository.findById(token);
 
-
             if(accessToken.isPresent()){
                 if(accessToken.get().getToken().equals(token)){
+                    log.info("로그아웃 된 토큰입니다.");
                     servletRequest.setAttribute("exception","HijackException");
                     return false;
                 }
             }
-
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             servletRequest.setAttribute("exception","MalformedJwtException");
