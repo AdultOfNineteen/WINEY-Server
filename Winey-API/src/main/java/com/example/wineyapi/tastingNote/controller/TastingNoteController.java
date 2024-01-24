@@ -90,11 +90,12 @@ public class TastingNoteController {
     }
 
 
-    @PatchMapping("{noteId}")
-    public CommonResponse<TastingNoteResponse.UpdateTastingNoteDTO> updateTastingNote(@PathVariable Long userId,
-                                                                                      @PathVariable Long noteId,
-                                                                                      @RequestBody TastingNoteRequest.UpdateTastingNoteDTO request) {
-        return null;
+    @PatchMapping("")
+    public CommonResponse<TastingNoteResponse.UpdateTastingNoteDTO> updateTastingNote(@Parameter(hidden = true) @AuthenticationPrincipal User user,
+        @Valid @RequestPart TastingNoteRequest.UpdateTastingNoteDTO request,
+        @RequestPart(required = false) List<MultipartFile> multipartFiles) {
+        tastingNoteService.updateTastingNote(user, request, multipartFiles);
+        return CommonResponse.onSuccess(new TastingNoteResponse.UpdateTastingNoteDTO(request.getTastingNoteId()));
     }
 
     @DeleteMapping("{noteId}")

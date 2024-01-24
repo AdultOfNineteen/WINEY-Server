@@ -42,7 +42,7 @@ public class TastingNoteResponse {
     @AllArgsConstructor
     @Builder
     public static class UpdateTastingNoteDTO {
-        private String field;
+        private Long tastingNoteId;
     }
 
     @NoArgsConstructor
@@ -75,6 +75,9 @@ public class TastingNoteResponse {
 
         @Schema(description = "별점")
         private Integer star;
+
+        @Schema(description = "빈티지")
+        private Integer vintage;
 
         @Schema(description = "사용자가 지정한 색")
         private String color;

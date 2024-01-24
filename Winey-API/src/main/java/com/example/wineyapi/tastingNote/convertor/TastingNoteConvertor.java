@@ -295,6 +295,7 @@ public class TastingNoteConvertor {
                 .wineType(wine.getType())
                 .wineName(wine.getName())
                 .region(wine.getRegion())
+                .vintage(wine.getVintage())
                 .star(tastingNote.getStarRating() != null ? tastingNote.getStarRating() : null)
                 .color(tastingNote.getColor())
                 .buyAgain(tastingNote.getBuyAgain())
@@ -393,5 +394,21 @@ public class TastingNoteConvertor {
         else {
             return String.valueOf(value);
         }
+    }
+
+    public void updateTastingNote(TastingNote tastingNote, TastingNoteRequest.UpdateTastingNoteDTO request) {
+        tastingNote.setStarRating((request.getPrice() == null) ? 0 : request.getPrice());
+        tastingNote.setBuyAgain(request.getBuyAgain());
+        tastingNote.setMemo(request.getMemo());
+        tastingNote.setPrice(request.getPrice());
+        tastingNote.setOfficialAlcohol(request.getOfficialAlcohol());
+        tastingNote.setSweetness(request.getSweetness());
+        tastingNote.setAcidity(request.getAcidity());
+        tastingNote.setBody(request.getBody());
+        tastingNote.setAlcohol(request.getAlcohol());
+        tastingNote.setTannins(request.getTannin());
+        tastingNote.setFinish(request.getFinish());
+        tastingNote.setColor(request.getColor());
+        tastingNote.setVintage(request.getVintage());
     }
 }
