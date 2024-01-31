@@ -286,6 +286,7 @@ public class TastingNoteConvertor {
         Wine wine = tastingNote.getWine();
         List<TastingNoteImage> tastingNoteImages = tastingNote.getTastingNoteImages();
         List<SmellKeywordTastingNote> smellKeywordTastingNotes = tastingNote.getSmellKeywordTastingNote();
+        System.out.println(smellKeywordTastingNotes.size());
         LocalDateTime createdAt = tastingNote.getCreatedAt();
 
         return TastingNoteResponse.TastingNoteDTO
@@ -295,7 +296,7 @@ public class TastingNoteConvertor {
                 .wineType(wine.getType())
                 .wineName(wine.getName())
                 .region(wine.getRegion())
-                .vintage(wine.getVintage())
+                .vintage(tastingNote.getVintage())
                 .star(tastingNote.getStarRating() != null ? tastingNote.getStarRating() : null)
                 .color(tastingNote.getColor())
                 .buyAgain(tastingNote.getBuyAgain())
@@ -347,6 +348,8 @@ public class TastingNoteConvertor {
         List<String> smellKeywordList = new ArrayList<>();
 
         for(SmellKeywordTastingNote smellKeywordTastingNote : smellKeywordTastingNotes){
+            System.out.println(smellKeywordTastingNote.getId());
+            System.out.println(smellKeywordTastingNote.getSmellKeyword());
             smellKeywordList.add(smellKeywordTastingNote.getSmellKeyword().getName());
         }
 

@@ -98,11 +98,8 @@ public class TastingNoteRequest {
     @AllArgsConstructor
     @Builder
     @NoArgsConstructor
+    @ToString
     public static class UpdateTastingNoteDTO {
-        @NotNull(message = "테이스팅 노트 ID 를 입력해주세요")
-        @Schema(name = "wineId", required = true)
-        private Long tastingNoteId;
-
         @Schema(name = "vintage", required = false)
         private Integer vintage;
 
@@ -159,8 +156,11 @@ public class TastingNoteRequest {
         @Schema(name ="rating", description = "평점", required = true)
         private Integer rating;
 
-        @Schema(name = "smellKeywordList 수정사항 있을 경우 작성해주세요",description = "향 키워드 리스트", required = false)
+        @Schema(name = "smellKeywordList 추가사항 있을 경우 작성해주세요",description = "향 키워드 리스트", required = false)
         private List<SmellKeyword> smellKeywordList;
+
+        @Schema(name = "deleteSmellKeywordList 삭제사항 있을 경우 작성해주세요",description = "향 키워드 리스트", required = false)
+        private List<SmellKeyword> deleteSmellKeywordList;
 
         @Schema(name = "deleteImgLists 삭제사항 있을 경우 작성해주세요",description = "테이스팅 노트 이미지 리스트", required = false)
         private List<Long> deleteImgLists;

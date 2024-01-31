@@ -25,5 +25,6 @@ public interface TastingNoteService {
   
     void deleteTastingNote(User user, Long noteId);
 
-    void updateTastingNote(User user, TastingNoteRequest.UpdateTastingNoteDTO request, List<MultipartFile> multipartFiles);
+    void updateTastingNote(User user, TastingNoteRequest.UpdateTastingNoteDTO request, List<MultipartFile> multipartFiles,
+        Long noteId);
 }
