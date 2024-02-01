@@ -28,7 +28,7 @@ public class WineGradeServiceImpl implements WineGradeService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(UserErrorCode.NOT_EXIST_USER));
         WineGrade currentGrade = user.getWineGrade();
-        Integer threeMonthsNoteCount = tastingNoteRepository.countByUserAndCreatedAtAfter(user, getThreeMonthsAgo());
+        Integer threeMonthsNoteCount = tastingNoteRepository.countByUserAndCreatedAtAfterAndIsDeleted(user, getThreeMonthsAgo(), false);
         WineGrade nextGrade = calculateNextWineGrade(threeMonthsNoteCount);
         return WineGradeConverter.toGetWineGradeDTO(currentGrade, nextGrade, threeMonthsNoteCount);
     }

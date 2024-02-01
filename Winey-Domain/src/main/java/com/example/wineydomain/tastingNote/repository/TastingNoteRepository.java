@@ -88,6 +88,8 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
 
     List<TastingNote> findByUserAndBuyAgainAndIsDeleted(User user, boolean b, boolean b1);
 
+    Integer countByUserAndCreatedAtAfterAndIsDeleted(User user, LocalDateTime threeMonthsAgo, boolean b);
+
     interface WineList{
         Long getWineId();
 
