@@ -30,4 +30,6 @@ public interface UserService {
     void deleteFcmToken(User user, String deviceId);
 
     UserResponse.UserInfoDTO getUserInfo(User user);
+
+    void patchNickname(User user, String nickname);
 }
