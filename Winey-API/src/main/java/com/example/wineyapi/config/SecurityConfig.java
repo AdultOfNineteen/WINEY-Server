@@ -78,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/users/{userId}/wine-grade").authenticated()
                 .antMatchers("/users/{userId}/wine-badges").authenticated()
                 .antMatchers("/users/logout").authenticated()
-                .antMatchers("/refresh").permitAll()
+                .antMatchers("/refresh").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/users/{userId}").authenticated()
                 .antMatchers("/users/**").permitAll()
                 .antMatchers("/profile").permitAll()
