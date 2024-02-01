@@ -168,4 +168,15 @@ public class UserController {
         return CommonResponse.onSuccess(userService.getUserInfo(user));
     }
 
+    @Operation(summary = "01-12 User 👤 유저 닉네임 변경 Mage By Austin", description = "유저 닉네임 변경.")
+    @ApiErrorCodeExample(UserAuthErrorCode.class)
+    @PatchMapping("/nickname")
+    public CommonResponse<String> patchNickname(
+            @AuthenticationPrincipal User user,
+            @RequestParam String nickname
+    ){
+        userService.patchNickname(user, nickname);
+        return CommonResponse.onSuccess("수정 완료되었습니다.");
+    }
+
 }
