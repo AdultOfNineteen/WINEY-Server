@@ -92,7 +92,7 @@ public class RedisConfig {
             .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer));
 
         Map<String, RedisCacheConfiguration> cacheConfiguration = new HashMap<>();
-        cacheConfiguration.put("recommendWine", redisCacheConfiguration.entryTtl(Duration.ofMinutes(5L)));
+        cacheConfiguration.put("recommendWine", redisCacheConfiguration.entryTtl(Duration.ofDays(1L)));
         cacheConfiguration.put("wineBadgeAll", redisCacheConfiguration.entryTtl(Duration.ofMinutes(60L)));
 
         return RedisCacheManager.RedisCacheManagerBuilder
