@@ -284,4 +284,10 @@ public class UserServiceImpl implements UserService {
     public UserResponse.UserInfoDTO getUserInfo(User user) {
         return UserResponse.UserInfoDTO.builder().userId(user.getId()).status(user.getStatus()).build();
     }
+
+    @Override
+    public void patchNickname(User user, String nickname) {
+        user.setNickName(nickname);
+        userRepository.save(user);
+    }
 }
