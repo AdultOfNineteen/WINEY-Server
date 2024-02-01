@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class WineBadgeResponse {
         private String name;
         private String acquisitionMethod;
         private String description;
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-        private LocalDateTime acquiredAt;
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate acquiredAt;
         private Boolean isRead;
         @Builder.Default
         private String badgeImage = "";
