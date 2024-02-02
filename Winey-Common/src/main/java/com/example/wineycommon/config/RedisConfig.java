@@ -76,7 +76,7 @@ public class RedisConfig {
         return stringRedisTemplate;
     }
 
-    @Bean(name = "re경disCacheManager")
+    @Bean(name = "redisCacheManager")
     public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance,
