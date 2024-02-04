@@ -75,4 +75,12 @@ public class UserResponse {
 
         private Status status;
 	}
+
+    @NoArgsConstructor
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class UserNicknameDto {
+        private String nickname;
+    }
 }

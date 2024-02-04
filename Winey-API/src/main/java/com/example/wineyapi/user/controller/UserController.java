@@ -34,8 +34,6 @@ import static com.example.wineycommon.exception.errorcode.CommonResponseStatus.I
 @RestController
 @RequiredArgsConstructor
 public class UserController {
-
-
     private final UserService userService;
     private final JwtService jwtService;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -177,6 +175,15 @@ public class UserController {
     ){
         userService.patchNickname(user, nickname);
         return CommonResponse.onSuccess("수정 완료되었습니다.");
+    }
+
+    @Operation(summary = "01-13 User 👤 유저 닉네임 조회", description = "유저 닉네임 조회")
+    @ApiErrorCodeExample(UserAuthErrorCode.class)
+    @GetMapping("/nickname")
+    public CommonResponse<UserResponse.UserNicknameDto> getNickname(
+            @AuthenticationPrincipal User user
+    ){
+        return CommonResponse.onSuccess(new UserResponse.UserNicknameDto(user.getNickName()));
     }
 
 }
