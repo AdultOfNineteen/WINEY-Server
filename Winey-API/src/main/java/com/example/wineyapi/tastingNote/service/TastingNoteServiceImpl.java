@@ -58,7 +58,7 @@ public class TastingNoteServiceImpl implements TastingNoteService{
 
     @Override
     public TastingNoteResponse.CheckTastingNote checkTastingNote(User user) {
-        boolean checkTastingNote = tastingNoteRepository.existsByUserAndBuyAgain(user, true);
+        boolean checkTastingNote = tastingNoteRepository.existsByUserAndBuyAgainAndIsDeleted(user, true, false);
         return new TastingNoteResponse.CheckTastingNote(checkTastingNote);
     }
 
