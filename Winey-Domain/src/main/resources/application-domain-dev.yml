@@ -27,7 +27,7 @@ spring:
     # DDl 생성 시 데이터베이스 고유의 기능 사용여부
     generate-ddl: false
     # 실행되는 쿼리문 보여주기 여부
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
