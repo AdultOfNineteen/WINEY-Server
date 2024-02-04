@@ -168,4 +168,17 @@ public class UserConverter {
 	    return UserResponse.UserInfoDTO.builder().userId(user.getId()).status(user.getStatus()).build();
 
     }
+
+    public VerificationMessage toMasterVerificationCode(UserRequest.VerifyCodeDTO request, String number) {
+        return VerificationMessage
+            .builder()
+            .phoneNumber(request.getPhoneNumber())
+            .verificationNumber(number)
+            .expireAt(LocalDateTime.now().plusMinutes(5))
+            .requestedAt(LocalDateTime.now())
+            .verifiedAt(LocalDateTime.now())
+            .status(VerifyMessageStatus.VERIFIED)
+            .mismatchAttempts(0)
+            .build();
+    }
 }

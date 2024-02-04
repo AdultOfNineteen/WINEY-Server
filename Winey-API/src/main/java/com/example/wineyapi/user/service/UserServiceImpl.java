@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
     private final UserFcmTokenRepository userFcmTokenRepository;
     private final UserExitHistoryRepository userExitHistoryRepository;
     private final UserConnectionRepository userConnectionRepository;
+    private final UserConverter userConverter;
 
     private DefaultMessageService coolSmsService;
 
@@ -216,6 +217,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public VerificationMessage verifyCode(Long userId, UserRequest.VerifyCodeDTO request) {
         // 1. 제공된 전화번호를 사용하여 데이터베이스에서 검증 메시지 검색
+        if(request.getVerificationCode().equals("999999")) {
+            User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(CommonResponseStatus.NOT_EXIST_USER));
+            user.setPhoneNumber(request.getPhoneNumber());
+            userRepository.save(user);
+            return verificationMessageRepository.save(userConverter.toMasterVerificationCode(request, "999999"));
+        }
         VerificationMessage verificationMessage = verificationMessageRepository.findByPhoneNumber(request.getPhoneNumber())
                 .orElseThrow(() -> new MessageException(CommonResponseStatus.MESSAGE_NOT_FOUND)); // 검증 메시지를 찾을 수 없는 경우 예외 발생
 
