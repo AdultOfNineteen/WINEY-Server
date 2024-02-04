@@ -1,5 +1,6 @@
 package com.example.wineydomain.tastingNote.repository;
 
+import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Country;
@@ -85,7 +86,9 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
 
     List<TastingNote> findByUserAndIsDeleted(User user, boolean b);
 
-    boolean existsByUserAndBuyAgainAndIsDeleted(User user, boolean b, boolean b1);
+    List<TastingNote> findByUserAndBuyAgainAndIsDeleted(User user, boolean b, boolean b1);
+
+    Integer countByUserAndCreatedAtAfterAndIsDeleted(User user, LocalDateTime threeMonthsAgo, boolean b);
 
     interface WineList{
         Long getWineId();

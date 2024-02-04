@@ -33,7 +33,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository{
                 .where(user.id.in(
                         JPAExpressions.select(tastingNote.user.id)
                                 .from(tastingNote)
-                                .where(tastingNote.createdAt.after(threeMonthsAgo.atStartOfDay()))
+                                .where(tastingNote.createdAt.after(threeMonthsAgo.atStartOfDay()).and(tastingNote.isDeleted.eq(false)))
                                 .groupBy(tastingNote.user)
                                 .having(tastingNote.count().goe(WineGrade.WINERY.getMinCount()))
                 ))
@@ -46,7 +46,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository{
                 .where(user.id.in(
                         JPAExpressions.select(tastingNote.user.id)
                                 .from(tastingNote)
-                                .where(tastingNote.createdAt.after(threeMonthsAgo.atStartOfDay()))
+                                .where(tastingNote.createdAt.after(threeMonthsAgo.atStartOfDay()).and(tastingNote.isDeleted.eq(false)))
                                 .groupBy(tastingNote.user)
                                 .having(tastingNote.count().goe(WineGrade.OAK.getMinCount()),
                                         tastingNote.count().lt(WineGrade.WINERY.getMinCount()))
@@ -60,7 +60,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository{
                 .where(user.id.in(
                         JPAExpressions.select(tastingNote.user.id)
                                 .from(tastingNote)
-                                .where(tastingNote.createdAt.after(threeMonthsAgo.atStartOfDay()))
+                                .where(tastingNote.createdAt.after(threeMonthsAgo.atStartOfDay()).and(tastingNote.isDeleted.eq(false)))
                                 .groupBy(tastingNote.user)
                                 .having(tastingNote.count().goe(WineGrade.BOTTLE.getMinCount()),
                                         tastingNote.count().lt(WineGrade.OAK.getMinCount()))
@@ -74,7 +74,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository{
                 .where(user.id.in(
                         JPAExpressions.select(tastingNote.user.id)
                                 .from(tastingNote)
-                                .where(tastingNote.createdAt.after(threeMonthsAgo.atStartOfDay()))
+                                .where(tastingNote.createdAt.after(threeMonthsAgo.atStartOfDay()).and(tastingNote.isDeleted.eq(false)))
                                 .groupBy(tastingNote.user)
                                 .having(tastingNote.count().lt(WineGrade.BOTTLE.getMinCount()))
                 ))
