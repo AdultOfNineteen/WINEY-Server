@@ -36,7 +36,9 @@ public class WineBadgeCustomRepositoryImpl implements WineBadgeCustomRepository 
                         wineBadge.acquisitionMethod,
                         userWineBadge.user.id.as("userId"),
                         userWineBadge.createdAt.as("acquiredAt"),
-                        userWineBadge.isRead.as("isRead")
+                        userWineBadge.isRead.as("isRead"),
+                        wineBadge.imgUrl,
+                        wineBadge.unActivatedImgUrl
                 ))
                 .from(wineBadge)
                 .leftJoin(userWineBadge)

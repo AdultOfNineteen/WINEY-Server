@@ -29,6 +29,8 @@ public class WineBadgeResponse {
         private Boolean isRead;
         @Builder.Default
         private String badgeImage = "";
+        private String imgUrl;
+        private String unActivatedImgUrl;
     }
 
     @NoArgsConstructor

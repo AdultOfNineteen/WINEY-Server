@@ -32,11 +32,15 @@ public class QWineBadge extends EntityPathBase<WineBadge> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath imgUrl = createString("imgUrl");
+
     public final StringPath name = createString("name");
 
     public final NumberPath<Integer> requiredActivity = createNumber("requiredActivity", Integer.class);
 
     public final EnumPath<BadgeType> type = createEnum("type", BadgeType.class);
+
+    public final StringPath unActivatedImgUrl = createString("unActivatedImgUrl");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;

@@ -21,6 +21,8 @@ import com.example.wineydomain.user.entity.UserFcmToken;
 import com.example.wineydomain.user.repository.UserConnectionRepository;
 import com.example.wineydomain.user.repository.UserRepository;
 import com.example.wineydomain.wine.entity.Wine;
+import com.example.wineyinfrastructure.amazonS3.enums.Folder;
+import com.example.wineyinfrastructure.amazonS3.service.S3UploadService;
 import com.example.wineyinfrastructure.firebase.dto.NotificationRequestDto;
 import com.example.wineyinfrastructure.firebase.service.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -51,6 +54,7 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     private final MessageService messageService;
     private final MessageConverter messageConverter;
     private final NotificationService notificationService;
+    private final S3UploadService s3UploadService;
 
 
     @RedissonLock(LockName =  "뱃지-계산", key = "#userId")
@@ -280,5 +284,14 @@ public class WineBadgeServiceImpl implements WineBadgeService {
         WineBadge wineBadge = wineBadgeRepository.findById(wineBadgeId)
                 .orElseThrow(() -> new NotFoundException(WineBadgeErrorCode.BADGE_NOT_FOUND));
         return WineBadgeUserDTO.from(wineBadge);
+    }
+
+    @Override
+    public void uploadBadgeImage(Long badgeId, MultipartFile multipartFile) {
+        WineBadge wineBadge = wineBadgeRepository.findById(badgeId)
+                .orElseThrow(() -> new NotFoundException(WineBadgeErrorCode.BADGE_NOT_FOUND));
+        String imageUrl = s3UploadService.uploadImage(badgeId, Folder.BADGE, multipartFile);
+        wineBadge.setImgUrl(imageUrl);
+        wineBadgeRepository.save(wineBadge);
     }
 }

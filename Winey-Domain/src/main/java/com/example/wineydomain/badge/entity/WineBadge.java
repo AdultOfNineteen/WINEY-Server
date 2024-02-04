@@ -23,6 +23,10 @@ public class WineBadge extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String imgUrl;
+
+    private String unActivatedImgUrl;
+
     @Column(name = "badge")
     private String badge;
 

@@ -9,8 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,5 +34,9 @@ public class TestController {
         String refreshToken = jwtService.createRefreshToken(userId);
         return CommonResponse.onSuccess(accessToken + " " + refreshToken);
     }
-
+    @PostMapping("/badge/{badgeId}")
+    public CommonResponse<String> postBadgeImage(@PathVariable Long badgeId, @RequestPart MultipartFile multipartFile){
+        wineBadgeService.uploadBadgeImage(badgeId, multipartFile);
+        return CommonResponse.onSuccess("성공");
+    }
 }

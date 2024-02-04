@@ -6,6 +6,8 @@ import com.example.wineydomain.user.entity.User;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public interface WineBadgeService {
     void calculateBadge(User user, Long userId);
 
@@ -16,4 +18,6 @@ public interface WineBadgeService {
     List<WineBadgeUserDTO> getWineBadgeListByUser(Long userId);
 
     WineBadgeUserDTO getWineBadgeById(Long userId, Long wineBadgeId);
+
+	void uploadBadgeImage(Long badgeId, MultipartFile multipartFile);
 }

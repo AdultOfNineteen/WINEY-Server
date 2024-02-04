@@ -9,7 +9,8 @@ public enum Folder {
 	WINE_TIP("wine-tip/"),
 	TASTING_NOTE("tasting-note/"),
 	USER("user/"),
-	SHOP("shop/");
+	SHOP("shop/"),
+	BADGE("badge/");
 
 	private final String folderName;
 }

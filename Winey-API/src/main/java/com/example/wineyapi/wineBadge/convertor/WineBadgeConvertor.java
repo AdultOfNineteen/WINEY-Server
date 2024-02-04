@@ -24,6 +24,8 @@ public class WineBadgeConvertor {
                 .acquisitionMethod(userWineBadge.getAcquisitionMethod())
                 .acquiredAt(userWineBadge.getAcquiredAt()!=null ? userWineBadge.getAcquiredAt().toLocalDate() : null)
                 .isRead(userWineBadge.getIsRead())
+                .imgUrl(userWineBadge.getImgUrl())
+                .unActivatedImgUrl(userWineBadge.getUnActivatedImgUrl())
                 .build();
     }
 

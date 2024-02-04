@@ -22,6 +22,8 @@ public class WineBadgeUserDTO {
     private Boolean isRead;
     private String acquisitionMethod;
     private LocalDateTime acquiredAt;
+    private String imgUrl;
+    private String unActivatedImgUrl;
 
     public static WineBadgeUserDTO from(WineBadge wineBadge) {
         return WineBadgeUserDTO.builder()
@@ -35,6 +37,8 @@ public class WineBadgeUserDTO {
                 .userId(null)
                 .isRead(null)
                 .acquiredAt(null)
+                .imgUrl(wineBadge.getImgUrl())
+                .unActivatedImgUrl(wineBadge.getUnActivatedImgUrl())
                 .build();
     }
 
@@ -51,6 +55,8 @@ public class WineBadgeUserDTO {
                 .userId(userWineBadge.getUser().getId())
                 .isRead(userWineBadge.getIsRead())
                 .acquiredAt(userWineBadge.getCreatedAt())
+                .imgUrl(wineBadge.getImgUrl())
+                .unActivatedImgUrl(wineBadge.getUnActivatedImgUrl())
                 .build();
     }
 
