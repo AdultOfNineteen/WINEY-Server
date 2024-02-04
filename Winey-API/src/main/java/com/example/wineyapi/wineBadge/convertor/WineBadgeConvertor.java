@@ -22,7 +22,7 @@ public class WineBadgeConvertor {
                 .name(userWineBadge.getName())
                 .description(userWineBadge.getDescription())
                 .acquisitionMethod(userWineBadge.getAcquisitionMethod())
-                .acquiredAt(userWineBadge.getAcquiredAt().toLocalDate())
+                .acquiredAt(userWineBadge.getAcquiredAt()!=null ? userWineBadge.getAcquiredAt().toLocalDate() : null)
                 .isRead(userWineBadge.getIsRead())
                 .build();
     }
