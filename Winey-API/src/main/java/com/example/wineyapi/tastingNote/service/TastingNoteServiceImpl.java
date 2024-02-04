@@ -9,6 +9,7 @@ import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.image.entity.TastingNoteImage;
 import com.example.wineydomain.image.repository.TastingNoteImageRepository;
 import com.example.wineydomain.tastingNote.entity.SmellKeyword;
+import com.example.wineydomain.tastingNote.entity.SmellKeywordTastingNote;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.tastingNote.repository.SmellKeywordTastingNoteRepository;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
@@ -21,13 +22,15 @@ import com.example.wineyinfrastructure.amazonS3.service.S3UploadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.example.wineydomain.tastingNote.exception.GetTastingNoteErrorCode.NOT_FOUND_TASTING_NOTE;
 import static com.example.wineydomain.tastingNote.exception.UploadTastingNoteErrorCode.NOT_FOUNT_WINE;
@@ -79,7 +82,7 @@ public class TastingNoteServiceImpl implements TastingNoteService{
     
   @Override
     public void deleteTastingNote(User user, Long noteId) {
-        TastingNote tastingNote = tastingNoteRepository.findByUserAndId(user, noteId).orElseThrow(()-> new BadRequestException(NOT_FOUND_TASTING_NOTE));
+        TastingNote tastingNote = finByUserAndTastingNoteId(user, noteId);
 
         tastingNote.setIsDeleted(true);
 
@@ -88,11 +91,54 @@ public class TastingNoteServiceImpl implements TastingNoteService{
         tastingNoteRepository.save(tastingNote);
     }
 
+    private TastingNote finByUserAndTastingNoteId(User user, Long noteId) {
+        return tastingNoteRepository.findByUserAndId(user, noteId).orElseThrow(() -> new BadRequestException(NOT_FOUND_TASTING_NOTE));
+    }
+
+    @Override
+    @Transactional
+    public void updateTastingNote(User user, TastingNoteRequest.UpdateTastingNoteDTO request,
+        List<MultipartFile> multipartFiles, Long noteId) {
+        TastingNote tastingNote = finByUserAndTastingNoteId(user, noteId);
+        updateTastingNoteInfo(request, tastingNote);
+        updateTastingNoteSmellKeyword(request, tastingNote);
+        updateTastingNoteImg(request, tastingNote, multipartFiles);
+    }
+
+    private void updateTastingNoteSmellKeyword(TastingNoteRequest.UpdateTastingNoteDTO request, TastingNote tastingNote) {
+        if(request.getDeleteSmellKeywordList() != null) smellKeywordTastingNoteRepository.deleteByTastingNoteAndSmellKeywordIn(tastingNote, request.getDeleteSmellKeywordList());
+        if(request.getSmellKeywordList() != null) updateSmellKeyword(request, tastingNote);
+    }
+
+    private void updateSmellKeyword(TastingNoteRequest.UpdateTastingNoteDTO request, TastingNote tastingNote) {
+        List<SmellKeywordTastingNote> smellKeywordTastingNoteList = new ArrayList<>();
+        for(SmellKeyword smellKeyword : request.getSmellKeywordList()){
+            smellKeywordTastingNoteList.add(tastingNoteConvertor.SmellKeyword(smellKeyword, tastingNote));
+        }
+        smellKeywordTastingNoteRepository.saveAll(smellKeywordTastingNoteList);
+    }
+
+    private void updateTastingNoteImg(TastingNoteRequest.UpdateTastingNoteDTO request, TastingNote tastingNote, List<MultipartFile> multipartFiles) {
+        tastingNoteImageUpload(tastingNote, multipartFiles);
+        imageDelete(request.getDeleteImgLists());
+    }
+
+    private void updateTastingNoteInfo(TastingNoteRequest.UpdateTastingNoteDTO request, TastingNote tastingNote) {
+        tastingNoteConvertor.updateTastingNote(tastingNote, request);
+        tastingNoteRepository.save(tastingNote);
+    }
+
+    private void imageDelete(List<Long> deleteImgLists) {
+        if(deleteImgLists != null){
+            deleteImgFile(tastingNoteImageRepository.findByIdIn(deleteImgLists));
+        }
+    }
+
     private void deleteImgFile(List<TastingNoteImage> tastingNoteImages) {
         for (TastingNoteImage tastingNoteImage : tastingNoteImages){
             s3UploadService.deleteFile(tastingNoteImage.getUrl());
         }
-
+        tastingNoteImageRepository.deleteAllInBatch(tastingNoteImages);
     }
 
     @Override
@@ -107,6 +153,14 @@ public class TastingNoteServiceImpl implements TastingNoteService{
             }
         }
 
+        tastingNoteImageUpload(tastingNote, multipartFiles);
+
+        wineBadgeService.calculateBadge(user, user.getId());
+
+        return new TastingNoteResponse.CreateTastingNoteDTO(tastingNote.getId());
+    }
+
+    private void tastingNoteImageUpload(TastingNote tastingNote, List<MultipartFile> multipartFiles) {
         List<String> imgList = s3UploadService.imageListUpload(tastingNote.getId(), TASTING_NOTE, multipartFiles);
 
         if(imgList!=null) {
@@ -114,10 +168,6 @@ public class TastingNoteServiceImpl implements TastingNoteService{
                 tastingNoteImageRepository.save(tastingNoteConvertor.TastingImg(tastingNote, imgUrl));
             }
         }
-
-        wineBadgeService.calculateBadge(user, user.getId());
-
-        return new TastingNoteResponse.CreateTastingNoteDTO(tastingNote.getId());
     }
 
     @Override

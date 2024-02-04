@@ -104,3 +104,4 @@ public class TastingNote extends BaseEntity {
     @Column(name = "isDeleted")
     private Boolean isDeleted;
 }
+

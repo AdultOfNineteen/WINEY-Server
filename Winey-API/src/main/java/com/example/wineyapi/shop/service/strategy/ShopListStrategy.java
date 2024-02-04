@@ -8,4 +8,5 @@ import com.example.wineydomain.shop.repository.ShopRepository;
 public interface ShopListStrategy {
 
 	List<ShopRepository.ShopMapList> getShopList(ShopCommand.getMapCommandDTO commandDTO);
+
 }

@@ -22,19 +22,22 @@ import java.util.List;
 public class TastingNoteRepositoryImpl implements TastingNoteCustomRepository{
     private final JPAQueryFactory queryFactory;
 
-    public TastingNote getTastingNote(Long noteId, boolean deleted){
+    public TastingNote getTastingNote(Long noteId, boolean deleted) {
         QTastingNote qTastingNote = QTastingNote.tastingNote;
 
         JPAQuery<TastingNote> query = queryFactory
-                .selectFrom(qTastingNote)
-                .join(qTastingNote.wine).fetchJoin() // 페치 조인 사용
-                .leftJoin(qTastingNote.tastingNoteImages)
-                .leftJoin(qTastingNote.smellKeywordTastingNote).fetchJoin()
-                .where(qTastingNote.id.eq(noteId).and(qTastingNote.isDeleted.eq(deleted)));
+            .selectFrom(qTastingNote)
+            .join(qTastingNote.wine).fetchJoin()
+            .leftJoin(qTastingNote.tastingNoteImages)
+            .leftJoin(qTastingNote.smellKeywordTastingNote)
+            .where(isNoteIdAndNotDeleted(qTastingNote, noteId, deleted));
 
         return query.fetchOne();
     }
 
+    private BooleanExpression isNoteIdAndNotDeleted(QTastingNote qTastingNote, Long noteId, boolean deleted) {
+        return qTastingNote.id.eq(noteId).and(qTastingNote.isDeleted.eq(deleted));
+    }
     @Override
     public Page<TastingNote> findTastingNotes(User user, Integer page, Integer size, Integer order, List<Country> countries, List<WineType> wineTypes, Integer buyAgain) {
         QTastingNote qTastingNote = QTastingNote.tastingNote;

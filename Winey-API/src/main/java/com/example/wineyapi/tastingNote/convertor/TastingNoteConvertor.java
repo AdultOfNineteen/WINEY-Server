@@ -286,6 +286,7 @@ public class TastingNoteConvertor {
         Wine wine = tastingNote.getWine();
         List<TastingNoteImage> tastingNoteImages = tastingNote.getTastingNoteImages();
         List<SmellKeywordTastingNote> smellKeywordTastingNotes = tastingNote.getSmellKeywordTastingNote();
+        System.out.println(smellKeywordTastingNotes.size());
         LocalDateTime createdAt = tastingNote.getCreatedAt();
 
         return TastingNoteResponse.TastingNoteDTO
@@ -295,6 +296,7 @@ public class TastingNoteConvertor {
                 .wineType(wine.getType())
                 .wineName(wine.getName())
                 .region(wine.getRegion())
+                .vintage(tastingNote.getVintage())
                 .star(tastingNote.getStarRating() != null ? tastingNote.getStarRating() : null)
                 .color(tastingNote.getColor())
                 .buyAgain(tastingNote.getBuyAgain())
@@ -346,6 +348,8 @@ public class TastingNoteConvertor {
         List<String> smellKeywordList = new ArrayList<>();
 
         for(SmellKeywordTastingNote smellKeywordTastingNote : smellKeywordTastingNotes){
+            System.out.println(smellKeywordTastingNote.getId());
+            System.out.println(smellKeywordTastingNote.getSmellKeyword());
             smellKeywordList.add(smellKeywordTastingNote.getSmellKeyword().getName());
         }
 
@@ -393,5 +397,21 @@ public class TastingNoteConvertor {
         else {
             return String.valueOf(value);
         }
+    }
+
+    public void updateTastingNote(TastingNote tastingNote, TastingNoteRequest.UpdateTastingNoteDTO request) {
+        tastingNote.setStarRating((request.getPrice() == null) ? 0 : request.getPrice());
+        tastingNote.setBuyAgain(request.getBuyAgain());
+        tastingNote.setMemo(request.getMemo());
+        tastingNote.setPrice(request.getPrice());
+        tastingNote.setOfficialAlcohol(request.getOfficialAlcohol());
+        tastingNote.setSweetness(request.getSweetness());
+        tastingNote.setAcidity(request.getAcidity());
+        tastingNote.setBody(request.getBody());
+        tastingNote.setAlcohol(request.getAlcohol());
+        tastingNote.setTannins(request.getTannin());
+        tastingNote.setFinish(request.getFinish());
+        tastingNote.setColor(request.getColor());
+        tastingNote.setVintage(request.getVintage());
     }
 }
