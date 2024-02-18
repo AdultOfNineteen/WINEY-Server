@@ -32,6 +32,8 @@ public class QVerificationMessage extends EntityPathBase<VerificationMessage> {
 
     public final StringPath phoneNumber = createString("phoneNumber");
 
+    public final NumberPath<Integer> requestCount = createNumber("requestCount", Integer.class);
+
     public final DateTimePath<java.time.LocalDateTime> requestedAt = createDateTime("requestedAt", java.time.LocalDateTime.class);
 
     public final EnumPath<com.example.wineydomain.common.model.VerifyMessageStatus> status = createEnum("status", com.example.wineydomain.common.model.VerifyMessageStatus.class);

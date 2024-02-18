@@ -89,7 +89,8 @@ public enum CommonResponseStatus implements BaseErrorCode {
     MESSAGE_SEND_FAILED(BAD_REQUEST, "M001", "메시지 전송이 실패했습니다. 올바른 번호인지 확인하세요."),
     MESSAGE_NOT_FOUND(NOT_FOUND, "M002", "인증번호 전송 기록이 존재하지 않습니다."),
     MESSAGE_VERIFICATION_TIMEOUT(BAD_REQUEST, "M003","인증 번호가 만료되었습니다."),
-    VERIFICATION_DID_NOT_MATCH(BAD_REQUEST, "M004", "인증 번호가 일치하지 않습니다.");
+    VERIFICATION_DID_NOT_MATCH(BAD_REQUEST, "M004", "인증 번호가 일치하지 않습니다."),
+    REQUEST_RATE_LIMIT_EXCEEDED(BAD_REQUEST, "M005", "인증번호 요청 횟수가 초과되었습니다. 잠시 후 다시 시도하세요.");
 
     private final HttpStatus httpStatus;
     private final String code;
