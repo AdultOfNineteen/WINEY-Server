@@ -19,5 +19,7 @@ public interface WineBadgeService {
 
     WineBadgeUserDTO getWineBadgeById(Long userId, Long wineBadgeId);
 
-	void uploadBadgeImage(Long badgeId, MultipartFile multipartFile);
+    void uploadBadgeImage(Long badgeId, MultipartFile activateImg, MultipartFile unActivateImg);
+
+    //void uploadBadgeImage(Long badgeId, MultipartFile multipartFile);
 }

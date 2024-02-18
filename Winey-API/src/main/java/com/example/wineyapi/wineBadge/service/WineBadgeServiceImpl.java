@@ -287,6 +287,16 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     }
 
     @Override
+    public void uploadBadgeImage(Long badgeId, MultipartFile activateImg, MultipartFile unActivateImg) {
+        WineBadge wineBadge = wineBadgeRepository.findById(badgeId)
+                .orElseThrow(() -> new NotFoundException(WineBadgeErrorCode.BADGE_NOT_FOUND));
+        String activateImageUrl = s3UploadService.uploadImage(badgeId, Folder.BADGE, activateImg);
+        String unActivateImageUrl = s3UploadService.uploadImage(badgeId, Folder.BADGE, unActivateImg);
+        wineBadge.setImgUrl(activateImageUrl);
+        wineBadge.setUnActivatedImgUrl(unActivateImageUrl);
+        wineBadgeRepository.save(wineBadge);
+    }
+
     public void uploadBadgeImage(Long badgeId, MultipartFile multipartFile) {
         WineBadge wineBadge = wineBadgeRepository.findById(badgeId)
                 .orElseThrow(() -> new NotFoundException(WineBadgeErrorCode.BADGE_NOT_FOUND));
