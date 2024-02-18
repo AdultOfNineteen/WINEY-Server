@@ -35,8 +35,11 @@ public class TestController {
         return CommonResponse.onSuccess(accessToken + " " + refreshToken);
     }
     @PostMapping("/badge/{badgeId}")
-    public CommonResponse<String> postBadgeImage(@PathVariable Long badgeId, @RequestPart MultipartFile multipartFile){
-        wineBadgeService.uploadBadgeImage(badgeId, multipartFile);
+    public CommonResponse<String> postBadgeImage(@PathVariable Long badgeId,
+        @RequestPart MultipartFile activateImg,
+        @RequestPart MultipartFile unActivateImg){
+        //wineBadgeService.uploadBadgeImage(badgeId, multipartFile);
+        wineBadgeService.uploadBadgeImage(badgeId, activateImg, unActivateImg);
         return CommonResponse.onSuccess("성공");
     }
 }

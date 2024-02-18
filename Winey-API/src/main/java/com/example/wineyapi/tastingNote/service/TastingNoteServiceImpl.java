@@ -120,7 +120,7 @@ public class TastingNoteServiceImpl implements TastingNoteService{
 
     private void updateTastingNoteImg(TastingNoteRequest.UpdateTastingNoteDTO request, TastingNote tastingNote, List<MultipartFile> multipartFiles) {
         tastingNoteImageUpload(tastingNote, multipartFiles);
-        imageDelete(request.getDeleteImgLists());
+        imageDelete(request.getDeleteImgList());
     }
 
     private void updateTastingNoteInfo(TastingNoteRequest.UpdateTastingNoteDTO request, TastingNote tastingNote) {
@@ -174,6 +174,6 @@ public class TastingNoteServiceImpl implements TastingNoteService{
     public PageResponse<List<TastingNoteResponse.TastingNoteListDTO>> getTastingNoteList(User user, Integer page, Integer size, Integer order, List<Country> countries, List<WineType> wineTypes, Integer buyAgain) {
         Page<TastingNote> tastingNotes = tastingNoteRepository.findTastingNotes(user, page, size, order, countries, wineTypes, buyAgain);
 
-        return tastingNoteConvertor.TastingNoteList(tastingNotes);
+        return tastingNoteConvertor.toTastingNoteList(tastingNotes);
     }
 }

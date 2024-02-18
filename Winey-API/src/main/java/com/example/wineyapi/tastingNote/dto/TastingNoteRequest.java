@@ -163,7 +163,7 @@ public class TastingNoteRequest {
         private List<SmellKeyword> deleteSmellKeywordList;
 
         @Schema(name = "deleteImgLists 삭제사항 있을 경우 작성해주세요",description = "테이스팅 노트 이미지 리스트", required = false)
-        private List<Long> deleteImgLists;
+        private List<Long> deleteImgList;
 
         public Boolean getBuyAgain() {
             return buyAgain;

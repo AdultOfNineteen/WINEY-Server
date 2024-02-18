@@ -90,7 +90,7 @@ public class TastingNoteController {
     }
 
 
-    @PatchMapping("/{noteId}")
+    @RequestMapping(value = "/{noteId}", consumes = {"multipart/form-data"}, method = RequestMethod.PATCH)
     public CommonResponse<TastingNoteResponse.UpdateTastingNoteDTO> updateTastingNote(
         @AuthenticationPrincipal User user,
         @PathVariable Long noteId,

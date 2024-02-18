@@ -261,25 +261,30 @@ public class TastingNoteConvertor {
                 .build();
     }
 
-    public PageResponse<List<TastingNoteResponse.TastingNoteListDTO>> TastingNoteList(Page<TastingNote> tastingNotes) {
+    public PageResponse<List<TastingNoteResponse.TastingNoteListDTO>> toTastingNoteList(Page<TastingNote> tastingNotes) {
         List<TastingNoteResponse.TastingNoteListDTO> tastingNoteListDTOS = new ArrayList<>();
 
+        int no = 0;
         tastingNotes.getContent().forEach(
                 result -> {
                     tastingNoteListDTOS.add(
-                     TastingNoteResponse.TastingNoteListDTO.builder()
-                             .noteId(result.getId())
-                             .wineName(result.getWine().getName())
-                             .country(result.getWine().getCountry())
-                             .starRating(result.getStarRating())
-                             .buyAgain(result.getBuyAgain())
-                             .wineType(result.getWine().getType())
-                             .build()
-                    );
+                        toTastingNoteListDTO(result, no));
                 }
         );
 
         return new PageResponse<>( tastingNotes.isLast(),tastingNotes.getTotalElements(), tastingNoteListDTOS);
+    }
+
+    private TastingNoteResponse.TastingNoteListDTO toTastingNoteListDTO(TastingNote result, int no) {
+        no++;
+        return TastingNoteResponse.TastingNoteListDTO.builder()
+            .noteId(result.getId())
+            .wineName(result.getWine().getName())
+            .country(result.getWine().getCountry())
+            .starRating(result.getStarRating())
+            .buyAgain(result.getBuyAgain())
+            .wineType(result.getWine().getType())
+            .build();
     }
 
     public TastingNoteResponse.TastingNoteDTO TastingNote(TastingNote tastingNote) {
