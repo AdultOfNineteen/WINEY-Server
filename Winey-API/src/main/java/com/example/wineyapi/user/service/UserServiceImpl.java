@@ -6,6 +6,7 @@ import com.example.wineyapi.user.dto.UserResponse;
 import com.example.wineyapi.user.service.context.SocialLoginContext;
 import com.example.wineyapi.user.service.context.SocialLoginContextFactory;
 import com.example.wineyapi.wineBadge.service.WineBadgeService;
+import com.example.wineycommon.constants.WineyStatic;
 import com.example.wineycommon.exception.MessageException;
 import com.example.wineycommon.exception.NotFoundException;
 import com.example.wineycommon.exception.UserException;
@@ -46,6 +47,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -173,6 +175,23 @@ public class UserServiceImpl implements UserService {
     public VerificationMessage sendCode(Long userId, UserRequest.SendCodeDTO request) {
 
         Optional<User> optionalUser = userRepository.findByPhoneNumber(request.getPhoneNumber());
+        Optional<VerificationMessage> optionalVerificationMessage = verificationMessageRepository.findByPhoneNumber(request.getPhoneNumber());
+
+        // 요청 횟수가 3회(이면 이번 요청이 4회째)이상 & updatedAt이 5분 이내이면 에러 응답
+        if(optionalVerificationMessage.isPresent()) {
+            VerificationMessage verificationMessage = optionalVerificationMessage.get();
+            LocalDateTime updatedAt = verificationMessage.getUpdatedAt();
+            LocalDateTime now = LocalDateTime.now();
+
+            // updatedAt과 현재 시간(now) 사이의 차이를 계산
+            Duration duration = Duration.between(updatedAt, now);
+
+            // 차이가 5분 이내인지 확인
+            if(verificationMessage.getRequestCount() >= 3 && duration.toMinutes() < 5) {
+                // 에러 응답 로직
+                throw new UserException(CommonResponseStatus.REQUEST_RATE_LIMIT_EXCEEDED);
+            }
+        }
 
         if(optionalUser.isPresent() && optionalUser.get().getStatus() == Status.ACTIVE) {
             // 0. 1~2를 수행한 소셜로그인 계정 hard delete & 안내문구전송
@@ -183,14 +202,14 @@ public class UserServiceImpl implements UserService {
         }
 
         try {
-            // 1. 4자리 인증 번호 생성
-            String verificationNumber = numberGen(6);
+            // 1. 6자리 인증 번호 생성
+            String verificationNumber = numberGen(WineyStatic.VERIFICATION_MESSAGE_NUMBER_LENGTH);
 
             // 2. 발송할 메시지 객체 준비
             Message message = new Message();
             message.setFrom(coolSmsProperties.getFromNumber());
             message.setTo(request.getPhoneNumber());
-            message.setText("[WINEY]\n인증번호 : " + verificationNumber);
+            message.setText(WineyStatic.VERIFICATION_MESSAGE_PREFIX + verificationNumber);
 
             // 3. 서비스를 이용하여 메시지 발송
             coolSmsService.sendOne(new SingleMessageSendingRequest(message));
@@ -199,8 +218,9 @@ public class UserServiceImpl implements UserService {
             VerificationMessage verificationMessage = verificationMessageRepository.findByPhoneNumber(request.getPhoneNumber())
                     .orElseGet(() -> UserConverter.toVerificationMessage(request, verificationNumber));
 
+            verificationMessage.setRequestCount(verificationMessage.getRequestCount() + 1);
             verificationMessage.setVerificationNumber(verificationNumber);
-            verificationMessage.setExpireAt(LocalDateTime.now().plusMinutes(5));
+            verificationMessage.setExpireAt(LocalDateTime.now().plusMinutes(WineyStatic.VERIFICATION_MESSAGE_EXPIRE_AT));
             verificationMessage.setStatus(VerifyMessageStatus.PENDING);
 
             // 5. 데이터베이스에 검증 메시지 저장
@@ -227,6 +247,7 @@ public class UserServiceImpl implements UserService {
         // 3. 제공된 인증 번호가 검증 번호와 일치하는지 확인
         if(verificationMessage.getVerificationNumber().equals(request.getVerificationCode())) {
             verificationMessage.setStatus(VerifyMessageStatus.VERIFIED);
+            verificationMessage.setVerifiedAt(LocalDateTime.now());
         } else {
             verificationMessage.setStatus(VerifyMessageStatus.FAILED);
             verificationMessage.setMismatchAttempts(verificationMessage.getMismatchAttempts() + 1);

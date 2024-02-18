@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface VerificationMessageRepository extends JpaRepository<VerificationMessage, Long> {
     Optional<VerificationMessage> findByPhoneNumber(String phoneNumber);
+
+    boolean existsByPhoneNumber(String phoneNumber);
 }

@@ -49,4 +49,10 @@ public class WineyStatic {
     public static final List<String> IGNORE_METHODS = List.of(new String[]{"healthCheck", ""});
     public static final String BOOKMARK_CANCEL_MESSAGE = "북마크 취소";
     public static final String BOOKMARK_REGISTER_MESSAGE = "북마크 등록";
+
+    public static final String VERIFICATION_MESSAGE_PREFIX = "[WINEY]\n인증번호 : ";
+
+    public static final int VERIFICATION_MESSAGE_NUMBER_LENGTH = 6;
+
+    public static final int VERIFICATION_MESSAGE_EXPIRE_AT = 5;
 }

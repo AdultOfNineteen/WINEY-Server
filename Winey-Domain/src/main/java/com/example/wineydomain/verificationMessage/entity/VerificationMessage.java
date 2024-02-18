@@ -45,4 +45,8 @@ public class VerificationMessage extends BaseEntity {
 
     @Column(name = "mismatchAttempts")
     private Integer mismatchAttempts;
+
+    @Column(name = "requestCount")
+    @Builder.Default
+    private Integer requestCount = 0;
 }
