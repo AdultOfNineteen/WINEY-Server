@@ -1,5 +1,6 @@
 package com.example.wineyapi.security;
 
+import com.example.wineycommon.exception.UnauthorizedException;
 import com.example.wineycommon.properties.JwtProperties;
 import com.example.wineydomain.redis.entity.AccessToken;
 import com.example.wineydomain.redis.entity.RefreshToken;
@@ -28,7 +29,7 @@ import java.util.Optional;
 
 import static com.example.wineycommon.constants.WineyStatic.AUTHORIZATION_HEADER;
 import static com.example.wineycommon.constants.WineyStatic.REFRESH_TOKEN_HEADER;
-
+import static com.example.wineydomain.user.exception.UserAuthErrorCode.*;
 
 @RequiredArgsConstructor
 @Component
@@ -151,11 +152,22 @@ public class JwtService {
 
     public Long getUserIdByRefreshToken(String refreshToken) {
         Jws<Claims> claims;
-        claims = Jwts.parser()
+        try {
+            claims = Jwts.parser()
                 .setSigningKey(getRefreshKey())
                 .parseClaimsJws(refreshToken);
 
+        }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            throw new UnauthorizedException(INVALID_TOKEN_EXCEPTION);
+        } catch (ExpiredJwtException e) {
+            throw new UnauthorizedException(EXPIRED_JWT_EXCEPTION);
+        } catch (UnsupportedJwtException e) {
+            throw new UnauthorizedException(UNSUPPORTED_JWT_TOKEN);
+        } catch (IllegalArgumentException e) {
+            throw new UnauthorizedException(INVALID_TOKEN);
+        }
         return claims.getBody().get("userId",Long.class);
+
     }
 
     @Bean
