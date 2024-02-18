@@ -114,7 +114,7 @@ public class UserConverter {
                 .password(staticPasswordEncoder.encode(appleMember.getSocialId()))
                 .socialId(appleMember.getSocialId())
                 .nickName(nickName)
-                .username(createUserName(SocialType.GOOGLE, appleMember.getSocialId()))
+                .username(createUserName(SocialType.APPLE, appleMember.getSocialId()))
                 .socialType(SocialType.APPLE)
                 .level(1)
                 .status(Status.INACTIVE)
