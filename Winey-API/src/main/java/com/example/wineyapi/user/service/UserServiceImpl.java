@@ -14,13 +14,11 @@ import com.example.wineycommon.properties.CoolSmsProperties;
 import com.example.wineycommon.properties.KakaoProperties;
 import com.example.wineydomain.badge.entity.UserWineBadge;
 import com.example.wineydomain.badge.repository.UserWineBadgeRepository;
-import com.example.wineydomain.badge.repository.WineBadgeRepository;
 import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.common.model.VerifyMessageStatus;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
-import com.example.wineydomain.user.entity.UserConnection;
 import com.example.wineydomain.user.entity.UserExitHistory;
 import com.example.wineydomain.user.entity.UserFcmToken;
 import com.example.wineydomain.user.exception.UserErrorCode;
@@ -30,9 +28,6 @@ import com.example.wineydomain.user.repository.UserFcmTokenRepository;
 import com.example.wineydomain.user.repository.UserRepository;
 import com.example.wineydomain.verificationMessage.entity.VerificationMessage;
 import com.example.wineydomain.verificationMessage.repository.VerificationMessageRepository;
-import com.example.wineydomain.wine.entity.RecommendWine;
-import com.example.wineydomain.wine.entity.RecommendWinePk;
-import com.example.wineydomain.wine.repository.RecommendWineRepository;
 import com.example.wineyinfrastructure.oauth.kakao.client.KakaoLoginFeignClient;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
@@ -62,7 +57,6 @@ public class UserServiceImpl implements UserService {
     private final VerificationMessageRepository verificationMessageRepository;
     private final UserWineBadgeRepository userWineBadgeRepository;
     private final TastingNoteRepository tastingNoteRepository;
-    private final RecommendWineRepository recommendWineRepository;
     private final WineBadgeService wineBadgeService;
     private final UserFcmTokenRepository userFcmTokenRepository;
     private final UserExitHistoryRepository userExitHistoryRepository;
@@ -127,13 +121,6 @@ public class UserServiceImpl implements UserService {
                 .map(UserWineBadge::getId)
                 .collect(Collectors.toList());
         userWineBadgeRepository.deleteAllByIdInBatch(userWineBadgeIds);
-
-        // 추천 와인 삭제
-        List<RecommendWine> recommendWineList = recommendWineRepository.findByUser(user);
-        List<RecommendWinePk> recommendWineIds = recommendWineList.stream()
-                .map(RecommendWine::getId)
-                .collect(Collectors.toList());
-        recommendWineRepository.deleteAllByIdInBatch(recommendWineIds);
 
         // 유저 접속 정보 삭제
         userConnectionRepository.deleteByUser(user);

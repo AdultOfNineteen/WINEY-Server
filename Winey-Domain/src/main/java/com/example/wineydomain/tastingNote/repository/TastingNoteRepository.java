@@ -6,6 +6,8 @@ import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Country;
 import com.example.wineydomain.wine.entity.WineSummary;
 import com.example.wineydomain.wine.entity.WineType;
+import com.example.wineydomain.wine.repository.WineRepository;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -36,7 +38,7 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
             "GROUP BY TN.wineId " +
             "ORDER BY COUNT(TN.wineId) DESC, TN.createdAt DESC LIMIT 3",
             nativeQuery = true)
-    List<WineList> recommendCountWine();
+    List<WineRepository.WineList> recommendCountWine();
 
 
     Page<TastingNote> findByUserAndIsDeletedOrderByCreatedAtDesc(User user, boolean isDeleted, Pageable pageable);

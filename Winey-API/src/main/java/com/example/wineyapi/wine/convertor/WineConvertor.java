@@ -1,9 +1,11 @@
 package com.example.wineyapi.wine.convertor;
 
+import com.example.wineyapi.common.redis.RecommendWine;
 import com.example.wineyapi.wine.dto.WineResponse;
 import com.example.wineyapi.wine.service.WineHelper;
 import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
+import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Wine;
 import com.example.wineydomain.wine.repository.WineRepository;
 import com.example.wineydomain.wine.entity.WineSummary;
@@ -11,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -45,7 +49,7 @@ public class WineConvertor {
         return recommendWineDTOS;
     }
 
-    public List<WineResponse.RecommendWineDTO> RecommendWineByTastingNote(List<WineRepository.WineList> wineLists) {
+    public List<WineResponse.RecommendWineDTO> toRecommendWineDto(List<WineRepository.WineList> wineLists) {
         List<WineResponse.RecommendWineDTO> recommendWineDTOS = new ArrayList<>();
 
         wineLists.forEach(
@@ -104,6 +108,18 @@ public class WineConvertor {
                 .body(wine.getBody())
                 .tannins(wine.getTannins())
                 .wineSummary(wineSummary)
+                .build();
+    }
+
+    public RecommendWine toRecommendWine(User user, List<WineResponse.RecommendWineDTO> recommendWineLists) {
+        LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime midnight = now.toLocalDate().plusDays(1).atStartOfDay();
+
+        return RecommendWine.builder()
+                .id(String.valueOf(user.getId()))
+                .recommendWineList(recommendWineLists)
+                .ttl(Duration.between(now, midnight).getSeconds())
                 .build();
     }
 }
