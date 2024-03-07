@@ -1,12 +1,15 @@
 package com.example.wineycommon.reponse;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@AllArgsConstructor
 @Schema(description = "페이징 처리 응답")
 @ToString
 public class PageResponse<T> {
@@ -16,4 +19,13 @@ public class PageResponse<T> {
     private final long totalCnt;
     @Schema(description = "요소", required = true)
     private final T contents;
+
+    @JsonCreator
+    public PageResponse(@JsonProperty("isLast") Boolean isLast,
+        @JsonProperty("totalCnt") long totalCnt,
+        @JsonProperty("contents") T contents) {
+        this.isLast = isLast;
+        this.totalCnt = totalCnt;
+        this.contents = contents;
+    }
 }
