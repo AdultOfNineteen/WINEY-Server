@@ -281,6 +281,7 @@ public class TastingNoteConvertor {
             .noteId(result.getId())
             .wineName(result.getWine().getName())
             .country(result.getWine().getCountry())
+            .varietal(result.getWine().getVarietal())
             .starRating(result.getStarRating())
             .buyAgain(result.getBuyAgain())
             .wineType(result.getWine().getType())

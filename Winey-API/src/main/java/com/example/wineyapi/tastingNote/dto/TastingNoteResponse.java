@@ -21,6 +21,8 @@ public class TastingNoteResponse {
         private String wineName;
         @Schema(description = "와인 생산지")
         private Country country;
+        @Schema(description = "품종")
+        private String varietal;
         @Schema(description = "평점")
         private Integer starRating;
         @Schema(description = "재구매 유무")
