@@ -33,7 +33,7 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
     @Query("SELECT new com.example.wineydomain.wine.entity.WineSummary(avg(t.price), avg(t.sweetness), avg(t.acidity), avg(t.body), avg(t.tannins)) FROM TastingNote t WHERE t.wine.id = :wineId AND t.buyAgain = true")
     Optional<WineSummary> findWineSummaryByWineId(@Param("wineId") Long wineId);
 
-    @Query(value = "SELECT W.id as 'wineId', W.name, W.country, W.type, COALESCE(AVG(CASE WHEN TN.price IS NULL OR TN.price = 0 THEN NULL ELSE TN.price END),0) as 'price', W.varietal " +
+    @Query(value = "SELECT W.id as 'id', W.name, W.country, W.type, COALESCE(AVG(CASE WHEN TN.price IS NULL OR TN.price = 0 THEN NULL ELSE TN.price END),0) as 'price', W.varietal " +
             "FROM TastingNote TN JOIN Wine W ON TN.wineId = W.id " +
             "GROUP BY TN.wineId " +
             "ORDER BY COUNT(TN.wineId) DESC, TN.createdAt DESC LIMIT 3",

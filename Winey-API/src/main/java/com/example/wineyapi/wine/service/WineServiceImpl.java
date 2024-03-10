@@ -34,7 +34,6 @@ public class WineServiceImpl implements WineService {
     @Override
     public List<WineResponse.RecommendWineDTO> recommendWine(User user) {
         if(recommendWineRepository.existsById(String.valueOf(user.getId()))){
-            System.out.println("확인");
             RecommendWine recommendWine = recommendWineRepository.findById(String.valueOf(user.getId())).get();
             return recommendWine.getRecommendWineList();
         }
@@ -48,7 +47,6 @@ public class WineServiceImpl implements WineService {
     }
 
     private List<WineRepository.WineList> findRecommend(User user, List<TastingNote> tastingNotes) {
-        System.out.println("찾기");
         Preference preferences = user.getPreference();
         List<WineRepository.WineList> recommendWineLists;
 
