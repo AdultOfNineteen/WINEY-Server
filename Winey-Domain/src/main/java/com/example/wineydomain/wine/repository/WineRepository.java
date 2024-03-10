@@ -21,7 +21,7 @@ public interface WineRepository extends JpaRepository<Wine, Long> {
             "(w.acidity = :acidity and w.sweetness = :sweetness and w.body = :body and w.tannins != :tannins))" +
             " group by w.id order by rand() limit 3"
             ,nativeQuery = true)
-    List<WineList> recommendWineByTastingNote(@Param("id") Long id, @Param("acidity") Integer acidity, @Param("sweetness") Integer sweetness, @Param("body") Integer body, @Param("tannins") Integer tannins,@Param("userId") Long userId);
+    List<WineList> recommendWineByTastingNote(@Param("id") Long id, @Param("acidity") Integer acidity, @Param("sweetness") Integer sweetness, @Param("body") Integer body, @Param("tannins") Integer tannins);
 
     @Query(value = "SELECT w.id, w.name, w.country, w.type, COALESCE(AVG(NULLIF(TN.price, 0)), 0) as 'price', w.varietal " +
             "FROM Wine w LEFT JOIN TastingNote TN ON w.id = TN.wineId " +
@@ -33,7 +33,7 @@ public interface WineRepository extends JpaRepository<Wine, Long> {
             "GROUP BY w.id " +
             "ORDER BY RAND() LIMIT 3",
             nativeQuery = true)
-    List<WineList> recommendWine(@Param("acidity") Integer acidity, @Param("sweetness") Integer sweetness, @Param("body") Integer body, @Param("tannins") Integer tannins,@Param("userId") Long userId);
+    List<WineList> recommendWine(@Param("acidity") Integer acidity, @Param("sweetness") Integer sweetness, @Param("body") Integer body, @Param("tannins") Integer tannins);
 
     Page<Wine> findByNameContaining(String content, Pageable pageable);
 

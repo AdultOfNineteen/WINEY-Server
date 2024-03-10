@@ -58,14 +58,14 @@ public class WineServiceImpl implements WineService {
                 recommendWineLists = tastingNoteRepository.recommendCountWine();
             } else {
                 Wine wine = tastingNotes.get(0).getWine();
-                recommendWineLists = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins(), user.getId());
+                recommendWineLists = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins());
             }
         } else {
             if (tastingNotes.size() == 0) {
-                recommendWineLists = wineRepository.recommendWine(preferences.getAcidity(), preferences.getSweetness(), preferences.getBody(), preferences.getTannins(), user.getId());
+                recommendWineLists = wineRepository.recommendWine(preferences.getAcidity(), preferences.getSweetness(), preferences.getBody(), preferences.getTannins());
             } else {
                 Wine wine = tastingNotes.get(0).getWine();
-                recommendWineLists = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins(), user.getId());
+                recommendWineLists = wineRepository.recommendWineByTastingNote(wine.getId(), wine.getAcidity(), wine.getSweetness(), wine.getBody(), wine.getTannins());
             }
         }
 
