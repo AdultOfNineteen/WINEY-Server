@@ -134,6 +134,7 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
         userFcmTokenRepository.deleteAllByIdInBatch(userFcmTokenIds);
 
+
         // 탈퇴 히스토리 테이블에 탈퇴 정보 기록
         userExitHistoryRepository.save(UserExitHistory.from(user, reason));
 
