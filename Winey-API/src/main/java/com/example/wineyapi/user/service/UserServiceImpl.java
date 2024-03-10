@@ -17,6 +17,9 @@ import com.example.wineydomain.badge.entity.UserWineBadge;
 import com.example.wineydomain.badge.repository.UserWineBadgeRepository;
 import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.common.model.VerifyMessageStatus;
+import com.example.wineydomain.shop.entity.BookMarkPk;
+import com.example.wineydomain.shop.entity.ShopBookMark;
+import com.example.wineydomain.shop.repository.ShopBookMarkRepository;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
@@ -63,6 +66,7 @@ public class UserServiceImpl implements UserService {
     private final UserFcmTokenRepository userFcmTokenRepository;
     private final UserExitHistoryRepository userExitHistoryRepository;
     private final UserConnectionRepository userConnectionRepository;
+    private final ShopBookMarkRepository shopBookMarkRepository;
 
     private DefaultMessageService coolSmsService;
 
@@ -107,6 +111,7 @@ public class UserServiceImpl implements UserService {
         4. 추천 와인 1 : N
             - User엔티티에서 그래프탐색으로 추천와인목록을 조회할 경우가 없을 것 같아서 양방향 매핑은 하지 않고
               유저 삭제시 추천와인 리포지토리로 목록을 삭제하는 것으로 결정했습니다.
+        + FCM 토큰, ShopBookMark
      */
     @Transactional
     @Override
@@ -133,6 +138,13 @@ public class UserServiceImpl implements UserService {
                 .map(UserFcmToken::getId)
                 .collect(Collectors.toList());
         userFcmTokenRepository.deleteAllByIdInBatch(userFcmTokenIds);
+
+        // 상점 북마크 삭제
+        List<ShopBookMark> shopBookMarkList = shopBookMarkRepository.findByUser(user);
+        List<BookMarkPk> shopBookMarkIds = shopBookMarkList.stream()
+                .map(ShopBookMark::getId)
+                .collect(Collectors.toList());
+        shopBookMarkRepository.deleteAllByIdInBatch(shopBookMarkIds);
 
         // 탈퇴 히스토리 테이블에 탈퇴 정보 기록
         userExitHistoryRepository.save(UserExitHistory.from(user, reason));
