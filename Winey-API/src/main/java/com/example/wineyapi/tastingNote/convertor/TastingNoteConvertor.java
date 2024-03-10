@@ -238,7 +238,7 @@ public class TastingNoteConvertor {
                 .vintage(request.getVintage())
                 .tannins(request.getTannin())
                 .finish(request.getFinish())
-                .price((request.getPrice() == null) ? 0 : request.getPrice())
+                .price(request.getPrice())
                 .memo(request.getMemo())
                 .buyAgain(request.getBuyAgain())
                 .starRating(request.getRating())
@@ -406,7 +406,7 @@ public class TastingNoteConvertor {
     }
 
     public void updateTastingNote(TastingNote tastingNote, TastingNoteRequest.UpdateTastingNoteDTO request) {
-        tastingNote.setStarRating((request.getPrice() == null) ? 0 : request.getPrice());
+        tastingNote.setStarRating((request.getRating() == null) ? 0 : request.getRating());
         tastingNote.setBuyAgain(request.getBuyAgain());
         tastingNote.setMemo(request.getMemo());
         tastingNote.setPrice(request.getPrice());
