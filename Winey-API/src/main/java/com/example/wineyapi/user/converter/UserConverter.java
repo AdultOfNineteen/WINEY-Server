@@ -14,11 +14,14 @@ import com.example.wineyinfrastructure.oauth.apple.dto.AppleMember;
 import com.example.wineyinfrastructure.oauth.google.dto.GoogleUserInfo;
 import com.example.wineyinfrastructure.oauth.kakao.dto.KakaoUserInfoDto;
 import com.example.wineyinfrastructure.user.client.NickNameFeignClient;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -26,76 +29,76 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserConverter {
 
-    private final PasswordEncoder passwordEncoder;
-    private final NickNameFeignClient nickNameFeignClient;
-    private final UserService userService;
+	private final PasswordEncoder passwordEncoder;
+	private final NickNameFeignClient nickNameFeignClient;
+	private final UserService userService;
 
-    private static PasswordEncoder staticPasswordEncoder;
-    private static NickNameFeignClient staticNickNameFeignClient;
-    private static UserService staticUserService;
+	private static PasswordEncoder staticPasswordEncoder;
+	private static NickNameFeignClient staticNickNameFeignClient;
+	private static UserService staticUserService;
 
-    @PostConstruct
-    void init() {
-        staticPasswordEncoder = this.passwordEncoder;
-        staticNickNameFeignClient = this.nickNameFeignClient;
-        staticUserService = this.userService;
-    }
+	@PostConstruct
+	void init() {
+		staticPasswordEncoder = this.passwordEncoder;
+		staticNickNameFeignClient = this.nickNameFeignClient;
+		staticUserService = this.userService;
+	}
 
-    public static String createUserName(SocialType socialType, String socialId) {
-        return socialType.name() + "-" + socialId;
-    }
+	public static String createUserName(SocialType socialType, String socialId) {
+		return socialType.name() + "-" + socialId;
+	}
 
-    public static UserResponse.LoginUserDTO toLoginUserDTO(User user, String accessToken, String refreshToken) {
-        VerifyMessageStatus verifyMessageStatus = staticUserService.findVerifyMessageStatusByUser(user);
-        PreferenceStatus preferenceStatus =
-                Optional.ofNullable(user.getPreference())
-                        .map(preference -> PreferenceStatus.DONE)
-                        .orElse(PreferenceStatus.NONE);
+	public static UserResponse.LoginUserDTO toLoginUserDTO(User user, String accessToken, String refreshToken) {
+		VerifyMessageStatus verifyMessageStatus = staticUserService.findVerifyMessageStatusByUser(user);
+		PreferenceStatus preferenceStatus =
+			Optional.ofNullable(user.getPreference())
+				.map(preference -> PreferenceStatus.DONE)
+				.orElse(PreferenceStatus.NONE);
 
-        return UserResponse.LoginUserDTO.builder()
-                .userId(user.getId())
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .userStatus(user.getStatus())
-                .messageStatus(verifyMessageStatus)
-                .preferenceStatus(preferenceStatus)
-                .build();
-    }
+		return UserResponse.LoginUserDTO.builder()
+			.userId(user.getId())
+			.accessToken(accessToken)
+			.refreshToken(refreshToken)
+			.userStatus(user.getStatus())
+			.messageStatus(verifyMessageStatus)
+			.preferenceStatus(preferenceStatus)
+			.build();
+	}
 
-    public static User toUser(KakaoUserInfoDto kakaoUserInfoDto) {
-        String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
+	public static User toUser(KakaoUserInfoDto kakaoUserInfoDto) {
+		String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
 
-        return User.builder()
-                .profileImgUrl(kakaoUserInfoDto.getProfileUrl())
-                .password(staticPasswordEncoder.encode(kakaoUserInfoDto.getId()))
-                .socialId(kakaoUserInfoDto.getId())
-                .nickName(nickName)
-                .username(createUserName(SocialType.KAKAO, kakaoUserInfoDto.getId()))
-                .socialType(SocialType.KAKAO)
-                .level(1)
-                .status(Status.INACTIVE)
-                .isTastingNoteAnalyzed(false)
-                .build();
-    }
+		return User.builder()
+			.profileImgUrl(kakaoUserInfoDto.getProfileUrl())
+			.password(staticPasswordEncoder.encode(kakaoUserInfoDto.getId()))
+			.socialId(kakaoUserInfoDto.getId())
+			.nickName(nickName)
+			.username(createUserName(SocialType.KAKAO, kakaoUserInfoDto.getId()))
+			.socialType(SocialType.KAKAO)
+			.level(1)
+			.status(Status.INACTIVE)
+			.isTastingNoteAnalyzed(false)
+			.build();
+	}
 
-    public static User toUser(GoogleUserInfo googleUserInfo) {
-        String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
+	public static User toUser(GoogleUserInfo googleUserInfo) {
+		String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
 
-        return User.builder()
-                .profileImgUrl(googleUserInfo.getPicture())
-                .password(staticPasswordEncoder.encode(googleUserInfo.getSub()))
-                .socialId(googleUserInfo.getSub())
-                .nickName(nickName)
-                .username(createUserName(SocialType.GOOGLE, googleUserInfo.getSub()))
-                .socialType(SocialType.GOOGLE)
-                .level(1)
-                .status(Status.INACTIVE)
-                .isTastingNoteAnalyzed(false)
-                .build();
-    }
+		return User.builder()
+			.profileImgUrl(googleUserInfo.getPicture())
+			.password(staticPasswordEncoder.encode(googleUserInfo.getSub()))
+			.socialId(googleUserInfo.getSub())
+			.nickName(nickName)
+			.username(createUserName(SocialType.GOOGLE, googleUserInfo.getSub()))
+			.socialType(SocialType.GOOGLE)
+			.level(1)
+			.status(Status.INACTIVE)
+			.isTastingNoteAnalyzed(false)
+			.build();
+	}
 
-    public static User toUser(AppleMember appleMember) {
-        String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
+	public static User toUser(AppleMember appleMember) {
+		String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
 
         /*
             NOTE
@@ -109,76 +112,81 @@ public class UserConverter {
 
             따라서, 프로필 이미지를 제공하려면 사용자에게 직접 이미지를 업로드하도록 요청하거나 다른 소셜 로그인 서비스를 통해 이미지를 가져와야 합니다.
          */
-        return User.builder()
-                .profileImgUrl(null)
-                .password(staticPasswordEncoder.encode(appleMember.getSocialId()))
-                .socialId(appleMember.getSocialId())
-                .nickName(nickName)
-                .username(createUserName(SocialType.APPLE, appleMember.getSocialId()))
-                .socialType(SocialType.APPLE)
-                .level(1)
-                .status(Status.INACTIVE)
-                .isTastingNoteAnalyzed(false)
-                .build();
-    }
+		return User.builder()
+			.profileImgUrl(null)
+			.password(staticPasswordEncoder.encode(appleMember.getSocialId()))
+			.socialId(appleMember.getSocialId())
+			.nickName(nickName)
+			.username(createUserName(SocialType.APPLE, appleMember.getSocialId()))
+			.socialType(SocialType.APPLE)
+			.level(1)
+			.status(Status.INACTIVE)
+			.isTastingNoteAnalyzed(false)
+			.build();
+	}
 
-    public static UserResponse.DeleteUserDTO toDeleteUserDTO(Long deletedUserId) {
-        return UserResponse.DeleteUserDTO.builder()
-                .userId(deletedUserId)
-                .deletedAt(LocalDateTime.now())
-                .build();
-    }
+	public static UserResponse.DeleteUserDTO toDeleteUserDTO(Long deletedUserId) {
+		return UserResponse.DeleteUserDTO.builder()
+			.userId(deletedUserId)
+			.deletedAt(LocalDateTime.now())
+			.build();
+	}
 
-    public static UserResponse.SendCodeDTO toSendCodeDTO(VerificationMessage verificationMessage) {
-        return UserResponse.SendCodeDTO.builder()
-                .phoneNumber(verificationMessage.getPhoneNumber())
-                .sentAt(verificationMessage.getCreatedAt())
-                .expireAt(verificationMessage.getExpireAt())
-                .build();
-    }
+	public static UserResponse.SendCodeDTO toSendCodeDTO(VerificationMessage verificationMessage) {
+		return UserResponse.SendCodeDTO.builder()
+			.phoneNumber(verificationMessage.getPhoneNumber())
+			.sentAt(verificationMessage.getCreatedAt())
+			.expireAt(verificationMessage.getExpireAt())
+			.build();
+	}
 
-    public static UserResponse.VerifyCodeDTO toVerifyCodeDTO(VerificationMessage verificationMessage) {
-        return UserResponse.VerifyCodeDTO.builder()
-                .phoneNumber(verificationMessage.getPhoneNumber())
-                .status(verificationMessage.getStatus())
-                .mismatchAttempts(verificationMessage.getMismatchAttempts())
-                .build();
-    }
+	public static UserResponse.VerifyCodeDTO toVerifyCodeDTO(VerificationMessage verificationMessage) {
+		return UserResponse.VerifyCodeDTO.builder()
+			.phoneNumber(verificationMessage.getPhoneNumber())
+			.status(verificationMessage.getStatus())
+			.mismatchAttempts(verificationMessage.getMismatchAttempts())
+			.build();
+	}
 
-    public static VerificationMessage toVerificationMessage(UserRequest.SendCodeDTO request, String verificationNumber) {
-        return VerificationMessage.builder()
-                .status(VerifyMessageStatus.PENDING)
-                .verificationNumber(verificationNumber)
-                .requestedAt(LocalDateTime.now())
-                .expireAt(LocalDateTime.now().plusMinutes(5))
-                .phoneNumber(request.getPhoneNumber())
-                .mismatchAttempts(0)
-                .build();
-    }
+	public static VerificationMessage toVerificationMessage(UserRequest.SendCodeDTO request,
+		String verificationNumber) {
+		return VerificationMessage.builder()
+			.status(VerifyMessageStatus.PENDING)
+			.verificationNumber(verificationNumber)
+			.requestedAt(LocalDateTime.now())
+			.expireAt(LocalDateTime.now().plusMinutes(5))
+			.phoneNumber(request.getPhoneNumber())
+			.mismatchAttempts(0)
+			.build();
+	}
 
-    public static UserFcmToken toUserFcmToken(UserRequest.UserFcmTokenDto userFcmTokenDto, User user) {
-        return UserFcmToken.builder()
-                .fcmToken(userFcmTokenDto.getFcmToken())
-                .deviceId(userFcmTokenDto.getDeviceId())
-                .user(user)
-                .build();
-    }
+	public static UserFcmToken toUserFcmToken(UserRequest.UserFcmTokenDto userFcmTokenDto, User user) {
+		return UserFcmToken.builder()
+			.fcmToken(userFcmTokenDto.getFcmToken())
+			.deviceId(userFcmTokenDto.getDeviceId())
+			.user(user)
+			.build();
+	}
 
 	public UserResponse.UserInfoDTO toUserInfoDTO(User user) {
-	    return UserResponse.UserInfoDTO.builder().userId(user.getId()).status(user.getStatus()).build();
+		return UserResponse.UserInfoDTO.builder()
+			.userId(user.getId())
+			.status(user.getStatus())
+			.nickname(user.getNickName())
+			.build();
 
-    }
+	}
 
-    public VerificationMessage toMasterVerificationCode(UserRequest.VerifyCodeDTO request, String number) {
-        return VerificationMessage
-            .builder()
-            .phoneNumber(request.getPhoneNumber())
-            .verificationNumber(number)
-            .expireAt(LocalDateTime.now().plusMinutes(5))
-            .requestedAt(LocalDateTime.now())
-            .verifiedAt(LocalDateTime.now())
-            .status(VerifyMessageStatus.VERIFIED)
-            .mismatchAttempts(0)
-            .build();
-    }
+	public VerificationMessage toMasterVerificationCode(UserRequest.VerifyCodeDTO request, String number) {
+		return VerificationMessage
+			.builder()
+			.phoneNumber(request.getPhoneNumber())
+			.verificationNumber(number)
+			.expireAt(LocalDateTime.now().plusMinutes(5))
+			.requestedAt(LocalDateTime.now())
+			.verifiedAt(LocalDateTime.now())
+			.status(VerifyMessageStatus.VERIFIED)
+			.mismatchAttempts(0)
+			.build();
+	}
 }

@@ -73,6 +73,8 @@ public class UserResponse {
 	public static class UserInfoDTO {
         private Long userId;
 
+        private String nickname;
+
         private Status status;
 	}
 

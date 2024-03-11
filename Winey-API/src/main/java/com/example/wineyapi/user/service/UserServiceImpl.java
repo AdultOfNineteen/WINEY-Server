@@ -302,7 +302,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse.UserInfoDTO getUserInfo(User user) {
-        return UserResponse.UserInfoDTO.builder().userId(user.getId()).status(user.getStatus()).build();
+        return UserResponse.UserInfoDTO.builder().userId(user.getId()).status(user.getStatus()).nickname(user.getNickName()).build();
     }
 
     @Override
