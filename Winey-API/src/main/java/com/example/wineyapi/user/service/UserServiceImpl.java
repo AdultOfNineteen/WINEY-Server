@@ -246,6 +246,7 @@ public class UserServiceImpl implements UserService {
         // 3. 제공된 인증 번호가 검증 번호와 일치하는지 확인
         if(verificationMessage.getVerificationNumber().equals(request.getVerificationCode())) {
             verificationMessage.setStatus(VerifyMessageStatus.VERIFIED);
+            verificationMessage.setRequestCount(0);
             verificationMessage.setVerifiedAt(LocalDateTime.now());
         } else {
             verificationMessage.setStatus(VerifyMessageStatus.FAILED);
