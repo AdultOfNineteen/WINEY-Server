@@ -185,8 +185,10 @@ public class UserServiceImpl implements UserService {
             // updatedAt과 현재 시간(now) 사이의 차이를 계산
             Duration duration = Duration.between(updatedAt, now);
 
-            // 차이가 5분 이내인지 확인
-            if(verificationMessage.getRequestCount() >= 3 && duration.toMinutes() < 5) {
+            // 4, 7, 10, ...
+            boolean isWaitingCount = (verificationMessage.getRequestCount() % 3  == 1) && verificationMessage.getRequestCount() != 1;
+            //  차이가 5분 이내인지 확인
+            if(isWaitingCount && duration.toMinutes() < 5) {
                 // 에러 응답 로직
                 throw new UserException(CommonResponseStatus.REQUEST_RATE_LIMIT_EXCEEDED);
             }
