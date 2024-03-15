@@ -186,7 +186,7 @@ public class UserServiceImpl implements UserService {
             Duration duration = Duration.between(updatedAt, now);
 
             // 4, 7, 10, ...
-            boolean isWaitingCount = (verificationMessage.getRequestCount() % 3  == 1) && verificationMessage.getRequestCount() != 1;
+            boolean isWaitingCount = (verificationMessage.getRequestCount() % 3 == 0) && verificationMessage.getRequestCount() != 0;
             //  차이가 5분 이내인지 확인
             if(isWaitingCount && duration.toMinutes() < 5) {
                 // 에러 응답 로직
