@@ -91,6 +91,7 @@ public class TastingNoteController {
 
 
     @RequestMapping(value = "/{noteId}", consumes = {"multipart/form-data"}, method = RequestMethod.PATCH)
+    @Operation(summary= "04-06 테이스팅노트📝 테이스팅 수정 #FRAME 수정 Made By Austin ",description = "수정 API 입니다")
     public CommonResponse<TastingNoteResponse.UpdateTastingNoteDTO> updateTastingNote(
         @AuthenticationPrincipal User user,
         @PathVariable Long noteId,

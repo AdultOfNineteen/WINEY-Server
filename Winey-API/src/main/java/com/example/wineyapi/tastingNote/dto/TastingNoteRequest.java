@@ -1,5 +1,6 @@
 package com.example.wineyapi.tastingNote.dto;
 
+import com.example.wineycommon.annotation.Enum;
 import com.example.wineydomain.common.model.BaseEntity;
 import com.example.wineydomain.tastingNote.entity.SmellKeyword;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -81,6 +82,7 @@ public class TastingNoteRequest {
         private Integer rating;
 
         @Schema(name = "smellKeywordList",description = "향 키워드 리스트", required = false)
+        @Enum(message = "FRUIT, BERRY, LEMONANDLIME, APPLEPEAR, PEACHPLUM, TROPICALFRUIT, FLOWER, GRASSWOOD, HERB, OAK, SPICE, NUTS, VANILLA, CHOCOLATE, FLINT, BREAD, RUBBER, EARTHASH, MEDICINE 중 하나를 입력해주세요")
         private List<SmellKeyword> smellKeywordList;
 
         public Boolean getBuyAgain() {
