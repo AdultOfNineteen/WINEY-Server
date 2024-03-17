@@ -185,8 +185,10 @@ public class UserServiceImpl implements UserService {
             // updatedAt과 현재 시간(now) 사이의 차이를 계산
             Duration duration = Duration.between(updatedAt, now);
 
-            // 차이가 5분 이내인지 확인
-            if(verificationMessage.getRequestCount() >= 3 && duration.toMinutes() < 5) {
+            // 4, 7, 10, ...
+            boolean isWaitingCount = (verificationMessage.getRequestCount() % 3 == 0) && verificationMessage.getRequestCount() != 0;
+            //  차이가 5분 이내인지 확인
+            if(isWaitingCount && duration.toMinutes() < 5) {
                 // 에러 응답 로직
                 throw new UserException(CommonResponseStatus.REQUEST_RATE_LIMIT_EXCEEDED);
             }
@@ -246,6 +248,7 @@ public class UserServiceImpl implements UserService {
         // 3. 제공된 인증 번호가 검증 번호와 일치하는지 확인
         if(verificationMessage.getVerificationNumber().equals(request.getVerificationCode())) {
             verificationMessage.setStatus(VerifyMessageStatus.VERIFIED);
+            verificationMessage.setRequestCount(0);
             verificationMessage.setVerifiedAt(LocalDateTime.now());
         } else {
             verificationMessage.setStatus(VerifyMessageStatus.FAILED);
