@@ -31,8 +31,8 @@ public enum SmellKeyword {
     FLINT("OTHER","FLINT","부싯돌"),
     BREAD("OTHER", "BREAD","빵"),
     RUBBER("OTHER","RUBBER","고무"),
-    EARTHASH("OTHER","EARTHASH","흙/재"),
-    MEDICINE("OTHER", "MEDICINE","약품");
+    EARTASH("OTHER","EARTASH","흙/재"),
+    MEDICNE("OTHER", "MEDICNE","약품");
 
    private final String type;
 

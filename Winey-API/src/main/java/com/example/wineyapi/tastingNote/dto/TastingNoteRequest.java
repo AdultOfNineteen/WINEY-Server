@@ -81,7 +81,6 @@ public class TastingNoteRequest {
         @Schema(name ="rating", description = "평점", required = true)
         private Integer rating;
 
-        @Schema(name = "smellKeywordList",description = "향 키워드 리스트", required = false)
         @Enum(message = "FRUIT, BERRY, LEMONANDLIME, APPLEPEAR, PEACHPLUM, TROPICALFRUIT, FLOWER, GRASSWOOD, HERB, OAK, SPICE, NUTS, VANILLA, CHOCOLATE, FLINT, BREAD, RUBBER, EARTHASH, MEDICINE 중 하나를 입력해주세요")
         private List<SmellKeyword> smellKeywordList;
 
