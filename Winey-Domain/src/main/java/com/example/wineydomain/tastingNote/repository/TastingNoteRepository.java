@@ -27,7 +27,7 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
     @Query("update TastingNote tn set tn.user = null where tn.user.id = :userId")
     void detachUserByUserId(@Param("userId") Long userId);
 
-    @Query("SELECT TN FROM TastingNote TN JOIN FETCH TN.wine")
+    @Query("SELECT TN FROM TastingNote TN JOIN FETCH TN.wine where TN.user = :user and TN.isDeleted = false")
     List<TastingNote> findByUser(User user);
 
     @Query("SELECT new com.example.wineydomain.wine.entity.WineSummary(avg(t.price), avg(t.sweetness), avg(t.acidity), avg(t.body), avg(t.tannins)) FROM TastingNote t WHERE t.wine.id = :wineId AND t.buyAgain = true")
