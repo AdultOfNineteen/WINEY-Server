@@ -19,6 +19,7 @@ import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.user.entity.UserConnection;
 import com.example.wineydomain.user.entity.UserFcmToken;
 import com.example.wineydomain.user.repository.UserConnectionRepository;
+import com.example.wineydomain.user.repository.UserFcmTokenRepository;
 import com.example.wineydomain.user.repository.UserRepository;
 import com.example.wineydomain.wine.entity.Wine;
 import com.example.wineyinfrastructure.amazonS3.enums.Folder;
@@ -55,6 +56,7 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     private final MessageConverter messageConverter;
     private final NotificationService notificationService;
     private final S3UploadService s3UploadService;
+    private final UserFcmTokenRepository userFcmTokenRepository;
 
 
     @RedissonLock(LockName =  "뱃지-계산", key = "#userId")
@@ -95,7 +97,8 @@ public class WineBadgeServiceImpl implements WineBadgeService {
 
     public void sendMessageGetWineBadge(UserWineBadge wineBadge, User user) {
         List<NotificationRequestDto> notificationRequestDtos = new ArrayList<>();
-        for(UserFcmToken fcmToken : user.getUserFcmTokens()) {
+        List<UserFcmToken> userFcmTokenList = userFcmTokenRepository.findByUser(user);
+        for(UserFcmToken fcmToken : userFcmTokenList) {
             notificationRequestDtos.add(messageConverter.toNotificationRequestDto(wineBadge.getWineBadge().getName(), fcmToken, user));
         }
         if(!notificationRequestDtos.isEmpty()) {
