@@ -31,20 +31,12 @@ public enum SmellKeyword {
     FLINT("OTHER","FLINT","부싯돌"),
     BREAD("OTHER", "BREAD","빵"),
     RUBBER("OTHER","RUBBER","고무"),
-    EARTASH("OTHER","EARTASH","흙/재"),
-    MEDICNE("OTHER", "MEDICNE","약품");
+    EARTHASH("OTHER","EARTHASH","흙/재"),
+    MEDICINE("OTHER", "MEDICINE","약품");
 
    private final String type;
 
    private final String value;
 
    private final String name;
-
-    @JsonCreator(mode=JsonCreator.Mode.DELEGATING)
-    public static SmellKeyword get(String value) {
-        return Arrays.stream(values())
-            .filter(type -> type.getValue().equals(value))
-            .findAny()
-            .orElse(null);
-    }
 }
