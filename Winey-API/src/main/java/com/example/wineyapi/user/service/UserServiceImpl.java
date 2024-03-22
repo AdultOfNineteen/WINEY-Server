@@ -17,6 +17,7 @@ import com.example.wineydomain.badge.entity.UserWineBadge;
 import com.example.wineydomain.badge.repository.UserWineBadgeRepository;
 import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.common.model.VerifyMessageStatus;
+import com.example.wineydomain.notification.repository.NotificationRepository;
 import com.example.wineydomain.shop.entity.BookMarkPk;
 import com.example.wineydomain.shop.entity.ShopBookMark;
 import com.example.wineydomain.shop.repository.ShopBookMarkRepository;
@@ -67,6 +68,7 @@ public class UserServiceImpl implements UserService {
     private final UserExitHistoryRepository userExitHistoryRepository;
     private final UserConnectionRepository userConnectionRepository;
     private final ShopBookMarkRepository shopBookMarkRepository;
+    private final NotificationRepository notificationRepository;
 
     private DefaultMessageService coolSmsService;
 
@@ -119,6 +121,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(UserErrorCode.NOT_EXIST_USER));
 
+        notificationRepository.deleteByUser(user);
         // 테이스팅 노트 연관관계 해제
         tastingNoteRepository.detachUserByUserId(id);
 
