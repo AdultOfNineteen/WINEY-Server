@@ -89,7 +89,7 @@ public class TastingNoteConvertor {
             bodySum += tastingNote.getBody();
             tanninSum += tastingNote.getTannins();
             finishSum += tastingNote.getFinish();
-            totalPrice += tastingNote.getPrice();
+            totalPrice += tastingNote.getPrice() != null ? tastingNote.getPrice() : 0;
 
 
             wineCountByCountry.put(country, wineCountByCountry.getOrDefault(country, 0) + 1);
@@ -238,7 +238,7 @@ public class TastingNoteConvertor {
                 .vintage(request.getVintage())
                 .tannins(request.getTannin())
                 .finish(request.getFinish())
-                .price(request.getPrice())
+                .price(request.getPrice() != null ? request.getPrice() : 0)
                 .memo(request.getMemo())
                 .buyAgain(request.getBuyAgain())
                 .starRating(request.getRating())
