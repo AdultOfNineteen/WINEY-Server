@@ -8,6 +8,8 @@ import com.example.wineycommon.reponse.CommonResponse;
 import com.example.wineycommon.reponse.PageResponse;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.user.exception.UserAuthErrorCode;
+import com.example.wineydomain.wine.exception.ReadWineErrorCode;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,6 +28,7 @@ public class WineController {
     private final WineService wineService;
 
     @GetMapping("/wines/{wineId}")
+    @ApiErrorCodeExample(ReadWineErrorCode.class)
     @Operation(summary= "02-04 Wine🍷 와인 상세조회 #001_01.1_와인 카드 자세히 보기 Made By Peter",description = "와인 상세조회 API입니다.")
     public CommonResponse<WineResponse.WineDTO> getWine(@PathVariable Long wineId) {
         return CommonResponse.onSuccess(wineService.getWineDTOById(wineId));

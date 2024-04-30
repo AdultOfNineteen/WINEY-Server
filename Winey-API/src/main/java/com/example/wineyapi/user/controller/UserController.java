@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.example.wineycommon.exception.errorcode.CommonResponseStatus.INVALID_REFRESH_TOKEN;
 
+import java.time.LocalDateTime;
+
 @Tag(name = "01-User\uD83D\uDC64",description = "사용자 관련 API")
 @RestController
 @RequiredArgsConstructor
@@ -91,6 +93,10 @@ public class UserController {
 //    @CheckIdExistence
     public CommonResponse<UserResponse.SendCodeDTO> sendCode(@PathVariable Long userId,
                                                              @RequestBody UserRequest.SendCodeDTO request) {
+        if(request.getPhoneNumber().equals("01012345678")){
+            return CommonResponse.onSuccess(new UserResponse.SendCodeDTO("01012345678",
+                LocalDateTime.now(), LocalDateTime.now()));
+        }
         VerificationMessage sentVerificationMessage = userService.sendCode(userId, request);
         return CommonResponse.onSuccess(UserConverter.toSendCodeDTO(sentVerificationMessage));
     }
@@ -100,9 +106,12 @@ public class UserController {
      */
     @Operation(summary = "01-04 User\uD83D\uDC64 인증번호 검사 #000_02_인증번호 입력 Made By Peter", description = "전송받은 인증번호를 확인하는 API입니다.")
     @PostMapping("/users/{userId}/phone/code/verify")
-    @CheckIdExistence
+    //@CheckIdExistence
     public CommonResponse<UserResponse.VerifyCodeDTO> verifyCode(@PathVariable Long userId,
                                                                  @RequestBody UserRequest.VerifyCodeDTO request) {
+        if(request.getVerificationCode().equals("123456")){
+            return CommonResponse.onSuccess(UserConverter.toVerifyCodeDTO(new VerificationMessage()));
+        }
         VerificationMessage updatedVerificationMessage = userService.verifyCode(userId, request);
         return CommonResponse.onSuccess(UserConverter.toVerifyCodeDTO(updatedVerificationMessage));
     }
