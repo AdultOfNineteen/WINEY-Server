@@ -44,7 +44,8 @@ public enum UserAuthErrorCode implements BaseErrorCode {
     INVALID_TOKEN(UNAUTHORIZED, "AUTH013", "JWT 토큰이 잘못되었습니다."),
 
     @ExplainError("해당 유저에게 URI 접근권한이 없을 때")
-    NOT_ALLOWED_ACCESS(UNAUTHORIZED,"U010","접근 권한이 없습니다.");
+    NOT_ALLOWED_ACCESS(UNAUTHORIZED,"U010","접근 권한이 없습니다."),
+    NOT_USER_ACTIVE(UNAUTHORIZED,"U011","유저가 활성화 되어있지 않습니다.");
 
 
     private final HttpStatus httpStatus;
