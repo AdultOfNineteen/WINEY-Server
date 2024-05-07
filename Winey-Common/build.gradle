@@ -11,25 +11,14 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
 
+    api 'org.springframework.boot:spring-boot-starter-aop'
     api 'org.springframework.boot:spring-boot-starter-web'
-    api 'org.springframework.boot:spring-boot-starter-security'
-
     api 'org.redisson:redisson-spring-boot-starter:3.18.0'
-
-    //jwt
-    api group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
-    api group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
-    api group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
-
-    api 'com.slack.api:slack-api-client:1.27.2'
-
-
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    api 'io.jsonwebtoken:jjwt-api:0.11.2'
+    api 'org.springframework.boot:spring-boot-starter-security'
 }
-
 
 tasks.named('test') {
     useJUnitPlatform()
