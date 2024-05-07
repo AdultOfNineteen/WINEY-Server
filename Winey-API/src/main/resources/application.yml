@@ -8,7 +8,9 @@ management:
     web:
       exposure:
         include: prometheus
-
+  endpoint:
+    prometheus:
+      enabled: true
 spring:
   profiles:
     include:
