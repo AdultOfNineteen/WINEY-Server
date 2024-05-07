@@ -3,6 +3,12 @@ server:
   servlet:
     context-path: /
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
 spring:
   profiles:
     include:
