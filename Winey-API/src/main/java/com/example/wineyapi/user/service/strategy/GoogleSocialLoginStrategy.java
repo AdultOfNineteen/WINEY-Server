@@ -2,6 +2,7 @@ package com.example.wineyapi.user.service.strategy;
 
 import com.example.wineyapi.user.converter.UserConverter;
 import com.example.wineyapi.user.dto.UserRequest;
+import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.user.repository.UserRepository;
@@ -19,7 +20,7 @@ public class GoogleSocialLoginStrategy implements SocialLoginStrategy {
     public User login(UserRequest.LoginUserDTO request) {
         String identityToken = request.getAccessToken();
         GoogleUserInfo googleUserInfo = googleOauth2Client.verifyToken(identityToken);
-        return userRepository.findBySocialIdAndSocialType(googleUserInfo.getSub(), SocialType.GOOGLE)
+        return userRepository.findBySocialIdAndSocialTypeAndStatus(googleUserInfo.getSub(), SocialType.GOOGLE, Status.ACTIVE)
                 .orElseGet(() -> UserConverter.toUser(googleUserInfo));
     }
 }

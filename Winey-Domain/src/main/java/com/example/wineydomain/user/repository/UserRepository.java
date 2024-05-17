@@ -1,5 +1,6 @@
 package com.example.wineydomain.user.repository;
 
+import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.user.entity.SocialType;
 import com.example.wineydomain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,6 @@ public interface UserRepository extends JpaRepository<User,Long>, UserCustomRepo
     Optional<User> findBySocialIdAndSocialType(String socialId, SocialType socialType);
 
     Optional<User> findByPhoneNumber(String phoneNumber);
+
+    Optional<User> findBySocialIdAndSocialTypeAndStatus(String id, SocialType socialType, Status status);
 }

@@ -1,5 +1,7 @@
 package com.example.wineyapi.user.service.strategy;
 
+import static com.example.wineydomain.common.model.Status.*;
+
 import com.example.wineyapi.user.converter.UserConverter;
 import com.example.wineyapi.user.dto.UserRequest;
 import com.example.wineydomain.user.entity.SocialType;
@@ -19,7 +21,7 @@ public class KakaoSocialLoginStrategy implements SocialLoginStrategy{
     public User login(UserRequest.LoginUserDTO request) {
         String accessTokenWithBearerPrefix = "Bearer " + request.getAccessToken();
         KakaoUserInfoDto kakaoUserInfoDto = kakaoFeignClient.getInfo(accessTokenWithBearerPrefix);
-        return userRepository.findBySocialIdAndSocialType(kakaoUserInfoDto.getId(), SocialType.KAKAO)
+        return userRepository.findBySocialIdAndSocialTypeAndStatus(kakaoUserInfoDto.getId(), SocialType.KAKAO, ACTIVE)
                 .orElseGet(() -> UserConverter.toUser(kakaoUserInfoDto));
     }
 }
