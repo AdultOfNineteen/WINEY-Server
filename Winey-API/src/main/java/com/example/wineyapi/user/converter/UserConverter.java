@@ -3,6 +3,7 @@ package com.example.wineyapi.user.converter;
 import com.example.wineyapi.user.dto.UserRequest;
 import com.example.wineyapi.user.dto.UserResponse;
 import com.example.wineyapi.user.service.UserService;
+import com.example.wineycommon.constants.WineyStatic;
 import com.example.wineydomain.common.model.PreferenceStatus;
 import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.common.model.VerifyMessageStatus;
@@ -66,7 +67,8 @@ public class UserConverter {
 	}
 
 	public static User toUser(KakaoUserInfoDto kakaoUserInfoDto) {
-		String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
+//		String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
+		String nickName = WineyStatic.DEFAULT_RANDOM_NICKNAME;
 
 		return User.builder()
 			.profileImgUrl(kakaoUserInfoDto.getProfileUrl())

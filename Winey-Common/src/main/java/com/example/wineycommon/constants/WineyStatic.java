@@ -55,4 +55,6 @@ public class WineyStatic {
     public static final int VERIFICATION_MESSAGE_NUMBER_LENGTH = 6;
 
     public static final int VERIFICATION_MESSAGE_EXPIRE_AT = 5;
+
+    public static final String DEFAULT_RANDOM_NICKNAME = "하품하는 와이니";
 }
