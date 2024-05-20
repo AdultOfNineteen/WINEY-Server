@@ -84,7 +84,9 @@ public class UserConverter {
 	}
 
 	public static User toUser(GoogleUserInfo googleUserInfo) {
-		String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
+		//		String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
+		String nickName = WineyStatic.DEFAULT_RANDOM_NICKNAME;
+
 
 		return User.builder()
 			.profileImgUrl(googleUserInfo.getPicture())
@@ -100,7 +102,8 @@ public class UserConverter {
 	}
 
 	public static User toUser(AppleMember appleMember) {
-		String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
+		//		String nickName = staticNickNameFeignClient.getNickName().getWords().get(0);
+		String nickName = WineyStatic.DEFAULT_RANDOM_NICKNAME;
 
         /*
             NOTE
