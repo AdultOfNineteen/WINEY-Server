@@ -20,7 +20,7 @@ public class GoogleSocialLoginStrategy implements SocialLoginStrategy {
     public User login(UserRequest.LoginUserDTO request) {
         String identityToken = request.getAccessToken();
         GoogleUserInfo googleUserInfo = googleOauth2Client.verifyToken(identityToken);
-        return userRepository.findBySocialIdAndSocialTypeAndStatus(googleUserInfo.getSub(), SocialType.GOOGLE, Status.ACTIVE)
+        return userRepository.findBySocialIdAndSocialType(googleUserInfo.getSub(), SocialType.GOOGLE)
                 .orElseGet(() -> UserConverter.toUser(googleUserInfo));
     }
 }

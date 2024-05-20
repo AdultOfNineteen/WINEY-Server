@@ -20,7 +20,7 @@ public class AppleSocialLoginStrategy implements SocialLoginStrategy {
     public User login(UserRequest.LoginUserDTO request) {
         String identityToken = request.getAccessToken();
         AppleMember appleMember = appleOAuthUserProvider.getApplePlatformMember(identityToken);
-        return userRepository.findBySocialIdAndSocialTypeAndStatus(appleMember.getSocialId(), SocialType.APPLE, Status.ACTIVE)
+        return userRepository.findBySocialIdAndSocialType(appleMember.getSocialId(), SocialType.APPLE)
                 .orElseGet(() -> UserConverter.toUser(appleMember));
     }
 }
