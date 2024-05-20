@@ -176,7 +176,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public VerificationMessage sendCode(Long userId, UserRequest.SendCodeDTO request) {
 
-        Optional<User> optionalUser = userRepository.findByPhoneNumber(request.getPhoneNumber());
+        Optional<User> optionalUser = userRepository.findByPhoneNumberAndStatus(request.getPhoneNumber(), Status.ACTIVE);
         Optional<VerificationMessage> optionalVerificationMessage = verificationMessageRepository.findByPhoneNumber(request.getPhoneNumber());
 
         // 요청 횟수가 3회(이면 이번 요청이 4회째)이상 & updatedAt이 5분 이내이면 에러 응답
