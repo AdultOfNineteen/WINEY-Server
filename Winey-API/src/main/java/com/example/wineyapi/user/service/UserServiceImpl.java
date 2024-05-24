@@ -85,9 +85,10 @@ public class UserServiceImpl implements UserService {
     public User login(SocialType socialType, UserRequest.LoginUserDTO request) {
         SocialLoginContext socialLoginContext = SocialLoginContextFactory.getContextBySocialType(socialType);
         User user = socialLoginContext.login(request);
-        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
-        boolean hasRecentExit = userExitHistoryRepository.existsBySocialIdAndSocialTypeAndCreatedAtGreaterThanEqual(user.getSocialId(), socialType, sevenDaysAgo);
-        if(hasRecentExit) throw new UserException(CommonResponseStatus.RECENTLY_EXIT_USER);
+// NOTE - 큐시즘 전시회를 위해 7일재가입 방지로직을 제외해둡니다.
+//        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
+//        boolean hasRecentExit = userExitHistoryRepository.existsBySocialIdAndSocialTypeAndCreatedAtGreaterThanEqual(user.getSocialId(), socialType, sevenDaysAgo);
+//        if(hasRecentExit) throw new UserException(CommonResponseStatus.RECENTLY_EXIT_USER);
         return userRepository.save(user);
     }
 
