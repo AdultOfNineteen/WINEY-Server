@@ -1,4 +1,4 @@
-name: dev Winey API Server CI/CD
+name: PROD Winey API Server CI/CD
 
 on:
   push:
@@ -100,5 +100,5 @@ jobs:
           environment_name: Winey-Api-Prod-env
           version_label: winey-prod-api-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}
           region: ap-northeast-2
-          deployment_package: deploy/winey-prod-server-api-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}.zip
+          deployment_package: deploy/winey-prod-api-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}.zip
           wait_for_deployment: false
