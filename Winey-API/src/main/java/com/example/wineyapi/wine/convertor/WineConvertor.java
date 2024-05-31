@@ -1,9 +1,10 @@
 package com.example.wineyapi.wine.convertor;
 
-import com.example.wineyapi.common.redis.RecommendWine;
+import com.example.wineydomain.redis.entity.RecommendWine;
 import com.example.wineyapi.wine.dto.WineResponse;
 import com.example.wineyapi.wine.service.WineHelper;
 import com.example.wineycommon.reponse.PageResponse;
+import com.example.wineydomain.redis.model.RecommendWineDTO;
 import com.example.wineydomain.tastingNote.repository.TastingNoteRepository;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Wine;
@@ -25,12 +26,12 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class WineConvertor {
     private final WineHelper wineHelper;
-    public List<WineResponse.RecommendWineDTO> RecommendWineCountByWine(List<TastingNoteRepository.WineList> wineLists) {
-        List<WineResponse.RecommendWineDTO> recommendWineDTOS = new ArrayList<>();
+    public List<RecommendWineDTO> RecommendWineCountByWine(List<TastingNoteRepository.WineList> wineLists) {
+        List<RecommendWineDTO> recommendWineDTOS = new ArrayList<>();
 
         wineLists.forEach(
                 result -> recommendWineDTOS.add(
-                        WineResponse.RecommendWineDTO.builder()
+                        RecommendWineDTO.builder()
                                 .name(result.getName())
                                 .wineId(result.getWineId())
                                 .country(result.getCountry())
@@ -49,12 +50,12 @@ public class WineConvertor {
         return recommendWineDTOS;
     }
 
-    public List<WineResponse.RecommendWineDTO> toRecommendWineDto(List<WineRepository.WineList> wineLists) {
-        List<WineResponse.RecommendWineDTO> recommendWineDTOS = new ArrayList<>();
+    public List<RecommendWineDTO> toRecommendWineDto(List<WineRepository.WineList> wineLists) {
+        List<RecommendWineDTO> recommendWineDTOS = new ArrayList<>();
 
         wineLists.forEach(
                 result -> recommendWineDTOS.add(
-                        WineResponse.RecommendWineDTO.builder()
+                        RecommendWineDTO.builder()
                                 .wineId(result.getId())
                                 .name(result.getName())
                                 .country(result.getCountry())
@@ -111,7 +112,7 @@ public class WineConvertor {
                 .build();
     }
 
-    public RecommendWine toRecommendWine(User user, List<WineResponse.RecommendWineDTO> recommendWineLists) {
+    public RecommendWine toRecommendWine(User user, List<RecommendWineDTO> recommendWineLists) {
         LocalDateTime now = LocalDateTime.now();
 
         LocalDateTime midnight = now.toLocalDate().plusDays(1).atStartOfDay();

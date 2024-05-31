@@ -41,6 +41,7 @@ jobs:
           aws.s3.access-key: ${{ secrets.AWS_S3_ACCESS_KEY }}
           aws.s3.secret-key: ${{ secrets.AWS_S3_SECRET_KEY }}
           spring.redis.host: ${{ secrets.REDIS_HOST }}
+          spring.redis.port: ${{ secrets.REDIS_DEV_PORT }}
           oauth.apple.iss: ${{ secrets.APPLE_ISS }}
           oauth.apple.client-id: ${{ secrets.APPLE_CLIENT_ID }}
           slack.webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -31,7 +31,7 @@ aws:
 spring:
   redis:
     host: ${REDIS_HOST}
-    port: 6379
+    port: ${REDIS_PORT}
 
 slack:
   webhook-url: ${SLACK_WEBHOOK_URL}

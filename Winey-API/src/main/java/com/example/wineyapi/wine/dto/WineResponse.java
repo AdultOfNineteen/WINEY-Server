@@ -51,24 +51,6 @@ public class WineResponse {
 
     @NoArgsConstructor
     @Getter
-    @AllArgsConstructor
-    @Builder
-    public static class RecommendWineDTO {
-        private Long wineId;
-
-        private String name;
-
-        private String country;
-
-        private String type;
-
-        private List<String> varietal;
-
-        private int price;
-    }
-
-    @NoArgsConstructor
-    @Getter
     @Setter
     @AllArgsConstructor
     @Builder
