@@ -1,9 +1,13 @@
 package com.example.wineyapi;
 
+import static com.example.wineycommon.constants.WineyStatic.*;
+
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.servers.Server;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -30,7 +34,7 @@ public class WineyApiApplication implements ApplicationListener<ApplicationReady
     public static void main(String[] args) {
         SpringApplication.run(WineyApiApplication.class, args);
         long heapSize = Runtime.getRuntime().totalMemory();
-        log.info("MATCH API Server - HEAP Size(M) : "+ heapSize / (1024*1024) + " MB");
+        log.info("WINEY API Server - HEAP Size(M) : "+ heapSize / (1024*1024) + " MB");
     }
 
     @Override

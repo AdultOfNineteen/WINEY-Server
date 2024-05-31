@@ -188,7 +188,7 @@ public class ExceptionAdvice {
             return request;
         } else if (request instanceof ResourceUrlEncodingFilter) {
             return new ContentCachingRequestWrapper(request);
-        } else if (request instanceof HttpServletRequest){
+        } else if (request != null){
             return new ContentCachingRequestWrapper(request);
         }
         else {

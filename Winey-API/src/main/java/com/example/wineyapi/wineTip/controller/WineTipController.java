@@ -29,9 +29,7 @@ public class WineTipController {
             @Parameter(description = "페이지", example = "0") @RequestParam(required = false, defaultValue = "0") Integer page,
             @Parameter(description = "페이지 사이즈", example = "10") @RequestParam(required = false, defaultValue = "10")  Integer size
     ){
-        PageResponse<List<WineTipResponse.WineTipDto>> wineTip = wineTipService.getWineTip(page, size);
-        return CommonResponse.onSuccess(wineTip);
+        return CommonResponse.onSuccess(wineTipService.getWineTip(page, size));
     }
-
 
 }

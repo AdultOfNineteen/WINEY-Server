@@ -1,7 +1,8 @@
 package com.example.wineyapi.wine.service;
 
-import com.example.wineyapi.common.redis.RecommendWine;
-import com.example.wineyapi.common.redis.RecommendWineRepository;
+import com.example.wineydomain.redis.entity.RecommendWine;
+import com.example.wineydomain.redis.model.RecommendWineDTO;
+import com.example.wineydomain.redis.repository.RecommendWineRepository;
 import com.example.wineyapi.wine.convertor.WineConvertor;
 import com.example.wineyapi.wine.dto.WineResponse;
 import com.example.wineycommon.exception.NotFoundException;
@@ -16,6 +17,7 @@ import com.example.wineydomain.wine.exception.ReadWineErrorCode;
 import com.example.wineydomain.wine.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,18 +34,14 @@ public class WineServiceImpl implements WineService {
     private final WineConvertor wineConvertor;
     private final WineRepository wineRepository;
     private final RecommendWineRepository recommendWineRepository;
+
     @Override
-    public List<WineResponse.RecommendWineDTO> recommendWine(User user) {
-        if(recommendWineRepository.existsById(String.valueOf(user.getId()))){
-            RecommendWine recommendWine = recommendWineRepository.findById(String.valueOf(user.getId())).get();
-            return recommendWine.getRecommendWineList();
-        }
-
+    public List<RecommendWineDTO> recommendWine(User user) {
+        Optional<RecommendWine> recommendWine = recommendWineRepository.findById(String.valueOf(user.getId()));
+        if (recommendWine.isPresent()) return recommendWine.get().getRecommendWineList();
         List<TastingNote> tastingNotes = tastingNoteRepository.findTop3ByUserAndBuyAgainOrderByStarRatingDescCreatedAtDesc(user, true);
-
-        List<WineResponse.RecommendWineDTO> recommendWineDTOS = wineConvertor.toRecommendWineDto(findRecommend(user, tastingNotes));
+        List<RecommendWineDTO> recommendWineDTOS = wineConvertor.toRecommendWineDto(findRecommend(user, tastingNotes));
         recommendWineRepository.save(wineConvertor.toRecommendWine(user, recommendWineDTOS));
-
         return recommendWineDTOS;
     }
 

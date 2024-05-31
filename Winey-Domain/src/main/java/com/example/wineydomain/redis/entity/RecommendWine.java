@@ -1,4 +1,4 @@
-package com.example.wineyapi.common.redis;
+package com.example.wineydomain.redis.entity;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
-import com.example.wineyapi.wine.dto.WineResponse;
+import com.example.wineydomain.redis.model.RecommendWineDTO;
 import com.example.wineydomain.wine.repository.WineRepository;
 
 import lombok.AccessLevel;
@@ -24,7 +24,7 @@ public class RecommendWine {
 	@Id
 	private String id;
 
-	private List<WineResponse.RecommendWineDTO> recommendWineList;
+	private List<RecommendWineDTO> recommendWineList;
 	@TimeToLive
 	private long ttl;
 }

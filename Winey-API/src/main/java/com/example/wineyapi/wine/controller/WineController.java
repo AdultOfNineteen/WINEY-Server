@@ -6,6 +6,7 @@ import com.example.wineyapi.wine.service.WineService;
 import com.example.wineycommon.annotation.ApiErrorCodeExample;
 import com.example.wineycommon.reponse.CommonResponse;
 import com.example.wineycommon.reponse.PageResponse;
+import com.example.wineydomain.redis.model.RecommendWineDTO;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.user.exception.UserAuthErrorCode;
 import com.example.wineydomain.wine.exception.ReadWineErrorCode;
@@ -42,7 +43,7 @@ public class WineController {
     @GetMapping("/wines/recommend")
     @ApiErrorCodeExample(UserAuthErrorCode.class)
     @Operation(summary= "02-01 Wine🍷 홈화면 와인 조회 API #FRAME 001_01_홈/메인페이지 Made By Austin",description = "홈화면 와인 추천 조회입니다.")
-    public CommonResponse<List<WineResponse.RecommendWineDTO>> recommendWine(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
+    public CommonResponse<List<RecommendWineDTO>> recommendWine(@Parameter(hidden = true) @AuthenticationPrincipal User user) {
         return CommonResponse.onSuccess(wineService.recommendWine(user));
     }
 
