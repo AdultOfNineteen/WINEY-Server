@@ -36,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static com.example.wineycommon.constants.WineyStatic.*;
@@ -98,10 +99,18 @@ public class WineBadgeServiceImpl implements WineBadgeService {
     public void sendMessageGetWineBadge(UserWineBadge wineBadge, User user) {
         List<NotificationRequestDto> notificationRequestDtos = new ArrayList<>();
         List<UserFcmToken> userFcmTokenList = userFcmTokenRepository.findByUser(user);
-        for(UserFcmToken fcmToken : userFcmTokenList) {
-            notificationRequestDtos.add(messageConverter.toNotificationRequestDto(wineBadge.getWineBadge().getName(), fcmToken, user));
+
+        Set<String> seenTokens = Collections.newSetFromMap(new ConcurrentHashMap<>());
+        List<UserFcmToken> uniqueFcmTokens = userFcmTokenList.parallelStream()
+            .filter(fcmToken -> seenTokens.add(fcmToken.getFcmToken()))
+            .collect(Collectors.toList());
+
+        for (UserFcmToken fcmToken : uniqueFcmTokens) {
+            notificationRequestDtos.add(messageConverter.toNotificationRequestDto(
+                wineBadge.getWineBadge().getName(), fcmToken, user));
         }
-        if(!notificationRequestDtos.isEmpty()) {
+
+        if (!notificationRequestDtos.isEmpty()) {
             messageService.sendNotifications(notificationRequestDtos);
             notificationService.saveNotification(notificationRequestDtos, user);
         }

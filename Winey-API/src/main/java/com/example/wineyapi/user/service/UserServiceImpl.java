@@ -6,6 +6,7 @@ import com.example.wineyapi.user.dto.UserResponse;
 import com.example.wineyapi.user.service.context.SocialLoginContext;
 import com.example.wineyapi.user.service.context.SocialLoginContextFactory;
 import com.example.wineyapi.wineBadge.service.WineBadgeService;
+import com.example.wineycommon.annotation.RedissonLock;
 import com.example.wineycommon.constants.WineyStatic;
 import com.example.wineycommon.exception.MessageException;
 import com.example.wineycommon.exception.NotFoundException;
@@ -297,8 +298,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @RedissonLock(LockName = "FCM_토큰저장",key = "#user.id")
     public void postUserFcmToken(UserRequest.UserFcmTokenDto userFcmTokenDto, User user) {
-        userFcmTokenRepository.save(UserConverter.toUserFcmToken(userFcmTokenDto, user));
+        if(!userFcmTokenRepository.existsByUserAndDeviceId(user, userFcmTokenDto.getDeviceId())) {
+            userFcmTokenRepository.save(UserConverter.toUserFcmToken(userFcmTokenDto, user));
+        }
     }
 
     @Override
