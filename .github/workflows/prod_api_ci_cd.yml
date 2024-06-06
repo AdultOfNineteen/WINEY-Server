@@ -51,12 +51,12 @@ jobs:
           slack.webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           slack.token: ${{ secrets.SLACK_TOKEN }}
 
-      - name: Set Environment - Domain DEV Yml
+      - name: Set Environment - Domain PROD Yml
         uses: microsoft/variable-substitution@v1
         with:
           files: ./Winey-Domain/src/main/resources/application-domain-prod.yml
         env:
-          spring.datasource.url: ${{ secrets.DEV_DB_URL_HOST }}
+          spring.datasource.url: ${{ secrets.PRDD_DB_URL_HOST }}
           spring.datasource.username: ${{ secrets.AWS_DB_USER_NAME }}
           spring.datasource.password: ${{ secrets.AWS_DB_PASSWORD }}
 
