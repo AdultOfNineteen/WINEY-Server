@@ -6,7 +6,6 @@ import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Country;
 import com.example.wineydomain.wine.entity.QWine;
 import com.example.wineydomain.wine.entity.WineType;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -22,7 +21,7 @@ import java.util.List;
 public class TastingNoteRepositoryImpl implements TastingNoteCustomRepository{
     private final JPAQueryFactory queryFactory;
 
-    public TastingNote getTastingNote(Long noteId, boolean deleted) {
+    public TastingNote getTastingNote(Long noteId, boolean deleted, User user) {
         QTastingNote qTastingNote = QTastingNote.tastingNote;
 
         JPAQuery<TastingNote> query = queryFactory
@@ -30,13 +29,13 @@ public class TastingNoteRepositoryImpl implements TastingNoteCustomRepository{
             .join(qTastingNote.wine).fetchJoin()
             .leftJoin(qTastingNote.tastingNoteImages)
             .leftJoin(qTastingNote.smellKeywordTastingNote)
-            .where(isNoteIdAndNotDeleted(qTastingNote, noteId, deleted));
+            .where(isNoteIdAndNotDeleted(qTastingNote, noteId, deleted, user.getId()));
 
         return query.fetchOne();
     }
 
-    private BooleanExpression isNoteIdAndNotDeleted(QTastingNote qTastingNote, Long noteId, boolean deleted) {
-        return qTastingNote.id.eq(noteId).and(qTastingNote.isDeleted.eq(deleted));
+    private BooleanExpression isNoteIdAndNotDeleted(QTastingNote qTastingNote, Long noteId, boolean deleted, Long id) {
+        return qTastingNote.id.eq(noteId).and(qTastingNote.isDeleted.eq(deleted)).and(qTastingNote.user.id.eq(id));
     }
     @Override
     public Page<TastingNote> findTastingNotes(User user, Integer page, Integer size, Integer order, List<Country> countries, List<WineType> wineTypes, Integer buyAgain) {

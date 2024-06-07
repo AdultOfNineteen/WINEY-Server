@@ -288,11 +288,10 @@ public class TastingNoteConvertor {
             .build();
     }
 
-    public TastingNoteResponse.TastingNoteDTO TastingNote(TastingNote tastingNote) {
+    public TastingNoteResponse.TastingNoteDTO toTastingNote(TastingNote tastingNote, Map<Long, Integer> tastingNoteNo) {
         Wine wine = tastingNote.getWine();
         List<TastingNoteImage> tastingNoteImages = tastingNote.getTastingNoteImages();
         List<SmellKeywordTastingNote> smellKeywordTastingNotes = tastingNote.getSmellKeywordTastingNote();
-        System.out.println(smellKeywordTastingNotes.size());
         LocalDateTime createdAt = tastingNote.getCreatedAt();
 
         return TastingNoteResponse.TastingNoteDTO
@@ -312,12 +311,13 @@ public class TastingNoteConvertor {
                 .smellKeywordList(SmellKeywordList(smellKeywordTastingNotes))
                 .myWineTaste(MyWineTaste(tastingNote))
                 .defaultWineTaste(DefaultWineTaste(wine))
-                .tastingNoteImage(TastingNoteImageRes(tastingNoteImages))
+                .tastingNoteImage(toTastingNoteImageRes(tastingNoteImages))
+                .tastingNoteNo(tastingNoteNo.get(tastingNote.getId()))
                 .memo(tastingNote.getMemo())
                 .build();
     }
 
-    private List<TastingNoteResponse.TastingNoteImage> TastingNoteImageRes(List<TastingNoteImage> tastingNoteImages) {
+    private List<TastingNoteResponse.TastingNoteImage> toTastingNoteImageRes(List<TastingNoteImage> tastingNoteImages) {
         List<TastingNoteResponse.TastingNoteImage> tastingNoteImageList = new ArrayList<>();
 
         for (TastingNoteImage tastingNoteImage : tastingNoteImages) {

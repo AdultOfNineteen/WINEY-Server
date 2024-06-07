@@ -77,9 +77,11 @@ public class TastingNoteController {
     @GetMapping("/{noteId}")
     @Operation(summary= "04-05 테이스팅노트📝 테이스팅 상세조회 #FRAME 001_03_테이스팅 노트 상세조회 Made By Austin ",description = "상세조회 API 입니다")
     @ApiErrorCodeExample(UserAuthErrorCode.class)
-    public CommonResponse<TastingNoteResponse.TastingNoteDTO> getTastingNote(@PathVariable Long noteId) {
+    public CommonResponse<TastingNoteResponse.TastingNoteDTO> getTastingNote(
+        @AuthenticationPrincipal User user,
+        @PathVariable Long noteId) {
 
-        return CommonResponse.onSuccess(tastingNoteService.getTastingNote(noteId));
+        return CommonResponse.onSuccess(tastingNoteService.getTastingNote(user, noteId));
     }
 
     @GetMapping("/filter")

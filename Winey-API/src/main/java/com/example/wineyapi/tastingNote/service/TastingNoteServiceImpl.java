@@ -32,10 +32,8 @@ import javax.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.example.wineydomain.tastingNote.exception.GetTastingNoteErrorCode.NOT_FOUND_TASTING_NOTE;
 import static com.example.wineydomain.tastingNote.exception.UploadTastingNoteErrorCode.NOT_FOUNT_WINE;
@@ -71,10 +69,11 @@ public class TastingNoteServiceImpl implements TastingNoteService{
     }
 
     @Override
-    public TastingNoteResponse.TastingNoteDTO getTastingNote(Long noteId) {
-        TastingNote tastingNote = tastingNoteRepository.getTastingNote(noteId, false);
+    public TastingNoteResponse.TastingNoteDTO getTastingNote(User user, Long noteId) {
+        TastingNote tastingNote = tastingNoteRepository.getTastingNote(noteId, false, user);
         if(tastingNote == null) throw new BadRequestException(NOT_FOUND_TASTING_NOTE);
-        return tastingNoteConvertor.TastingNote(tastingNote);
+        Map<Long, Integer> tastingNoteNo = getTastingNoteNo(user);
+        return tastingNoteConvertor.toTastingNote(tastingNote, tastingNoteNo);
     }
 
     @Override
