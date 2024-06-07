@@ -65,6 +65,9 @@ public class TastingNoteResponse {
         @Schema(name = "noteId")
         private Long noteId;
 
+        @Schema(description = "테이스팅 노트 NO")
+        private Integer tastingNoteNo;
+
         @Schema(description = "작성 날짜")
         private String noteDate;
 

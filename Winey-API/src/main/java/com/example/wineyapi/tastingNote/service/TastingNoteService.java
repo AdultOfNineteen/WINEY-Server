@@ -19,7 +19,7 @@ public interface TastingNoteService {
 
     TastingNoteResponse.CheckTastingNote checkTastingNote(User user);
 
-    TastingNoteResponse.TastingNoteDTO getTastingNote(Long noteId);
+    TastingNoteResponse.TastingNoteDTO getTastingNote(User user, Long noteId);
 
     TastingNoteResponse.NoteFilterDTO getNoteFilter(User user);
   
