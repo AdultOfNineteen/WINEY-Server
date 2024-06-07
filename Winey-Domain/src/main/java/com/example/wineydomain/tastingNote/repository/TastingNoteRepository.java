@@ -94,6 +94,8 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
 
     boolean existsByUserAndBuyAgainAndIsDeleted(User user, boolean b, boolean b1);
 
+    List<TastingNote> findByUserAndIsDeletedOrderByIdAsc(User user, boolean b);
+
     interface WineList{
         Long getWineId();
 

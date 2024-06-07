@@ -21,6 +21,9 @@ import com.example.wineydomain.wine.repository.WineRepository;
 import com.example.wineyinfrastructure.amazonS3.service.S3UploadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,8 +31,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.example.wineydomain.tastingNote.exception.GetTastingNoteErrorCode.NOT_FOUND_TASTING_NOTE;
@@ -81,7 +86,8 @@ public class TastingNoteServiceImpl implements TastingNoteService{
 
     
   @Override
-    public void deleteTastingNote(User user, Long noteId) {
+  @CacheEvict(value = "tastingNoteNoLists", key = "#user.id")
+  public void deleteTastingNote(User user, Long noteId) {
         TastingNote tastingNote = finByUserAndTastingNoteId(user, noteId);
 
         tastingNote.setIsDeleted(true);
@@ -143,6 +149,7 @@ public class TastingNoteServiceImpl implements TastingNoteService{
 
     @Override
     @Transactional
+    @CacheEvict(value = "tastingNoteNoLists", key = "#user.id")
     public TastingNoteResponse.CreateTastingNoteDTO createTastingNote(User user, TastingNoteRequest.CreateTastingNoteDTO request, List<MultipartFile> multipartFiles) {
         Wine wine  = wineRepository.findById(request.getWineId()).orElseThrow(() ->  new BadRequestException(NOT_FOUNT_WINE));
         TastingNote tastingNote = tastingNoteRepository.save(tastingNoteConvertor.CreateTastingNote(request, user, wine));
@@ -162,7 +169,6 @@ public class TastingNoteServiceImpl implements TastingNoteService{
 
     private void tastingNoteImageUpload(TastingNote tastingNote, List<MultipartFile> multipartFiles) {
         List<String> imgList = s3UploadService.imageListUpload(tastingNote.getId(), TASTING_NOTE, multipartFiles);
-
         if(imgList!=null) {
             for (String imgUrl : imgList) {
                 tastingNoteImageRepository.save(tastingNoteConvertor.TastingImg(tastingNote, imgUrl));
@@ -172,8 +178,21 @@ public class TastingNoteServiceImpl implements TastingNoteService{
 
     @Override
     public PageResponse<List<TastingNoteResponse.TastingNoteListDTO>> getTastingNoteList(User user, Integer page, Integer size, Integer order, List<Country> countries, List<WineType> wineTypes, Integer buyAgain) {
+        Map<Long, Integer> tastingNoteNo = getTastingNoteNo(user);
+
         Page<TastingNote> tastingNotes = tastingNoteRepository.findTastingNotes(user, page, size, order, countries, wineTypes, buyAgain);
 
-        return tastingNoteConvertor.toTastingNoteList(tastingNotes);
+        return tastingNoteConvertor.toTastingNoteList(tastingNotes, tastingNoteNo);
+    }
+
+
+    @Cacheable(value = "tastingNoteNoLists", key = "#user.id")
+    public Map<Long, Integer> getTastingNoteNo(User user) {
+        Map<Long, Integer> tastingNoteNo = new HashMap<>();
+        List<TastingNote> tastingNotes = tastingNoteRepository.findByUserAndIsDeletedOrderByIdAsc(user, false);
+        for (int i = 0; i < tastingNotes.size(); i++) {
+            tastingNoteNo.put(tastingNotes.get(i).getId(), i+1);
+        }
+        return tastingNoteNo;
     }
 }

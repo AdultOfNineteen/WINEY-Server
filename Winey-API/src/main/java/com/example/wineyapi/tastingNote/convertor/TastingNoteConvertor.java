@@ -261,22 +261,21 @@ public class TastingNoteConvertor {
                 .build();
     }
 
-    public PageResponse<List<TastingNoteResponse.TastingNoteListDTO>> toTastingNoteList(Page<TastingNote> tastingNotes) {
+    public PageResponse<List<TastingNoteResponse.TastingNoteListDTO>> toTastingNoteList(Page<TastingNote> tastingNotes,
+		Map<Long, Integer> tastingNoteNo) {
         List<TastingNoteResponse.TastingNoteListDTO> tastingNoteListDTOS = new ArrayList<>();
 
-        int no = 0;
         tastingNotes.getContent().forEach(
                 result -> {
                     tastingNoteListDTOS.add(
-                        toTastingNoteListDTO(result, no));
+                        toTastingNoteListDTO(result, tastingNoteNo));
                 }
         );
 
         return new PageResponse<>( tastingNotes.isLast(),tastingNotes.getTotalElements(), tastingNoteListDTOS);
     }
 
-    private TastingNoteResponse.TastingNoteListDTO toTastingNoteListDTO(TastingNote result, int no) {
-        no++;
+    private TastingNoteResponse.TastingNoteListDTO toTastingNoteListDTO(TastingNote result, Map<Long, Integer> tastingNoteNo) {
         return TastingNoteResponse.TastingNoteListDTO.builder()
             .noteId(result.getId())
             .wineName(result.getWine().getName())
@@ -285,6 +284,7 @@ public class TastingNoteConvertor {
             .starRating(result.getStarRating())
             .buyAgain(result.getBuyAgain())
             .wineType(result.getWine().getType())
+            .tastingNoteNo(tastingNoteNo.get(result.getId()))
             .build();
     }
 
