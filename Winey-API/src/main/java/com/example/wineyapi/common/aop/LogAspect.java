@@ -95,7 +95,7 @@ public class LogAspect {
 		try{
 			return joinPoint.proceed();
 		} finally {
-			if(IGNORE_METHODS.contains(method)) {
+			if(!IGNORE_METHODS.contains(method)) {
 				long finish = System.currentTimeMillis();
 				long timeMs = finish - start;
 				log.info("END: {} {}ms", method, timeMs);
