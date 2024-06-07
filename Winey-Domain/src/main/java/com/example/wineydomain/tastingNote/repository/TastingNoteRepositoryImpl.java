@@ -67,7 +67,7 @@ public class TastingNoteRepositoryImpl implements TastingNoteCustomRepository{
                 .join(qWine).on(qTastingNote.wine.eq(qWine)).fetchJoin()
                 .where(predicate);
 
-        if(order.equals(0)) query.orderBy(qTastingNote.createdAt.desc());
+        if(order.equals(0)) query.orderBy(qTastingNote.id.desc());
         else query.orderBy(qTastingNote.starRating.desc());
 
         List<TastingNote> results = query

@@ -17,6 +17,8 @@ public class TastingNoteResponse {
     public static class TastingNoteListDTO {
         @Schema(description = "테이스팅 노트 id")
         private Long noteId;
+        @Schema(description = "테이스팅 노트 NO")
+        private Integer tastingNoteNo;
         @Schema(description = "와인 이름")
         private String wineName;
         @Schema(description = "와인 생산지")
