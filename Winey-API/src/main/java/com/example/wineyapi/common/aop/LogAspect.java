@@ -95,9 +95,11 @@ public class LogAspect {
 		try{
 			return joinPoint.proceed();
 		} finally {
-			long finish = System.currentTimeMillis();
-			long timeMs = finish - start;
-			log.info("END: {} {}ms", method, timeMs);
+			if(!IGNORE_METHODS.contains(method)) {
+				long finish = System.currentTimeMillis();
+				long timeMs = finish - start;
+				log.info("END: {} {}ms", method, timeMs);
+			}
 		}
 	}
 
