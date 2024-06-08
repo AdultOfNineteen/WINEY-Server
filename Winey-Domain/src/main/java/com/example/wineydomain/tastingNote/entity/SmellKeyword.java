@@ -22,6 +22,7 @@ public enum SmellKeyword {
     TROPICALFRUIT("FRUIT","TROPICALFRUIT","열대과일"),
     FLOWER("NATURAL", "FLOWER","꽃향"),
     GRASSWOOD("NATURAL", "GRASSWOOD","풀/나무"),
+    NATURAL("NATURAL","NATURAL","자연향"),
     HERB("NATURAL","HERB","허브향"),
     OAK("OAK","OAK","오크향"),
     SPICE("OAK","SPICE","향신료"),
