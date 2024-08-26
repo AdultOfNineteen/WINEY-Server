@@ -60,9 +60,10 @@ public class TastingNoteController {
                                                                                                          @Parameter(description = "최신순 = 0, 평점순 = 1 기본 최신순 정렬입니다.", example = "0") @RequestParam(required = false, defaultValue = "0") Integer order,
                                                                                                          @Parameter(description = "생산지 국가입니다. List<String> 형식입니다.", required = false) @RequestParam(required = false) List<Country> countries,
                                                                                                          @Parameter(description = "와인 타입입니다. List<String> 형식입니다.", required = false) @RequestParam(required = false) List<WineType> wineTypes,
-                                                                                                         @Parameter(description = "와인 재구매 유무 입니다.") @RequestParam(required = false) Integer buyAgain
+                                                                                                         @Parameter(description = "와인 재구매 유무 입니다.") @RequestParam(required = false) Integer buyAgain,
+                                                                                                         @Parameter(description = "테이스팅 노트에서 와인 ID 로 검색할 때 사용하는 파라미터") @RequestParam(required = false) Long wineId
      ) {
-        return CommonResponse.onSuccess(tastingNoteService.getTastingNoteList(user, page, size,order, countries, wineTypes, buyAgain));
+        return CommonResponse.onSuccess(tastingNoteService.getTastingNoteList(user, page, size,order, countries, wineTypes, buyAgain, wineId));
     }
 
     @RequestMapping(value = "", consumes = {"multipart/form-data"}, method = RequestMethod.POST)
@@ -79,9 +80,10 @@ public class TastingNoteController {
     @ApiErrorCodeExample(UserAuthErrorCode.class)
     public CommonResponse<TastingNoteResponse.TastingNoteDTO> getTastingNote(
         @AuthenticationPrincipal User user,
-        @PathVariable Long noteId) {
-
-        return CommonResponse.onSuccess(tastingNoteService.getTastingNote(user, noteId));
+        @PathVariable Long noteId,
+        @RequestParam(defaultValue = "false") boolean isShared
+    ) {
+        return CommonResponse.onSuccess(tastingNoteService.getTastingNote(user, noteId, isShared));
     }
 
     @GetMapping("/filter")

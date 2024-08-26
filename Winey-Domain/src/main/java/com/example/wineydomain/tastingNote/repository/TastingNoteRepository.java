@@ -4,6 +4,7 @@ import com.example.wineydomain.common.model.Status;
 import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Country;
+import com.example.wineydomain.wine.entity.Wine;
 import com.example.wineydomain.wine.entity.WineSummary;
 import com.example.wineydomain.wine.entity.WineType;
 import com.example.wineydomain.wine.repository.WineRepository;
@@ -95,6 +96,14 @@ public interface TastingNoteRepository extends JpaRepository<TastingNote, Long>,
     boolean existsByUserAndBuyAgainAndIsDeleted(User user, boolean b, boolean b1);
 
     List<TastingNote> findByUserAndIsDeletedOrderByIdAsc(User user, boolean b);
+
+    @Query("SELECT t FROM TastingNote t WHERE t.wine = :wine AND t.isDeleted = :isDeleted AND (t.isPublic = :isPublic OR t.user = :user) ORDER BY t.id ASC")
+    List<TastingNote> findByWineAndIsDeletedAndIsPublicOrderByIdAsc(
+        @Param("wine") Wine wine,
+        @Param("isDeleted") boolean isDeleted,
+        @Param("isPublic") boolean isPublic,
+        @Param("user") User user
+    );
 
     interface WineList{
         Long getWineId();

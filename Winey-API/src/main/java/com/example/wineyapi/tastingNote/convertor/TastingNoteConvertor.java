@@ -284,6 +284,7 @@ public class TastingNoteConvertor {
             .starRating(result.getStarRating())
             .buyAgain(result.getBuyAgain())
             .wineType(result.getWine().getType())
+            .isPublic(result.getIsPublic())
             .tastingNoteNo(tastingNoteNo.get(result.getId()))
             .build();
     }

@@ -5,6 +5,7 @@ import com.example.wineydomain.tastingNote.entity.TastingNote;
 import com.example.wineydomain.user.entity.User;
 import com.example.wineydomain.wine.entity.Country;
 import com.example.wineydomain.wine.entity.QWine;
+import com.example.wineydomain.wine.entity.Wine;
 import com.example.wineydomain.wine.entity.WineType;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -21,7 +22,7 @@ import java.util.List;
 public class TastingNoteRepositoryImpl implements TastingNoteCustomRepository{
     private final JPAQueryFactory queryFactory;
 
-    public TastingNote getTastingNote(Long noteId, boolean deleted, User user) {
+    public TastingNote getTastingNote(Long noteId, boolean deleted) {
         QTastingNote qTastingNote = QTastingNote.tastingNote;
 
         JPAQuery<TastingNote> query = queryFactory
@@ -29,13 +30,13 @@ public class TastingNoteRepositoryImpl implements TastingNoteCustomRepository{
             .join(qTastingNote.wine).fetchJoin()
             .leftJoin(qTastingNote.tastingNoteImages)
             .leftJoin(qTastingNote.smellKeywordTastingNote)
-            .where(isNoteIdAndNotDeleted(qTastingNote, noteId, deleted, user.getId()));
+            .where(isNoteIdAndNotDeleted(qTastingNote, noteId, deleted));
 
         return query.fetchOne();
     }
 
-    private BooleanExpression isNoteIdAndNotDeleted(QTastingNote qTastingNote, Long noteId, boolean deleted, Long id) {
-        return qTastingNote.id.eq(noteId).and(qTastingNote.isDeleted.eq(deleted)).and(qTastingNote.user.id.eq(id));
+    private BooleanExpression isNoteIdAndNotDeleted(QTastingNote qTastingNote, Long noteId, boolean deleted) {
+        return qTastingNote.id.eq(noteId).and(qTastingNote.isDeleted.eq(deleted));
     }
     @Override
     public Page<TastingNote> findTastingNotes(User user, Integer page, Integer size, Integer order, List<Country> countries, List<WineType> wineTypes, Integer buyAgain) {
@@ -79,6 +80,32 @@ public class TastingNoteRepositoryImpl implements TastingNoteCustomRepository{
         return new PageImpl<>(results, pageable, total);
     }
 
+    @Override
+    public Page<TastingNote> findTastingNotesByWine(Wine wine, User user, Integer page, Integer size) {
+        QTastingNote qTastingNote = QTastingNote.tastingNote;
+        QWine qWine = QWine.wine;
+        Pageable pageable = PageRequest.of(page, size);
+        JPAQuery<TastingNote> query = queryFactory
+            .select(qTastingNote)
+            .from(qTastingNote)
+            .join(qWine).on(qTastingNote.wine.eq(qWine)).fetchJoin()
+            .where(
+                qTastingNote.wine.eq(wine)
+                    .and(qTastingNote.isDeleted.eq(false))
+                    .and(qTastingNote.isPublic.eq(true)
+                        .or(qTastingNote.user.eq(user))
+                    )
+            )
+            .orderBy(qTastingNote.id.desc());
 
+        List<TastingNote> results = query
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+
+        long total = queryFactory.selectFrom(qTastingNote).fetchCount();
+
+        return new PageImpl<>(results, pageable, total);
+    }
 
 }

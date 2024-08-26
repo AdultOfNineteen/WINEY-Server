@@ -21,7 +21,9 @@ public enum GetTastingNoteErrorCode implements BaseErrorCode {
     */
 
     @ExplainError("해당 와인이 없는 경우")
-    NOT_FOUND_TASTING_NOTE(BAD_REQUEST,"TASTING_NOTE_001", "해당 테이스팅 노트가 존재하지 않습니다..");
+    NOT_FOUND_TASTING_NOTE(BAD_REQUEST,"TASTING_NOTE_001", "해당 테이스팅 노트가 존재하지 않습니다.."),
+    @ExplainError("해당 테이스팅 노트가 공개가 아닌 경우")
+    NOT_PUBLIC_TASTING_NOTE(BAD_REQUEST,"TASTING_NOTE_002", "해당 테이스팅 노트가 공개되지 않았습니다.");
 
 
     private final HttpStatus httpStatus;
