@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Column;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -82,6 +83,9 @@ public class TastingNoteRequest {
         private Integer rating;
 
         private List<SmellKeyword> smellKeywordList;
+
+        @Schema(name = "isPublic", description = "공개여부", required = false)
+        private Boolean isPublic = Boolean.FALSE;
 
         public Boolean getBuyAgain() {
             return buyAgain;
@@ -164,6 +168,9 @@ public class TastingNoteRequest {
 
         @Schema(name = "deleteImgLists 삭제사항 있을 경우 작성해주세요",description = "테이스팅 노트 이미지 리스트", required = false)
         private List<Long> deleteImgList;
+
+        @Schema(name = "isPublic", description = "공개여부", required = false)
+        private Boolean isPublic;
 
         public Boolean getBuyAgain() {
             return buyAgain;

@@ -243,6 +243,7 @@ public class TastingNoteConvertor {
                 .buyAgain(request.getBuyAgain())
                 .starRating(request.getRating())
                 .isDeleted(false)
+                .isPublic(request.getIsPublic())
                 .build();
     }
 
@@ -419,5 +420,7 @@ public class TastingNoteConvertor {
         tastingNote.setFinish(request.getFinish());
         tastingNote.setColor(request.getColor());
         tastingNote.setVintage(request.getVintage());
+        Boolean isPublic = request.getIsPublic();
+        if(isPublic != null) tastingNote.setIsPublic(request.getIsPublic());
     }
 }
