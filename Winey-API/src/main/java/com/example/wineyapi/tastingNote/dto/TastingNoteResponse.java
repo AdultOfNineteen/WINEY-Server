@@ -31,6 +31,8 @@ public class TastingNoteResponse {
         private boolean buyAgain;
         @Schema(description = "와인 타입 RED,WHITE 등등")
         private WineType wineType;
+        @Schema(description = "공개유무")
+        private boolean isPublic;
     }
 
     @NoArgsConstructor
@@ -112,6 +114,9 @@ public class TastingNoteResponse {
         private List<TastingNoteImage> tastingNoteImage;
 
         private String memo;
+
+        @Schema(description = "공개유무")
+        private boolean isPublic;
     }
 
     @NoArgsConstructor

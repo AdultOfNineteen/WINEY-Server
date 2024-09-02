@@ -13,13 +13,14 @@ import java.util.List;
 public interface TastingNoteService {
     TastingNoteResponse.CreateTastingNoteDTO createTastingNote(User user, TastingNoteRequest.CreateTastingNoteDTO request, List<MultipartFile> multipartFiles);
 
-    PageResponse<List<TastingNoteResponse.TastingNoteListDTO>> getTastingNoteList(User user, Integer page, Integer size, Integer order, List<Country> countries, List<WineType> wineTypes, Integer isBuyAgain);
+    PageResponse<List<TastingNoteResponse.TastingNoteListDTO>> getTastingNoteList(User user, Integer page, Integer size, Integer order, List<Country> countries, List<WineType> wineTypes, Integer isBuyAgain,
+        Long wineId);
 
     TastingNoteResponse.TasteAnalysisDTO tasteAnalysis(User user);
 
     TastingNoteResponse.CheckTastingNote checkTastingNote(User user);
 
-    TastingNoteResponse.TastingNoteDTO getTastingNote(User user, Long noteId);
+    TastingNoteResponse.TastingNoteDTO getTastingNote(User user, Long noteId, boolean isShared);
 
     TastingNoteResponse.NoteFilterDTO getNoteFilter(User user);
   
