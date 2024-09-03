@@ -103,7 +103,13 @@ public class TastingNoteRepositoryImpl implements TastingNoteCustomRepository{
             .limit(pageable.getPageSize())
             .fetch();
 
-        long total = queryFactory.selectFrom(qTastingNote).fetchCount();
+        long total = queryFactory.selectFrom(qTastingNote).where(
+            qTastingNote.wine.eq(wine)
+                .and(qTastingNote.isDeleted.eq(false))
+                .and(qTastingNote.isPublic.eq(true)
+                    .or(qTastingNote.user.eq(user))
+                )
+        ).fetchCount();
 
         return new PageImpl<>(results, pageable, total);
     }
