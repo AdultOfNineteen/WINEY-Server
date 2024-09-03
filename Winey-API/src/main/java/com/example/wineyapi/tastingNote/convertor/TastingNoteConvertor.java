@@ -288,7 +288,7 @@ public class TastingNoteConvertor {
             .isPublic(result.getIsPublic())
             .tastingNoteNo(tastingNoteNo.get(result.getId()))
             .userNickname(result.getUser().getNickName())
-            .noteDate(result.getCreatedAt().toLocalDate())
+            .noteDate(result.getCreatedAt().toLocalDate().toString())
             .build();
     }
 

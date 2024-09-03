@@ -37,7 +37,7 @@ public class TastingNoteResponse {
         @Schema(description = "유저 이름")
         private String userNickname;
         @Schema(description = "노트 생성 날짜")
-        private LocalDate noteDate;
+        private String noteDate;
     }
 
     @NoArgsConstructor
