@@ -287,6 +287,8 @@ public class TastingNoteConvertor {
             .wineType(result.getWine().getType())
             .isPublic(result.getIsPublic())
             .tastingNoteNo(tastingNoteNo.get(result.getId()))
+            .userNickname(result.getUser().getNickName())
+            .noteDate(result.getCreatedAt().toLocalDate())
             .build();
     }
 
@@ -316,6 +318,9 @@ public class TastingNoteConvertor {
                 .tastingNoteImage(toTastingNoteImageRes(tastingNoteImages))
                 .tastingNoteNo(tastingNoteNo.get(tastingNote.getId()))
                 .memo(tastingNote.getMemo())
+                .isPublic(tastingNote.getIsPublic())
+                .wineId(wine.getId())
+                .userNickname(tastingNote.getUser().getNickName())
                 .build();
     }
 

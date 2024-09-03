@@ -6,6 +6,7 @@ import com.example.wineydomain.wine.entity.WineType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class TastingNoteResponse {
@@ -33,6 +34,10 @@ public class TastingNoteResponse {
         private WineType wineType;
         @Schema(description = "공개유무")
         private boolean isPublic;
+        @Schema(description = "유저 이름")
+        private String userNickname;
+        @Schema(description = "노트 생성 날짜")
+        private LocalDate noteDate;
     }
 
     @NoArgsConstructor
@@ -66,6 +71,9 @@ public class TastingNoteResponse {
     public static class TastingNoteDTO {
         @Schema(name = "noteId")
         private Long noteId;
+
+        @Schema(description = "와인 ID")
+        private Long wineId;
 
         @Schema(description = "테이스팅 노트 NO")
         private Integer tastingNoteNo;
@@ -117,6 +125,9 @@ public class TastingNoteResponse {
 
         @Schema(description = "공개유무")
         private boolean isPublic;
+
+        @Schema(description = "유저 이름")
+        private String userNickname;
     }
 
     @NoArgsConstructor
