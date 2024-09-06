@@ -243,6 +243,7 @@ public class TastingNoteConvertor {
                 .buyAgain(request.getBuyAgain())
                 .starRating(request.getRating())
                 .isDeleted(false)
+                .isPublic(request.getIsPublic())
                 .build();
     }
 
@@ -284,7 +285,10 @@ public class TastingNoteConvertor {
             .starRating(result.getStarRating())
             .buyAgain(result.getBuyAgain())
             .wineType(result.getWine().getType())
+            .isPublic(result.getIsPublic())
             .tastingNoteNo(tastingNoteNo.get(result.getId()))
+            .userNickname(result.getUser().getNickName())
+            .noteDate(result.getCreatedAt().toLocalDate().toString())
             .build();
     }
 
@@ -314,6 +318,9 @@ public class TastingNoteConvertor {
                 .tastingNoteImage(toTastingNoteImageRes(tastingNoteImages))
                 .tastingNoteNo(tastingNoteNo.get(tastingNote.getId()))
                 .memo(tastingNote.getMemo())
+                .isPublic(tastingNote.getIsPublic())
+                .wineId(wine.getId())
+                .userNickname(tastingNote.getUser().getNickName())
                 .build();
     }
 
@@ -419,5 +426,7 @@ public class TastingNoteConvertor {
         tastingNote.setFinish(request.getFinish());
         tastingNote.setColor(request.getColor());
         tastingNote.setVintage(request.getVintage());
+        Boolean isPublic = request.getIsPublic();
+        if(isPublic != null) tastingNote.setIsPublic(request.getIsPublic());
     }
 }

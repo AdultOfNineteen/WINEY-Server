@@ -77,7 +77,7 @@ public class SwaggerConfig {
     }
 
     private void generateErrorCodeResponseExample(
-            Operation operation, Class<? extends BaseErrorCode>[] errorCodeList) {
+        Operation operation, Class<? extends BaseErrorCode>[] errorCodeList) {
         ApiResponses responses = operation.getResponses();
         Map<Integer, List<ExampleHolder>> statusWithExampleHolders = new HashMap<>();
 
@@ -86,31 +86,31 @@ public class SwaggerConfig {
             // 400, 401, 404 등 에러코드의 상태코드들로 리스트로 모읍니다.
             // 400 같은 상태코드에 여러 에러코드들이 있을 수 있습니다.
             List<ExampleHolder> exampleHolders =
-                    Arrays.stream(errorCodes)
-                            .map(
-                                    baseErrorCode -> {
-                                        try {
-                                            ErrorReason errorReason = baseErrorCode.getErrorReasonHttpStatus();
-                                            ErrorReason errorReasonToView = baseErrorCode.getErrorReason();
-                                            return ExampleHolder.builder()
-                                                    .holder(
-                                                            getSwaggerExample(
-                                                                    baseErrorCode.getExplainError(), errorReasonToView))
-                                                    .code(errorReason.getHttpStatus().value())
-                                                    .name(errorReason.getCode())
-                                                    .build();
-                                        } catch (NoSuchFieldException e) {
-                                            throw new RuntimeException(e);
-                                        }
-                                    })
-                            .collect(Collectors.toList());
+                Arrays.stream(errorCodes)
+                    .map(
+                        baseErrorCode -> {
+                            try {
+                                ErrorReason errorReason = baseErrorCode.getErrorReasonHttpStatus();
+                                ErrorReason errorReasonToView = baseErrorCode.getErrorReason();
+                                return ExampleHolder.builder()
+                                    .holder(
+                                        getSwaggerExample(
+                                            baseErrorCode.getExplainError(), errorReasonToView))
+                                    .code(errorReason.getHttpStatus().value())
+                                    .name(errorReason.getCode())
+                                    .build();
+                            } catch (NoSuchFieldException e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
+                    .collect(Collectors.toList());
 
             // statusWithExampleHolders에 현재 루프의 결과를 추가합니다.
             exampleHolders.forEach(
-                    exampleHolder ->
-                            statusWithExampleHolders
-                                    .computeIfAbsent(exampleHolder.getCode(), k -> new ArrayList<>())
-                                    .add(exampleHolder));
+                exampleHolder ->
+                    statusWithExampleHolders
+                        .computeIfAbsent(exampleHolder.getCode(), k -> new ArrayList<>())
+                        .add(exampleHolder));
         }
 
         addExamplesToResponses(responses, statusWithExampleHolders);
@@ -124,20 +124,20 @@ public class SwaggerConfig {
     }
 
     private void addExamplesToResponses(
-            ApiResponses responses, Map<Integer, List<ExampleHolder>> statusWithExampleHolders) {
+        ApiResponses responses, Map<Integer, List<ExampleHolder>> statusWithExampleHolders) {
         statusWithExampleHolders.forEach(
-                (status, v) -> {
-                    Content content = new Content();
-                    MediaType mediaType = new MediaType();
-                    ApiResponse apiResponse = new ApiResponse();
-                    v.forEach(
-                            exampleHolder -> {
-                                mediaType.addExamples(
-                                        exampleHolder.getName(), exampleHolder.getHolder());
-                            });
-                    content.addMediaType("application/json", mediaType);
-                    apiResponse.setContent(content);
-                    responses.addApiResponse(status.toString(), apiResponse);
-                });
+            (status, v) -> {
+                Content content = new Content();
+                MediaType mediaType = new MediaType();
+                ApiResponse apiResponse = new ApiResponse();
+                v.forEach(
+                    exampleHolder -> {
+                        mediaType.addExamples(
+                            exampleHolder.getName(), exampleHolder.getHolder());
+                    });
+                content.addMediaType("application/json", mediaType);
+                apiResponse.setContent(content);
+                responses.addApiResponse(status.toString(), apiResponse);
+            });
     }
 }

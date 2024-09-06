@@ -43,6 +43,8 @@ public class QTastingNote extends EntityPathBase<TastingNote> {
 
     public final BooleanPath isDeleted = createBoolean("isDeleted");
 
+    public final BooleanPath isPublic = createBoolean("isPublic");
+
     public final StringPath memo = createString("memo");
 
     public final NumberPath<Double> officialAlcohol = createNumber("officialAlcohol", Double.class);
