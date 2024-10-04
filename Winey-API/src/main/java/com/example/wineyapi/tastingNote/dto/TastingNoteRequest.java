@@ -69,6 +69,9 @@ public class TastingNoteRequest {
         @Schema(name="finish",description = "여운", required = true)
         private Integer finish;
 
+        @Schema(name = "sparkling", description = "탄산감", required = false)
+        private Integer sparkling;
+
         @NotNull(message = "느낌을 입력해주세요")
         @Schema(name ="memo",description = "느낌", required = true)
         private String memo;
@@ -141,6 +144,9 @@ public class TastingNoteRequest {
         @Max(value = 5 ,message = "5이하를 입력해주세요")
         @Schema(name="tannin",description = "탄닌", required = true)
         private Integer tannin;
+
+        @Schema(name = "sparkling", description = "탄산감", required = false)
+        private Integer sparkling;
 
         @Min(value = 1 ,message = "1이상을 입력해주세요")
         @Max(value = 5 ,message = "5이하를 입력해주세요")

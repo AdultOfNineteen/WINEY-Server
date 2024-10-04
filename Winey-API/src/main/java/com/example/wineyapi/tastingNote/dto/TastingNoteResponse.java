@@ -154,6 +154,8 @@ public class TastingNoteResponse {
 
         private double tannin;
 
+        private Double sparkling;
+
         private double finish;
     }
 
@@ -226,6 +228,8 @@ public class TastingNoteResponse {
         private double body;
 
         private double tannin;
+
+        private Double sparkling;
 
         private double finish;
     }

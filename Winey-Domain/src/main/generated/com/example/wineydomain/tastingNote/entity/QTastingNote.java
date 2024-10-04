@@ -53,6 +53,8 @@ public class QTastingNote extends EntityPathBase<TastingNote> {
 
     public final ListPath<SmellKeywordTastingNote, QSmellKeywordTastingNote> smellKeywordTastingNote = this.<SmellKeywordTastingNote, QSmellKeywordTastingNote>createList("smellKeywordTastingNote", SmellKeywordTastingNote.class, QSmellKeywordTastingNote.class, PathInits.DIRECT2);
 
+    public final NumberPath<Integer> sparkling = createNumber("sparkling", Integer.class);
+
     public final NumberPath<Integer> starRating = createNumber("starRating", Integer.class);
 
     public final NumberPath<Integer> sweetness = createNumber("sweetness", Integer.class);
