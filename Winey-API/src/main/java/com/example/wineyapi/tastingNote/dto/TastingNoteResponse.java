@@ -90,6 +90,9 @@ public class TastingNoteResponse {
         @Schema(description = "와인 생상지")
         private String region;
 
+        @Schema(description = "와인 생산지")
+        private Country country;
+
         @Schema(description = "별점")
         private Integer star;
 
