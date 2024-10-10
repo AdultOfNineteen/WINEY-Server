@@ -291,7 +291,7 @@ public class TastingNoteConvertor {
             .wineType(result.getWine().getType())
             .isPublic(result.getIsPublic())
             .tastingNoteNo(tastingNoteNo.get(result.getId()))
-            .userNickname(result.getUser().getNickName())
+            .userNickname(result.getUser() != null ? result.getUser().getNickName() : "알 수 없음")
             .noteDate(result.getCreatedAt().toLocalDate().toString())
             .build();
     }
