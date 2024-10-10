@@ -86,7 +86,7 @@ public class TastingNoteConvertor {
 
             sweetnessSum += tastingNote.getSweetness();
             aciditySum += tastingNote.getAcidity();
-            alcoholSum += tastingNote.getAlcohol();
+            alcoholSum += (tastingNote.getAlcohol() != null ? tastingNote.getAlcohol() : 0);
             bodySum += tastingNote.getBody();
             tanninSum += tastingNote.getTannins();
             sparklingSum += tastingNote.getSparkling() != null ? tastingNote.getSparkling() : 0;
