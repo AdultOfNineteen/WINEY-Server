@@ -104,7 +104,7 @@ public class WineConvertor {
                 .wineId(result.getId())
                 .country(result.getCountry())
                 .type(result.getType())
-                .name(result.getName())
+                .name(name)
                 .varietal(result.getVarietal())
                 .build();
     }
