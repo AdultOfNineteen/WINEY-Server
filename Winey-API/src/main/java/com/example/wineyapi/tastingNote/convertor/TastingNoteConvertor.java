@@ -35,6 +35,7 @@ public class TastingNoteConvertor {
         int alcoholSum = 0;
         int bodySum = 0;
         int tanninSum = 0;
+        int sparklingSum = 0;
         int finishSum = 0;
         int totalPrice = 0;
 
@@ -85,9 +86,10 @@ public class TastingNoteConvertor {
 
             sweetnessSum += tastingNote.getSweetness();
             aciditySum += tastingNote.getAcidity();
-            alcoholSum += tastingNote.getAlcohol();
+            alcoholSum += (tastingNote.getAlcohol() != null ? tastingNote.getAlcohol() : 0);
             bodySum += tastingNote.getBody();
             tanninSum += tastingNote.getTannins();
+            sparklingSum += tastingNote.getSparkling() != null ? tastingNote.getSparkling() : 0;
             finishSum += tastingNote.getFinish();
             totalPrice += tastingNote.getPrice() != null ? tastingNote.getPrice() : 0;
 
@@ -189,6 +191,7 @@ public class TastingNoteConvertor {
                         .alcohol(calculateAvg(alcoholSum, totalWineCnt))
                         .body(calculateAvg(bodySum, totalWineCnt))
                         .tannin(calculateAvg(tanninSum, totalWineCnt))
+                        .sparkling(calculateAvg(sparklingSum, totalWineCnt))
                         .finish(calculateAvg(finishSum, totalWineCnt))
                         .build())
                 .build();
@@ -238,6 +241,7 @@ public class TastingNoteConvertor {
                 .vintage(request.getVintage())
                 .tannins(request.getTannin())
                 .finish(request.getFinish())
+                .sparkling(request.getSparkling())
                 .price(request.getPrice() != null ? request.getPrice() : 0)
                 .memo(request.getMemo())
                 .buyAgain(request.getBuyAgain())
@@ -287,7 +291,7 @@ public class TastingNoteConvertor {
             .wineType(result.getWine().getType())
             .isPublic(result.getIsPublic())
             .tastingNoteNo(tastingNoteNo.get(result.getId()))
-            .userNickname(result.getUser().getNickName())
+            .userNickname(result.getUser() != null ? result.getUser().getNickName() : "알 수 없음")
             .noteDate(result.getCreatedAt().toLocalDate().toString())
             .build();
     }
@@ -305,6 +309,7 @@ public class TastingNoteConvertor {
                 .wineType(wine.getType())
                 .wineName(wine.getName())
                 .region(wine.getRegion())
+                .country(wine.getCountry())
                 .vintage(tastingNote.getVintage())
                 .star(tastingNote.getStarRating() != null ? tastingNote.getStarRating() : null)
                 .color(tastingNote.getColor())
@@ -350,9 +355,10 @@ public class TastingNoteConvertor {
                 .builder()
                 .sweetness(tastingNote.getSweetness())
                 .acidity(tastingNote.getAcidity())
-                .alcohol(tastingNote.getAlcohol())
+                .alcohol(tastingNote.getAlcohol() != null ? Double.valueOf(tastingNote.getAlcohol()) : 0)
                 .body(tastingNote.getBody())
                 .tannin(tastingNote.getTannins())
+                .sparkling(tastingNote.getSparkling() != null ? Double.valueOf(tastingNote.getSparkling()) : 0)
                 .finish(tastingNote.getFinish())
                 .build();
     }
@@ -424,6 +430,10 @@ public class TastingNoteConvertor {
         tastingNote.setAlcohol(request.getAlcohol());
         tastingNote.setTannins(request.getTannin());
         tastingNote.setFinish(request.getFinish());
+        if (request.getSparkling() != null){
+            tastingNote.setSparkling(request.getSparkling());
+        }
+        tastingNote.setSparkling(request.getSparkling());
         tastingNote.setColor(request.getColor());
         tastingNote.setVintage(request.getVintage());
         Boolean isPublic = request.getIsPublic();

@@ -37,6 +37,8 @@ public interface WineRepository extends JpaRepository<Wine, Long> {
 
     Page<Wine> findByNameContaining(String content, Pageable pageable);
 
+    Page<Wine> findByNameContainingOrEngNameContaining(String content1, String content2, Pageable pageable);
+
     interface WineList{
         Long getId();
 

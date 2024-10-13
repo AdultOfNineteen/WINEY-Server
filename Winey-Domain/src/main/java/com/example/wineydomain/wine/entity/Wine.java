@@ -31,6 +31,9 @@ public class Wine extends BaseEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name ="engName")
+    private String engName;
+
     /**
      * 품종
      */

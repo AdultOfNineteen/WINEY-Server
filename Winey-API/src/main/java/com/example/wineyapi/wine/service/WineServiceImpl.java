@@ -78,9 +78,9 @@ public class WineServiceImpl implements WineService {
         if(content == null){
             wines = wineRepository.findAll(pageable);
         }else{
-            wines = wineRepository.findByNameContaining(content,pageable);
+            wines = wineRepository.findByNameContainingOrEngNameContaining(content,content,pageable);
         }
-        return wineConvertor.SearchWineList(wines);
+        return wineConvertor.SearchWineList(wines, content);
     }
 
     @Override

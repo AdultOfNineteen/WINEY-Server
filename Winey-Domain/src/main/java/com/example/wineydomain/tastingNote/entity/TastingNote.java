@@ -84,6 +84,9 @@ public class TastingNote extends BaseEntity {
     @Column(name = "tannins")
     private Integer tannins;
 
+    @Column(name ="sparkling")
+    private Integer sparkling;
+
     /**
      * 여운
      */
