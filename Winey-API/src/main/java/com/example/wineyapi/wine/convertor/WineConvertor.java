@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -75,18 +76,29 @@ public class WineConvertor {
         return recommendWineDTOS;
     }
 
-    public PageResponse<List<WineResponse.SearchWineDto>> SearchWineList(Page<Wine> wines) {
+    public PageResponse<List<WineResponse.SearchWineDto>> SearchWineList(Page<Wine> wines, String content) {
         List<WineResponse.SearchWineDto> wineDtoList = new ArrayList<>();
 
         wines.getContent().forEach(
                 result -> wineDtoList.add(
-                        convertWineInfo(result)
+                        convertWineInfo(result, content)
                 )
         );
         return new PageResponse<>(wines.isLast(), wines.getTotalElements(), wineDtoList);
     }
 
-    private WineResponse.SearchWineDto convertWineInfo(Wine result) {
+    private WineResponse.SearchWineDto convertWineInfo(Wine result, String content) {
+        String name ="";
+        if(content !=null){
+            if (Pattern.matches("^[a-zA-Z]*$", content)
+            ) {
+                name = result.getEngName();
+            } else {
+                name = result.getName();
+            }
+        }else{
+            name = result.getName();
+        }
         return WineResponse.SearchWineDto
                 .builder()
                 .wineId(result.getId())

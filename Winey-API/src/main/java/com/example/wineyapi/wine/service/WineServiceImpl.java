@@ -80,7 +80,7 @@ public class WineServiceImpl implements WineService {
         }else{
             wines = wineRepository.findByNameContainingOrEngNameContaining(content,content,pageable);
         }
-        return wineConvertor.SearchWineList(wines);
+        return wineConvertor.SearchWineList(wines, content);
     }
 
     @Override
