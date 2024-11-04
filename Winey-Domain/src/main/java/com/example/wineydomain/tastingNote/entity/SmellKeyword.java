@@ -1,10 +1,7 @@
 package com.example.wineydomain.tastingNote.entity;
 
-import java.util.Arrays;
-
 import com.example.wineydomain.common.model.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonCreator;
-
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -21,23 +18,43 @@ public enum SmellKeyword {
     PEACHPLUM("FRUIT","PEACHPLUM","복숭아/자두"),
     TROPICALFRUIT("FRUIT","TROPICALFRUIT","열대과일"),
     FLOWER("NATURAL", "FLOWER","꽃향"),
+    ACACIA("NATURAL", "ACACIA", "아카시아"),
+    ROSE("NATURAL", "ROSE", "장미"),
+    LAVENDER("NATURAL", "LAVENDER", "라벤더"),
     GRASSWOOD("NATURAL", "GRASSWOOD","풀/나무"),
-    NATURAL("NATURAL","NATURAL","자연향"),
+    PINE("NATURAL", "PINE", "솔향"),
+    PEPPER("NATURAL", "PEPPER", "피망"),
+    ONION("NATURAL", "ONION", "양파"),
+    CORN("NATURAL", "CORN", "옥수수"),
     HERB("NATURAL","HERB","허브향"),
+    MUSHROOM("NATURAL", "MUSHROOM", "버섯"),
+    MOSS("NATURAL", "MOSS", "이끼"),
     OAK("OAK","OAK","오크향"),
     SPICE("OAK","SPICE","향신료"),
+    PEPPERSPICE("OAK","PEPPERSPICE","후추"),
+    CINNAMON("OAK", "CINNAMON", "계피"),
     NUTS("OAK","NUTS","견과류"),
     VANILLA("OAK","VANILLA","바닐라"),
+    CARAMEL("OAK", "CARAMEL", "캐러멜"),
     CHOCOLATE("OAK","CHOCOLATE","초콜릿"),
+    TOAST("OAK", "TOAST", "토스트"),
+    COFFEE("OAK", "COFFEE", "커피"),
+    COCONUT("OAK", "COCONUT", "코코넛"),
+    SMOKE("OAK", "SMOKE", "연기"),
     FLINT("OTHER","FLINT","부싯돌"),
     BREAD("OTHER", "BREAD","빵"),
     RUBBER("OTHER","RUBBER","고무"),
-    EARTHASH("OTHER","EARTHASH","흙/재"),
-    MEDICINE("OTHER", "MEDICINE","약품");
+    SWEAT("OTHER", "SWEAT", "땀"),
+    LEATHER("OTHER", "LEATHER", "가죽"),
+    VINEGAR("OTHER", "VINEGAR", "식초"),
+    REMOVER("OTHER", "REMOVER", "리무버"),
+    CIGARETTE("OTHER", "CIGARETTE", "담배"),
+    HONEY("OTHER", "HONEY", "꿀"),
+    BUTTER("OTHER", "BUTTER", "버터"),
+    MEDICINE("OTHER", "MEDICINE","약품"),
+    EARTHASH("OTHER","EARTHASH","흙/재");
 
-   private final String type;
-
-   private final String value;
-
-   private final String name;
+    private final String type;
+    private final String value;
+    private final String name;
 }
