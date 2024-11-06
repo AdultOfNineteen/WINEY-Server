@@ -116,6 +116,8 @@ public class TastingNoteResponse {
 
         private List<String> smellKeywordList;
 
+        private List<String> directKeywordList;
+
         @Schema(description = "내가 느낀 와인의 맛")
         private MyWineTaste myWineTaste;
 

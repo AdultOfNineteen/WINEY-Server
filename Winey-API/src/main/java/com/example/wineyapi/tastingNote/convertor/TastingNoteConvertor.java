@@ -325,7 +325,8 @@ public class TastingNoteConvertor {
                 .varietal(wine.getVarietal())
                 .price(tastingNote.getPrice())
                 .officialAlcohol(tastingNote.getOfficialAlcohol())
-                .smellKeywordList(SmellKeywordList(smellKeywordTastingNotes))
+                .smellKeywordList(toSmellKeywordList(smellKeywordTastingNotes))
+                .directKeywordList(toDirectKeywordList(smellKeywordTastingNotes))
                 .myWineTaste(MyWineTaste(tastingNote))
                 .defaultWineTaste(DefaultWineTaste(wine))
                 .tastingNoteImage(toTastingNoteImageRes(tastingNoteImages))
@@ -335,6 +336,18 @@ public class TastingNoteConvertor {
                 .wineId(wine.getId())
                 .userNickname(tastingNote.getUser().getNickName())
                 .build();
+    }
+
+    private List<String> toDirectKeywordList(List<SmellKeywordTastingNote> smellKeywordTastingNotes) {
+        List<String> directKeywordList = new ArrayList<>();
+
+        for(SmellKeywordTastingNote smellKeywordTastingNote : smellKeywordTastingNotes){
+            if(smellKeywordTastingNote.getDirectYN().equals("Y")){
+                directKeywordList.add(smellKeywordTastingNote.getSmellKeyword());
+            }
+        }
+
+        return directKeywordList;
     }
 
     private List<TastingNoteResponse.TastingNoteImage> toTastingNoteImageRes(List<TastingNoteImage> tastingNoteImages) {
@@ -371,13 +384,11 @@ public class TastingNoteConvertor {
                 .build();
     }
 
-    private List<String> SmellKeywordList(List<SmellKeywordTastingNote> smellKeywordTastingNotes) {
+    private List<String> toSmellKeywordList(List<SmellKeywordTastingNote> smellKeywordTastingNotes) {
         List<String> smellKeywordList = new ArrayList<>();
 
         for(SmellKeywordTastingNote smellKeywordTastingNote : smellKeywordTastingNotes){
-            if(smellKeywordTastingNote.getDirectYN().equals("Y")){
-                smellKeywordList.add(smellKeywordTastingNote.getSmellKeyword());
-            }else {
+            if(smellKeywordTastingNote.getDirectYN().equals("N")){
                 smellKeywordList.add(SmellKeyword.findByValue(smellKeywordTastingNote.getSmellKeyword()).getValue());
             }
         }
