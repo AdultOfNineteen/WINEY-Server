@@ -301,6 +301,7 @@ public class TastingNoteConvertor {
             .tastingNoteNo(tastingNoteNo.get(result.getId()))
             .userNickname(result.getUser() != null ? result.getUser().getNickName() : "알 수 없음")
             .noteDate(result.getCreatedAt().toLocalDate().toString())
+            .thumbnail(result.getTastingNoteImages().size() > 0 ? result.getTastingNoteImages().get(0).getUrl() : null)
             .build();
     }
 

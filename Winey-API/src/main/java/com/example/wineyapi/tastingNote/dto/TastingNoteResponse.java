@@ -38,6 +38,8 @@ public class TastingNoteResponse {
         private String userNickname;
         @Schema(description = "노트 생성 날짜")
         private String noteDate;
+        @Schema(description = "썸네일")
+        private String thumbnail;
     }
 
     @NoArgsConstructor
