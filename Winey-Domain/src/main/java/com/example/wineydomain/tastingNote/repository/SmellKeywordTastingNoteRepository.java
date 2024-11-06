@@ -9,7 +9,7 @@ import com.example.wineydomain.tastingNote.entity.TastingNote;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SmellKeywordTastingNoteRepository extends JpaRepository<SmellKeywordTastingNote, Long> {
-	void deleteByTastingNoteAndSmellKeyword(TastingNote tastingNote, SmellKeyword smellKeyword);
+	void deleteByTastingNoteAndSmellKeyword(TastingNote tastingNote, String smellKeyword);
 
-	void deleteByTastingNoteAndSmellKeywordIn(TastingNote tastingNote, List<SmellKeyword> deleteSmellKeywordList);
+	void deleteByTastingNoteAndSmellKeywordIn(TastingNote tastingNote, List<String> deleteSmellKeywordList);
 }

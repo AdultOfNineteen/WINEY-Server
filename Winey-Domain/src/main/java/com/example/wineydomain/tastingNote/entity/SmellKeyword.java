@@ -60,4 +60,13 @@ public enum SmellKeyword {
     private final String type;
     private final String value;
     private final String name;
+
+    public static SmellKeyword findByValue(String value) {
+        for (SmellKeyword keyword : SmellKeyword.values()) {
+            if (keyword.getValue().equals(value)) {
+                return keyword;
+            }
+        }
+        return null;
+    }
 }

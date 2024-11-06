@@ -90,9 +90,13 @@ public class TastingNoteRequest {
         @Schema(name = "isPublic", description = "공개여부", required = false)
         private Boolean isPublic = Boolean.FALSE;
 
+        private List<String> directKeywordList;
+
+
         public Boolean getBuyAgain() {
             return buyAgain;
         }
+
     }
 
     @Getter
@@ -171,6 +175,12 @@ public class TastingNoteRequest {
 
         @Schema(name = "deleteSmellKeywordList 삭제사항 있을 경우 작성해주세요",description = "향 키워드 리스트", required = false)
         private List<SmellKeyword> deleteSmellKeywordList;
+
+        @Schema(name = "directKeywordList 추가사항 있을 경우 작성해주세요",description = "직접 입력한 키워드 리스트", required = false)
+        private List<String> directKeywordList;
+
+        @Schema(name = "deleteDirectKeywordList 삭제사항 있을 경우 작성해주세요",description = "직접 입력한 키워드 리스트", required = false)
+        private List<String> deleteDirectKeywordList;
 
         @Schema(name = "deleteImgLists 삭제사항 있을 경우 작성해주세요",description = "테이스팅 노트 이미지 리스트", required = false)
         private List<Long> deleteImgList;
