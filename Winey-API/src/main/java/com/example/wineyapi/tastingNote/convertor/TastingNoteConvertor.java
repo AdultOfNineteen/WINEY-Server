@@ -101,8 +101,15 @@ public class TastingNoteConvertor {
             }
             wineCountByType.put(wine.getType().getValue(), wineCountByType.getOrDefault(wine.getType().getValue() ,0)+1);
             for(SmellKeywordTastingNote smellKeywordTastingNote : tastingNote.getSmellKeywordTastingNote()) {
-                wineCountBySmell.put(smellKeywordTastingNote.getSmellKeyword().getName(), wineCountBySmell.getOrDefault(smellKeywordTastingNote.getSmellKeyword().getName(), 0) + 1);
+                wineCountBySmell.put(
+                    smellKeywordTastingNote.getDirectYN().equals("N") ?
+                        SmellKeyword.findByValue(smellKeywordTastingNote.getSmellKeyword()).getName() : smellKeywordTastingNote.getSmellKeyword(),
+                    wineCountBySmell.getOrDefault(smellKeywordTastingNote.getDirectYN().equals("N") ?
+                        SmellKeyword.findByValue(smellKeywordTastingNote.getSmellKeyword()).getName() : smellKeywordTastingNote.getSmellKeyword(),
+                        0)
+                        + 1);
             }
+            System.out.println("wineCountBySmell = " + wineCountBySmell);
         }
 
         List<Map.Entry<String, Integer>> sortCountry = new ArrayList<>(wineCountByCountry.entrySet());
@@ -251,10 +258,11 @@ public class TastingNoteConvertor {
                 .build();
     }
 
-    public SmellKeywordTastingNote SmellKeyword(SmellKeyword smellKeyword, TastingNote tastingNote) {
+    public SmellKeywordTastingNote toSmellKeyword(SmellKeyword smellKeyword, TastingNote tastingNote) {
         return SmellKeywordTastingNote.builder()
-                .smellKeyword(smellKeyword)
+                .smellKeyword(smellKeyword.getValue())
                 .tastingNote(tastingNote)
+                .directYN("N")
                 .build();
     }
 
@@ -293,6 +301,7 @@ public class TastingNoteConvertor {
             .tastingNoteNo(tastingNoteNo.get(result.getId()))
             .userNickname(result.getUser() != null ? result.getUser().getNickName() : "알 수 없음")
             .noteDate(result.getCreatedAt().toLocalDate().toString())
+            .thumbnail(!result.getTastingNoteImages().isEmpty() ? result.getTastingNoteImages().get(0).getUrl() : null)
             .build();
     }
 
@@ -317,7 +326,9 @@ public class TastingNoteConvertor {
                 .varietal(wine.getVarietal())
                 .price(tastingNote.getPrice())
                 .officialAlcohol(tastingNote.getOfficialAlcohol())
-                .smellKeywordList(SmellKeywordList(smellKeywordTastingNotes))
+                .smellKeywordList(toSmellKeywordList(smellKeywordTastingNotes))
+            .korSmellKeywordList(toKorSmellKeywordList(smellKeywordTastingNotes))
+                .directKeywordList(toDirectKeywordList(smellKeywordTastingNotes))
                 .myWineTaste(MyWineTaste(tastingNote))
                 .defaultWineTaste(DefaultWineTaste(wine))
                 .tastingNoteImage(toTastingNoteImageRes(tastingNoteImages))
@@ -327,6 +338,18 @@ public class TastingNoteConvertor {
                 .wineId(wine.getId())
                 .userNickname(tastingNote.getUser().getNickName())
                 .build();
+    }
+
+    private List<String> toDirectKeywordList(List<SmellKeywordTastingNote> smellKeywordTastingNotes) {
+        List<String> directKeywordList = new ArrayList<>();
+
+        for(SmellKeywordTastingNote smellKeywordTastingNote : smellKeywordTastingNotes){
+            if(smellKeywordTastingNote.getDirectYN().equals("Y")){
+                directKeywordList.add(smellKeywordTastingNote.getSmellKeyword());
+            }
+        }
+
+        return directKeywordList;
     }
 
     private List<TastingNoteResponse.TastingNoteImage> toTastingNoteImageRes(List<TastingNoteImage> tastingNoteImages) {
@@ -363,13 +386,25 @@ public class TastingNoteConvertor {
                 .build();
     }
 
-    private List<String> SmellKeywordList(List<SmellKeywordTastingNote> smellKeywordTastingNotes) {
+    private List<String> toSmellKeywordList(List<SmellKeywordTastingNote> smellKeywordTastingNotes) {
         List<String> smellKeywordList = new ArrayList<>();
 
         for(SmellKeywordTastingNote smellKeywordTastingNote : smellKeywordTastingNotes){
-            System.out.println(smellKeywordTastingNote.getId());
-            System.out.println(smellKeywordTastingNote.getSmellKeyword());
-            smellKeywordList.add(smellKeywordTastingNote.getSmellKeyword().getName());
+            if(smellKeywordTastingNote.getDirectYN().equals("N")){
+                smellKeywordList.add(SmellKeyword.findByValue(smellKeywordTastingNote.getSmellKeyword()).getValue());
+            }
+        }
+
+        return smellKeywordList;
+    }
+
+    private List<String> toKorSmellKeywordList(List<SmellKeywordTastingNote> smellKeywordTastingNotes) {
+        List<String> smellKeywordList = new ArrayList<>();
+
+        for(SmellKeywordTastingNote smellKeywordTastingNote : smellKeywordTastingNotes){
+            if(smellKeywordTastingNote.getDirectYN().equals("N")){
+                smellKeywordList.add(SmellKeyword.findByValue(smellKeywordTastingNote.getSmellKeyword()).getName());
+            }
         }
 
         return smellKeywordList;
@@ -438,5 +473,13 @@ public class TastingNoteConvertor {
         tastingNote.setVintage(request.getVintage());
         Boolean isPublic = request.getIsPublic();
         if(isPublic != null) tastingNote.setIsPublic(request.getIsPublic());
+    }
+
+    public SmellKeywordTastingNote toDirectSmellKeyword(String smellKeyword, TastingNote tastingNote) {
+        return SmellKeywordTastingNote.builder()
+                .smellKeyword(smellKeyword)
+                .tastingNote(tastingNote)
+                .directYN("Y")
+                .build();
     }
 }

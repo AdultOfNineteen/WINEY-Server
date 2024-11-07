@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.example.wineydomain.tastingNote.exception.GetTastingNoteErrorCode.*;
 import static com.example.wineydomain.tastingNote.exception.UploadTastingNoteErrorCode.NOT_FOUNT_WINE;
@@ -115,14 +116,25 @@ public class TastingNoteServiceImpl implements TastingNoteService{
     }
 
     private void updateTastingNoteSmellKeyword(TastingNoteRequest.UpdateTastingNoteDTO request, TastingNote tastingNote) {
-        if(request.getDeleteSmellKeywordList() != null) smellKeywordTastingNoteRepository.deleteByTastingNoteAndSmellKeywordIn(tastingNote, request.getDeleteSmellKeywordList());
+        if(request.getDeleteSmellKeywordList() != null) smellKeywordTastingNoteRepository.deleteByTastingNoteAndSmellKeywordIn(tastingNote, request.getDeleteSmellKeywordList().stream().map(SmellKeyword::getValue).collect(
+            Collectors.toList()));
         if(request.getSmellKeywordList() != null) updateSmellKeyword(request, tastingNote);
+        if (request.getDirectKeywordList() != null) updateDirectKeyword(request, tastingNote);
+        if (request.getDeleteDirectKeywordList() != null) smellKeywordTastingNoteRepository.deleteByTastingNoteAndSmellKeywordIn(tastingNote, request.getDeleteDirectKeywordList());
+    }
+
+    private void updateDirectKeyword(TastingNoteRequest.UpdateTastingNoteDTO request, TastingNote tastingNote) {
+        List<SmellKeywordTastingNote> smellKeywordTastingNoteList = new ArrayList<>();
+        for(String smellKeyword : request.getDirectKeywordList()){
+            smellKeywordTastingNoteList.add(tastingNoteConvertor.toDirectSmellKeyword(smellKeyword, tastingNote));
+        }
+        smellKeywordTastingNoteRepository.saveAll(smellKeywordTastingNoteList);
     }
 
     private void updateSmellKeyword(TastingNoteRequest.UpdateTastingNoteDTO request, TastingNote tastingNote) {
         List<SmellKeywordTastingNote> smellKeywordTastingNoteList = new ArrayList<>();
         for(SmellKeyword smellKeyword : request.getSmellKeywordList()){
-            smellKeywordTastingNoteList.add(tastingNoteConvertor.SmellKeyword(smellKeyword, tastingNote));
+            smellKeywordTastingNoteList.add(tastingNoteConvertor.toSmellKeyword(smellKeyword, tastingNote));
         }
         smellKeywordTastingNoteRepository.saveAll(smellKeywordTastingNoteList);
     }
@@ -162,7 +174,12 @@ public class TastingNoteServiceImpl implements TastingNoteService{
 
         if(request.getSmellKeywordList() != null) {
             for (SmellKeyword smellKeyword : request.getSmellKeywordList()) {
-                smellKeywordTastingNoteRepository.save(tastingNoteConvertor.SmellKeyword(smellKeyword, tastingNote));
+                smellKeywordTastingNoteRepository.save(tastingNoteConvertor.toSmellKeyword(smellKeyword, tastingNote));
+            }
+        }
+        if (request.getDirectKeywordList() !=null ){
+            for (String smellKeyword : request.getDirectKeywordList()) {
+                smellKeywordTastingNoteRepository.save(tastingNoteConvertor.toDirectSmellKeyword(smellKeyword, tastingNote));
             }
         }
 

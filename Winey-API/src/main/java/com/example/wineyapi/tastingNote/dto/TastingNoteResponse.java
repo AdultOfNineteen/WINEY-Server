@@ -38,6 +38,8 @@ public class TastingNoteResponse {
         private String userNickname;
         @Schema(description = "노트 생성 날짜")
         private String noteDate;
+        @Schema(description = "썸네일")
+        private String thumbnail;
     }
 
     @NoArgsConstructor
@@ -115,6 +117,11 @@ public class TastingNoteResponse {
         private Integer price;
 
         private List<String> smellKeywordList;
+
+        @Schema(description = "한국어 향 리스트")
+        private List<String> korSmellKeywordList;
+
+        private List<String> directKeywordList;
 
         @Schema(description = "내가 느낀 와인의 맛")
         private MyWineTaste myWineTaste;

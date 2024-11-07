@@ -15,6 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
+@ToString
 public class SmellKeywordTastingNote {
 
     @Id
@@ -22,10 +23,11 @@ public class SmellKeywordTastingNote {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private SmellKeyword smellKeyword;
+    private String smellKeyword;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tastingNoteId", nullable = false)
     private TastingNote tastingNote;
+
+    private String directYN;
 }
