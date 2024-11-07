@@ -94,7 +94,7 @@ public class TastingNoteRepositoryImpl implements TastingNoteCustomRepository{
                     .and(qTastingNote.isDeleted.eq(false))
                     .and(qTastingNote.isPublic.eq(true)
                         .or(qTastingNote.user.eq(user))
-                    )
+                    ).and(qTastingNote.user.ne(user))
             )
             .orderBy(qTastingNote.id.desc());
 
