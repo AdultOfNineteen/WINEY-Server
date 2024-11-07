@@ -301,7 +301,7 @@ public class TastingNoteConvertor {
             .tastingNoteNo(tastingNoteNo.get(result.getId()))
             .userNickname(result.getUser() != null ? result.getUser().getNickName() : "알 수 없음")
             .noteDate(result.getCreatedAt().toLocalDate().toString())
-            .thumbnail(result.getTastingNoteImages().size() > 0 ? result.getTastingNoteImages().get(0).getUrl() : null)
+            .thumbnail(!result.getTastingNoteImages().isEmpty() ? result.getTastingNoteImages().get(0).getUrl() : null)
             .build();
     }
 
@@ -327,6 +327,7 @@ public class TastingNoteConvertor {
                 .price(tastingNote.getPrice())
                 .officialAlcohol(tastingNote.getOfficialAlcohol())
                 .smellKeywordList(toSmellKeywordList(smellKeywordTastingNotes))
+            .korSmellKeywordList(toKorSmellKeywordList(smellKeywordTastingNotes))
                 .directKeywordList(toDirectKeywordList(smellKeywordTastingNotes))
                 .myWineTaste(MyWineTaste(tastingNote))
                 .defaultWineTaste(DefaultWineTaste(wine))
@@ -391,6 +392,18 @@ public class TastingNoteConvertor {
         for(SmellKeywordTastingNote smellKeywordTastingNote : smellKeywordTastingNotes){
             if(smellKeywordTastingNote.getDirectYN().equals("N")){
                 smellKeywordList.add(SmellKeyword.findByValue(smellKeywordTastingNote.getSmellKeyword()).getValue());
+            }
+        }
+
+        return smellKeywordList;
+    }
+
+    private List<String> toKorSmellKeywordList(List<SmellKeywordTastingNote> smellKeywordTastingNotes) {
+        List<String> smellKeywordList = new ArrayList<>();
+
+        for(SmellKeywordTastingNote smellKeywordTastingNote : smellKeywordTastingNotes){
+            if(smellKeywordTastingNote.getDirectYN().equals("N")){
+                smellKeywordList.add(SmellKeyword.findByValue(smellKeywordTastingNote.getSmellKeyword()).getName());
             }
         }
 
