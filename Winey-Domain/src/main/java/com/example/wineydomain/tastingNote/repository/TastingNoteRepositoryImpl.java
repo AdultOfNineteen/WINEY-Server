@@ -93,7 +93,6 @@ public class TastingNoteRepositoryImpl implements TastingNoteCustomRepository{
                 qTastingNote.wine.eq(wine)
                     .and(qTastingNote.isDeleted.eq(false))
                     .and(qTastingNote.isPublic.eq(true)
-                        .or(qTastingNote.user.eq(user))
                     ).and(qTastingNote.user.ne(user))
             )
             .orderBy(qTastingNote.id.desc());
@@ -107,8 +106,8 @@ public class TastingNoteRepositoryImpl implements TastingNoteCustomRepository{
             qTastingNote.wine.eq(wine)
                 .and(qTastingNote.isDeleted.eq(false))
                 .and(qTastingNote.isPublic.eq(true)
-                    .or(qTastingNote.user.eq(user))
-                )
+                ).and(qTastingNote.user.ne(user)
+        )
         ).fetchCount();
 
         return new PageImpl<>(results, pageable, total);
